@@ -1,0 +1,125 @@
+import 'dart:async';
+
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:flutter/material.dart';
+import 'easy_loading_splash.dart';
+
+class EasyInterstitialAd extends StatefulWidget {
+  final AdNetwork adNetwork;
+  final String adId;
+  final void Function()? onShowed;
+  final void Function()? onFailed;
+  final void Function()? adDismissed;
+  final void Function()? onAdImpression;
+
+  const EasyInterstitialAd({
+    super.key,
+    this.adNetwork = AdNetwork.admob,
+    required this.adId,
+    this.onShowed,
+    this.adDismissed,
+    this.onFailed,
+    this.onAdImpression,
+  });
+
+  @override
+  State<EasyInterstitialAd> createState() => _EasyInterstitialAdState();
+}
+
+class _EasyInterstitialAdState extends State<EasyInterstitialAd>
+    with WidgetsBindingObserver {
+  late final EasyAdBase? _interstitialAd = EasyAds.instance.createInterstitial(
+    adNetwork: widget.adNetwork,
+    adId: widget.adId,
+    immersiveModeEnabled: true,
+  );
+
+  StreamSubscription? _streamSubscription;
+
+  Future<void> _showAd() => Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          if (_appLifecycleState == AppLifecycleState.resumed) {
+            if (mounted) {
+              _interstitialAd?.show();
+            }
+          } else {
+            _adFailedToShow = true;
+          }
+        },
+      );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    EasyAds.instance.setFullscreenAdShowing(true);
+    _interstitialAd?.load();
+    _streamSubscription = EasyAds.instance.onEvent.listen((event) {
+      if (event.adUnitType == AdUnitType.interstitial) {
+        switch (event.type) {
+          case AdEventType.adLoaded:
+            if (_appLifecycleState == AppLifecycleState.resumed) {
+              _showAd();
+            } else {
+              _adFailedToShow = true;
+            }
+            break;
+          case AdEventType.adShowed:
+            widget.onShowed?.call();
+            break;
+          case AdEventType.onAdImpression:
+            widget.onAdImpression?.call();
+            break;
+          case AdEventType.adFailedToLoad:
+            widget.onFailed?.call();
+            EasyAds.instance.setFullscreenAdShowing(false);
+            _streamSubscription?.cancel();
+            break;
+          case AdEventType.adDismissed:
+            EasyAds.instance.setFullscreenAdShowing(false);
+            widget.adDismissed?.call();
+            _streamSubscription?.cancel();
+            break;
+          case AdEventType.adFailedToShow:
+            if (_appLifecycleState != AppLifecycleState.resumed) {
+              _adFailedToShow = true;
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    });
+    super.initState();
+  }
+
+  AppLifecycleState _appLifecycleState = AppLifecycleState.resumed;
+  bool _adFailedToShow = false;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _appLifecycleState = state;
+    if (state == AppLifecycleState.resumed && _adFailedToShow) {
+      _showAd();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: EasyLoadingSplash(
+        customSplash: EasyAds.configuredLoadingSplash,
+        message: EasyAds.configuredLoadingMessage,
+      ),
+    );
+  }
+}

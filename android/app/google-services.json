@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515933034163",
+    "project_id": "d54---fast-video-saver",
+    "storage_bucket": "d54---fast-video-saver.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515933034163:android:9b5cbffdce7be105aa42c6",
+        "android_client_info": {
+          "package_name": "com.video.downloader.fastsave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlgyUpFif0w1OMwrXYhhzcLOyibH3aolw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
