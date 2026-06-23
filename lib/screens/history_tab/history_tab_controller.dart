@@ -8,13 +8,13 @@ import 'package:cscmobi_app/helper/firebase_helper.dart';
 import 'package:cscmobi_app/helper/video_download_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/utils/app_util.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../helper/media_store_helper.dart';
 import '../../models/realm/download_realm_model.dart';
@@ -29,20 +29,16 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
   RxList<DownloadRealmModel> listDownloadItems = <DownloadRealmModel>[].obs;
   var realm = AppSetting.realm;
 
-  RxBool isNativeInlineAdLoaded = false.obs;
-  NativeAd? nativeInlineAd;
-
-  // native_download: native nhỏ xen kẽ trong list data (cách 3 data đặt 1 ads)
-  RxMap<int, NativeAd?> nativeDownloadAds = <int, NativeAd?>{}.obs;
-  RxMap<int, bool> isNativeDownloadAdLoaded = <int, bool>{}.obs;
-
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     // Load inter_play ad cho video play
     if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.inter_play)) {
-      AdmobAdsManager.loadAdmobInterstitialAdWithType(InterAdType.interPlayAd);
+      EasyAds.instance.createInterstitial(
+        adNetwork: AdNetwork.admob,
+        adId: MyAdIdName.interPlayAd.getId, // interPlay is interPlayAd in new IDs
+        immersiveModeEnabled: true,
+      )?.load();
     }
     tabController = TabController(length: 2, vsync: this);
     getData();
@@ -50,70 +46,12 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
-    reloadAds();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
-    // Dispose các native download ads
-    nativeDownloadAds.forEach((key, ad) {
-      ad?.dispose();
-    });
-    nativeDownloadAds.clear();
-  }
-
-  reloadAds() {
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_home)) {
-      AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeHomeMediumAd, true, (_nativeAd) {
-        if (isClosed) {
-          _nativeAd.dispose();
-          return;
-        }
-        isNativeAdLoaded.value = false;
-        nativeAd = _nativeAd;
-        isNativeAdLoaded.value = true;
-      });
-      if (listDownloadItems.isNotEmpty) {
-        AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeHome2Ad, true, (_nativeAd) {
-          if (isClosed) {
-            _nativeAd.dispose();
-            return;
-          }
-          isNativeInlineAdLoaded.value = false;
-          nativeInlineAd = _nativeAd;
-          isNativeInlineAdLoaded.value = true;
-        });
-      }
-    }
-    // Load native_download ads
-    _loadNativeDownloadAds();
-  }
-
-  // Tải native download ads cho các vị trí xen kẽ (cách 3 data đặt 1 ads)
-  _loadNativeDownloadAds() {
-    if (!FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_download)) return;
-    if (listDownloadItems.isEmpty) return;
-
-    // Tính số lượng ads cần load: cách 3 item đặt 1 ads
-    // Vị trí ad: sau item 2 (index 3), sau item 5 (index 6), sau item 8 (index 9)...
-    int adCount = (listDownloadItems.length / 3).floor();
-    for (int i = 0; i < adCount; i++) {
-      int adSlotIndex = i; // Dùng làm key cho map
-      if (nativeDownloadAds[adSlotIndex] == null && isNativeDownloadAdLoaded[adSlotIndex] != true) {
-        AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeDownloadAd, false, (_nativeAd) {
-          if (isClosed) {
-            _nativeAd.dispose();
-            return;
-          }
-          nativeDownloadAds[adSlotIndex] = _nativeAd;
-          isNativeDownloadAdLoaded[adSlotIndex] = true;
-        });
-      }
-    }
   }
 
   // Tính tổng items (data + ads) cho ListView
@@ -155,14 +93,26 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     // Kiểm tra xem item có phải video không
     if (index < listDownloadItems.length && listDownloadItems[index].type == "video") {
       // Hiển thị inter_play trước khi mở video
-      AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interPlayAd, onNextScreen: () async {
-        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-        if (!existFile) {
-          AppUtil.showNormalToast("File not found".tr);
-          return;
-        }
-        openMyFile(listDownloadItems[index].url);
-      });
+      EasyAds.instance.showInterstitialAd(
+        Get.context!,
+        adId: MyAdIdName.interPlayAd.getId,
+        adDissmissed: () async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        },
+        onFailed: () async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        },
+      );
     } else {
       // Non-video items: mở trực tiếp không qua inter
       var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
@@ -178,14 +128,26 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     if (value == 'open') {
       // open with: cũng kiểm tra inter_play nếu là video
       if (index < listDownloadItems.length && listDownloadItems[index].type == "video") {
-        AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interPlayAd, onNextScreen: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        });
+        EasyAds.instance.showInterstitialAd(
+          Get.context!,
+          adId: MyAdIdName.interPlayAd.getId,
+          adDissmissed: () async {
+            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+            if (!existFile) {
+              AppUtil.showNormalToast("File not found".tr);
+              return;
+            }
+            openMyFile(listDownloadItems[index].url);
+          },
+          onFailed: () async {
+            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+            if (!existFile) {
+              AppUtil.showNormalToast("File not found".tr);
+              return;
+            }
+            openMyFile(listDownloadItems[index].url);
+          },
+        );
       } else {
         var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
         if (!existFile) {
@@ -197,14 +159,26 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     } else if (value == 'play') {
       // play: hiển thị inter_play
       if (index < listDownloadItems.length) {
-        AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interPlayAd, onNextScreen: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        });
+        EasyAds.instance.showInterstitialAd(
+          Get.context!,
+          adId: MyAdIdName.interPlayAd.getId,
+          adDissmissed: () async {
+            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+            if (!existFile) {
+              AppUtil.showNormalToast("File not found".tr);
+              return;
+            }
+            openMyFile(listDownloadItems[index].url);
+          },
+          onFailed: () async {
+            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+            if (!existFile) {
+              AppUtil.showNormalToast("File not found".tr);
+              return;
+            }
+            openMyFile(listDownloadItems[index].url);
+          },
+        );
       }
     } else if (value == 'share') {
       var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);

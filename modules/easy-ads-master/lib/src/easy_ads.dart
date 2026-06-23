@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:adjust_sdk/adjust_config.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'easy_admob/easy_admob_native_ad.dart';
-import 'services/easy_appsflyer_service.dart';
+import 'services/easy_adjust_service.dart';
 import 'utils/easy_app_open_ad.dart';
 import 'utils/easy_interstitial_ad_splash_with_3_id.dart';
 import 'utils/easy_splash_ad_with_interstitial_and_app_open.dart';
@@ -145,15 +145,13 @@ class EasyAds {
     _initialized = true;
   }
 
-  Future<void> initAppsflyer(AppsflyerSdk appsflyerSdk) async {
-    await EasyAppsflyerService().initAppsFlyer(appsflyerSdk);
+  Future<void> initAdjust(AdjustConfig config) async {
+    await EasyAdjustService().initAdjust(config);
   }
 
   Future<void> initFirebaseAnalytics(FirebaseAnalytics analytics) async {
     EasyFirebaseService().init(analytics);
   }
-
-  bool get isFullAds => EasySharedPrefService().getFullAdsValue();
 
   /// Returns [EasyAdBase] if ad is created successfully. It assumes that you have already assigned banner id in Ad Id Manager
   ///
@@ -520,17 +518,24 @@ class EasyAds {
     if (_isFullscreenAdShowing) {
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EasyInterstitialAd(
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        fullscreenDialog: true,
+        opaque: false,
+        barrierColor: Colors.black54,
+        pageBuilder: (context, animation, secondaryAnimation) => EasyInterstitialAd(
           adNetwork: adNetwork,
           adId: adId,
           onShowed: onShowed,
           onFailed: onFailed,
           adDismissed: adDissmissed,
         ),
-        fullscreenDialog: true,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
     );
   }

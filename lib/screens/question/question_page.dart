@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
+import '../../helper/firebase_remote_config_service.dart';
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 
 class QuestionPage extends GetView<QuestionController> {
   @override
@@ -40,52 +44,26 @@ class QuestionPage extends GetView<QuestionController> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                    offset: Offset(0, 2),
-                  )
-                ],
-              ),
-              child: Obx(() =>
-              (controller.isNativeAdLoaded.value && controller.nativeAd != null
-                  && !AppSetting.isPremiumUser.value
-                  && !controller.isShowAdsAlt.value)
-                  ? SizedBox(
-                child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAd!),
-              ) :
-              Container()),
-            ),
-          ),
-          Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                      offset: Offset(0, 2),
+            child: Obx(() {
+              final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+                  FirebaseRemoteConfigService.native_question);
+              if (!showAd) return const SizedBox();
+
+              final bool isShowAlt = controller.isShowAdsAlt.value;
+              return isShowAlt
+                  ? EasyNativeAd(
+                      key: const ValueKey('question_alt'),
+                      factoryId: 'nativeMedia',
+                      adId: MyAdIdName.nativeQuestionAd.getId,
+                      height: AdDimen.mediumNativeHeight,
                     )
-                  ],
-                ),
-                child: Obx(() => controller.isNativeAltAdLoaded.value
-                    && controller.nativeAdAlt != null
-                    && !AppSetting.isPremiumUser.value
-                    && controller.isShowAdsAlt.value
-                    ? SizedBox(
-                  child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAdAlt!),
-                ) :
-                Container()
-                ),
-              )
+                  : EasyNativeAd(
+                      key: const ValueKey('question_std'),
+                      factoryId: 'nativeMedia',
+                      adId: MyAdIdName.nativeQuestionAd.getId,
+                      height: AdDimen.mediumNativeHeight,
+                    );
+            }),
           )
         ],
       ),

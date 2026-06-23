@@ -18,23 +18,6 @@ import '/core/values/styles.dart';
 
 class AppUtil {
 
-  savePurchaseStatus(bool purchaseSuccess) {
-    return saveBool(Constants.kIsPurchase, purchaseSuccess);
-  }
-
-  saveRemoveAdsStatus(bool isRemoveAdsSuccess) {
-    return saveBool(Constants.kIsRemoveAds, isRemoveAdsSuccess);
-  }
-
-  bool getPurchaseStatus() {
-    bool isPurchaseSuccess = getBool(Constants.kIsPurchase);
-    return isPurchaseSuccess;
-  }
-
-  bool getRemoveAdsStatus() {
-    bool isRemoveAdsSuccess = getBool(Constants.kIsRemoveAds);
-    return isRemoveAdsSuccess;
-  }
 
   static Future<String> convertImageToBase64(String imagePath) async {
     final File imageFile = File(imagePath);

@@ -5,11 +5,8 @@ import '../core/values/constants.dart';
 import '../models/realm/download_realm_model.dart';
 
 class AppSetting {
-  static RxBool isPremiumUser = false.obs;
-  static RxBool isRemoveAds = false.obs;
   static RxBool isShowingFullAd = false.obs;
   static int adImpressionCount = 1;
-  static bool isDialogPremiumShowing = false;
   static var isInReviewing = false;
   static String selectedLanguageCode = AppUtil().getUserChoosedLanguage();
   static RxBool isInitRemoteConfig = false.obs;

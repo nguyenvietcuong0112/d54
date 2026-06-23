@@ -10,12 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
-import '../../helper/firebase_remote_config_service.dart';
 import '../popup_confirm_quit/popup_confirm_quit_controller.dart';
 import '../popup_confirm_quit/popup_confirm_quit_page.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 class TabbarController extends BaseController with GetTickerProviderStateMixin {
   RxInt selectedIndex = 0.obs;
@@ -29,10 +27,6 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
   List<Widget> bottomBarPages = [];
   final autoSizeGroup = AutoSizeGroup();
 
-  // Timer để reload banner_home mỗi 15 giây
-  Timer? _bannerReloadTimer;
-  RxBool isBannerAdLoadingFailed = false.obs;
-
   @override
   void onInit() {
     // TODO: implement onInit
@@ -41,10 +35,10 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
     Get.put<HistoryTabController>(HistoryTabController());
     Get.put<SettingTabController>(SettingTabController());
 
+    EasyAds.instance.appLifecycleReactor?.setAllowAppOpenAd(true);
+
     FirebaseHelper.setTrackingScreenName("HomeScreen");
     requestPermission();
-    reloadBannerHome();
-    _startBannerReloadTimer();
     borderRadiusAnimationController = AnimationController(
         duration: Duration(milliseconds: 500),
         vsync: this
@@ -66,7 +60,6 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
   @override
   void onClose() {
     super.onClose();
-    _bannerReloadTimer?.cancel();
     animationController.dispose();
     borderRadiusAnimationController.dispose();
   }
@@ -78,49 +71,6 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
     if (apnsToken != null) {
       // APNS token is available, make FCM plugin API requests...
     }
-  }
-
-  // banner_home: Collab banner ở dưới cùng màn Home, Download (15s reload 1 lần)
-  reloadBannerHome() {
-    isBannerAdLoadingFailed.value = false;
-    Timer(const Duration(seconds: 3), () {
-      if (!isClosed && !isBannerAdLoaded.value) {
-        isBannerAdLoadingFailed.value = true;
-        update();
-      }
-    });
-
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.banner_home)) {
-      AdmobAdsManager.reloadBannerAdWithType(BannerAdType.bannerHome, true, (_bannerAd) {
-        if (isClosed) {
-          _bannerAd.dispose();
-          return;
-        }
-        isBannerAdLoadingFailed.value = false;
-        isBannerAdLoaded.value = false;
-        bannerAd = _bannerAd;
-        isBannerAdLoaded.value = true;
-        update();
-      });
-    }
-  }
-
-  // Timer reload banner mỗi 15 giây
-  _startBannerReloadTimer() {
-    _bannerReloadTimer?.cancel();
-    _bannerReloadTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
-      if (isClosed) {
-        timer.cancel();
-        return;
-      }
-      // Dispose banner cũ trước khi load mới
-      if (bannerAd != null) {
-        bannerAd!.dispose();
-        bannerAd = null;
-        isBannerAdLoaded.value = false;
-      }
-      reloadBannerHome();
-    });
   }
 
 

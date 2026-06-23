@@ -1,21 +1,17 @@
 import 'dart:async';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/core/values/enums.dart';
 import 'package:cscmobi_app/routes/app_pages.dart';
 import 'package:cscmobi_app/screens/download_detail/download_detail_controller.dart';
-import 'package:cscmobi_app/screens/tabbar/tabbar_controller.dart';
 import 'package:cscmobi_app/screens/url_downloader/url_downloader_controller.dart';
 import 'package:cscmobi_app/screens/url_downloader/url_downloader_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../Utils/app_setting.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
-import '../../helper/firebase_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../download_detail/download_detail_page.dart';
 
@@ -26,18 +22,9 @@ class HomeTabController extends BaseController {
   var title_twitter = "Twitter".obs;
   var title_tiktok = "TikTok".obs;
 
-  RxBool isNativeAdLoadingFailed = false.obs;
-  RxBool showHomeLoading = false.obs;
-
-  @override
+    @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
-    // Load inter_home ad for feature button clicks
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(
-        FirebaseRemoteConfigService.inter_home)) {
-      AdmobAdsManager.loadAdmobInterstitialAdWithType(InterAdType.interHomeAd);
-    }
     title_facebook.value = FirebaseRemoteConfigService.getStringConfigByKey(
         FirebaseRemoteConfigService.title_facebook);
     title_instagram.value = FirebaseRemoteConfigService.getStringConfigByKey(
@@ -52,17 +39,11 @@ class HomeTabController extends BaseController {
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
-    reloadAds();
     _startHomeLoadingTimer();
   }
 
   void _startHomeLoadingTimer() {
-    if (AppSetting.isPremiumUser.value || AppSetting.isRemoveAds.value) {
-      return;
-    }
-    
     Get.dialog(
       WillPopScope(
         onWillPop: () async => false,
@@ -88,32 +69,7 @@ class HomeTabController extends BaseController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
-  }
-
-  reloadAds() {
-    isNativeAdLoadingFailed.value = false;
-    Timer(const Duration(seconds: 3), () {
-      if (!isClosed && !isNativeAdLoaded.value) {
-        isNativeAdLoadingFailed.value = true;
-      }
-    });
-
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(
-        FirebaseRemoteConfigService.native_home)) {
-      AdmobAdsManager.reloadNativeAdsWithType(
-          NativeAdType.nativeHomeMediumAd, false, (_nativeAd) {
-        if (isClosed) {
-          _nativeAd.dispose();
-          return;
-        }
-        isNativeAdLoadingFailed.value = false;
-        isNativeAdLoaded.value = false;
-        nativeAd = _nativeAd;
-        isNativeAdLoaded.value = true;
-      });
-    }
   }
 
   goToScreenWithType(DownloadType type) {
@@ -125,54 +81,99 @@ class HomeTabController extends BaseController {
 
   // Sử dụng interHomeAd cho tất cả feature buttons trên Home (trừ Settings)
   onSelectFacebook() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.facebook);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.facebook);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.facebook);
+      },
+    );
   }
 
   onSelectInstagram() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.instagram);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.instagram);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.instagram);
+      },
+    );
   }
 
   onSelectTwitter() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.twitter);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.twitter);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.twitter);
+      },
+    );
   }
 
   onSelectTiktok() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.tiktok);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.tiktok);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.tiktok);
+      },
+    );
   }
 
   onSelectURLDownloader({String? validUrl = ""}) {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      Get.toWithController(
-          controllerBuilder: () => URLDownloaderController(),
-          page: () => URLDownloaderPage(),
-          arguments: {"type": DownloadType.webview, "url": validUrl});
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        Get.toWithController(
+            controllerBuilder: () => URLDownloaderController(),
+            page: () => URLDownloaderPage(),
+            arguments: {"type": DownloadType.webview, "url": validUrl});
+      },
+      onFailed: () {
+        Get.toWithController(
+            controllerBuilder: () => URLDownloaderController(),
+            page: () => URLDownloaderPage(),
+            arguments: {"type": DownloadType.webview, "url": validUrl});
+      },
+    );
   }
 
   onSelectPinterest() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.pinterest);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.pinterest);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.pinterest);
+      },
+    );
   }
 
   onSelectAddUrl() {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interHomeAd,
-        onNextScreen: () async {
-      goToScreenWithType(DownloadType.addUrl);
-    });
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interHomeAd.getId,
+      adDissmissed: () {
+        goToScreenWithType(DownloadType.addUrl);
+      },
+      onFailed: () {
+        goToScreenWithType(DownloadType.addUrl);
+      },
+    );
   }
 }

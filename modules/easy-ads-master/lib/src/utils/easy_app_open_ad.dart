@@ -38,9 +38,9 @@ class _EasyAppOpenAdState extends State<EasyAppOpenAd>
           case AdEventType.adFailedToLoad:
           case AdEventType.adFailedToShow:
             EasyAds.instance.setFullscreenAdShowing(false);
-            // if (mounted) {
-            //   Navigator.of(context).pop();
-            // }
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
             break;
           case AdEventType.adDismissed:
             EasyAds.instance.setFullscreenAdShowing(false);

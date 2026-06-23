@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 
 class PopupDeletePage extends GetView<PopupDeleteController> {

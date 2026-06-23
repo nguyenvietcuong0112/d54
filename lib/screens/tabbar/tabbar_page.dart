@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
 import '../../customwidget/wrap_keep_alive_tab.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../customwidget/shimmer.dart';
 
@@ -91,42 +93,19 @@ class TabbarPage extends GetView<TabbarController> {
                       );
                     }),
                   ),
-                  Obx(() {
-                    final bool isPremium = AppSetting.isPremiumUser.value ||
-                        AppSetting.isRemoveAds.value;
-                    final bool isShowAd =
-                        FirebaseRemoteConfigService.getBoolConfigByKey(
-                            FirebaseRemoteConfigService.banner_home);
-                    if (isPremium || !isShowAd || controller.isBannerAdLoadingFailed.value) {
-                      return const SizedBox();
-                    }
-
-                    return Container(
-                      height: 60,
-                      width: double.infinity,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: (controller.isBannerAdLoaded.value &&
-                                controller.bannerAd != null)
-                            ? Container(
-                                key: const ValueKey('banner_loaded'),
-                                color: Colors.white,
-                                child: AdmobAdHelper().getBottomBannerAdWidget(
-                                    ad: controller.bannerAd!),
-                              )
-                            : Shimmer.fromColors(
-                                key: const ValueKey('banner_loading'),
-                                baseColor: const Color(0xFF2C2C3E),
-                                highlightColor: const Color(0xFF3D3D5C),
-                                child: Container(
-                                  color: const Color(0xFF2C2C3E),
-                                  width: double.infinity,
-                                  height: 60,
-                                ),
-                              ),
-                      ),
-                    );
-                  })
+                  FirebaseRemoteConfigService.getBoolConfigByKey(
+                          FirebaseRemoteConfigService.banner_home)
+                      ? Container(
+                          height: 60,
+                          width: double.infinity,
+                          color: Colors.white,
+                          child: EasyBannerAd(
+                            adId: MyAdIdName.bannerHome.getId,
+                            isCollapsible: true,
+                            reloadInterval: 15,
+                          ),
+                        )
+                      : const SizedBox()
                 ],
               ),
             );

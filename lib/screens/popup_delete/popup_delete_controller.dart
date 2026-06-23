@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import '../../core/base/base_controller.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 

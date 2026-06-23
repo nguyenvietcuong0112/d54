@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/services/easy_firebase_service.dart';
 
-import '../services/easy_appsflyer_service.dart';
+import '../services/easy_adjust_service.dart';
 import '../services/easy_shared_pref_service.dart';
 
 /// Easy Event controller manages events received from all type of ad units
@@ -100,14 +100,14 @@ class EasyEventController {
     PrecisionType precision,
     String currencyCode,
   ) {
-    EasyAppsflyerService().logAdRevenue(
+    EasyAdjustService().logAdRevenue(
       adNetwork,
       ad,
       valueMicros,
       currencyCode,
     );
 
-    EasyAppsflyerService().logAdRevenue100Percent(
+    EasyAdjustService().logAdRevenue60Percent(
       adNetwork,
       ad,
       valueMicros,
@@ -122,6 +122,10 @@ class EasyEventController {
       type: AdEventType.onPaidEvent,
       adNetwork: adNetwork,
       adUnitType: adUnitType,
+      ad: ad,
+      valueMicros: valueMicros,
+      precision: precision,
+      currencyCode: currencyCode,
       data: {'valueMicros': valueMicros, 'currencyCode': currencyCode},
     ));
   }
@@ -144,6 +148,7 @@ class EasyEventController {
       type: AdEventType.onAdImpression,
       adNetwork: adNetwork,
       adUnitType: adUnitType,
+      ad: ad,
     ));
   }
 }

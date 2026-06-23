@@ -9,7 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
+import '../../helper/firebase_remote_config_service.dart';
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 
 class SettingTabPage extends GetView<SettingTabController> {
   @override
@@ -255,12 +259,14 @@ class SettingTabPage extends GetView<SettingTabController> {
                 ),
               ),
             ),
-            Obx(() => (controller.isNativeAdLoaded.value && controller.nativeAd != null
-                && !AppSetting.isPremiumUser.value)
-                ? Container(
-              margin: EdgeInsets.only(top: 10),
-              child: AdmobAdHelper().getNativeAdWidgetSmall(ad: controller.nativeAd!, color: AppColors.colorBgAds),
-            ) : Container()),
+             FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_home)
+                ? EasyNativeAd(
+                    key: const ValueKey('settings_bottom_ad'),
+                    factoryId: 'nativeMedia',
+                    adId: MyAdIdName.nativeHomeAd.getId,
+                    height: AdDimen.mediumNativeHeight,
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

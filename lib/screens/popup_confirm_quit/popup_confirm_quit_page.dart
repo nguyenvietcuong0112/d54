@@ -233,10 +233,7 @@ class PopupConfirmQuitPage extends GetView<PopupConfirmQuitController> {
               SizedBox(
                 height: 10,
               ),
-              // Obx(() => (controller.isNativeAdMediumLoaded.value && controller.nativeAdMedium != null
-              //     && !AppSetting.isPremiumUser.value && FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_popup_confirm_quit))
-              //     ? controller.getAdmobAdHelperSmall(ad: controller.nativeAdMedium! )
-              //     : const SizedBox()),
+
             ],
           ),
         ),

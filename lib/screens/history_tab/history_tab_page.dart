@@ -4,10 +4,13 @@ import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
+import '../../helper/firebase_remote_config_service.dart';
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
 import '../../helper/video_download_helper.dart';
 import 'history_tab_controller.dart';
 
@@ -31,12 +34,6 @@ class HistoryTabPage extends GetView<HistoryTabController> {
                 flex: 1,
                 child: buildContent(context),
               ),
-              Obx(() => (controller.isNativeAdLoaded.value && controller.nativeAd != null
-                  && !AppSetting.isPremiumUser.value)
-                  ? Container(
-                child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAd!, color: AppColors.colorBgAds),
-              ) :
-              Container())
             ],
           ),
         ),
@@ -52,7 +49,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
         children: [
           Container(
             height: 45,
-            margin: EdgeInsets.only(left: 20, right: 20),
+            margin: const EdgeInsets.only(left: 20, right: 20),
             decoration: BoxDecoration(
               color: AppColors.backgroundItemColor,
               borderRadius: BorderRadius.circular(
@@ -62,7 +59,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
             child: TabBar(
               controller: controller.tabController,
               // give the indicator a decoration (color and border radius)
-              padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(
                   25.0,
@@ -83,6 +80,16 @@ class HistoryTabPage extends GetView<HistoryTabController> {
               ],
             ),
           ),
+          if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_download))
+            Padding(
+              padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              child: EasyNativeAd(
+                key: const ValueKey('history_download_native'),
+                factoryId: 'nativeNoMedia',
+                adId: MyAdIdName.nativeDownloadAd.getId,
+                height: AdDimen.horizontalAdHeight,
+              ),
+            ),
           Expanded(
             child: TabBarView(
               controller: controller.tabController,
@@ -169,37 +176,11 @@ class HistoryTabPage extends GetView<HistoryTabController> {
       padding: EdgeInsets.only(left: 20, right: 20),
       child: Obx(() => controller.listDownloadItems.length > 0
           ? ListView.builder(
-          itemCount: controller.totalListItems,
+          itemCount: controller.listDownloadItems.length,
           padding: EdgeInsets.only(top: 5, bottom: 220),
           itemBuilder: (context, index) {
-            // Kiểm tra nếu vị trí này là ad slot (native_download)
-            if (controller.isAdPosition(index)) {
-              int adSlotIndex = controller.getAdSlotIndex(index);
-              return Obx(() {
-                bool adLoaded = controller.isNativeDownloadAdLoaded[adSlotIndex] == true;
-                NativeAd? ad = controller.nativeDownloadAds[adSlotIndex];
-                if (adLoaded && ad != null && !AppSetting.isPremiumUser.value) {
-                  return Container(
-                    margin: EdgeInsets.only(top: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Color(0xFF2E2E39),
-                    ),
-                    child: AdmobAdHelper().getNativeAdWidgetSmall(ad: ad, color: Color(0xFF2E2E39)),
-                  );
-                }
-                return SizedBox();
-              });
-            }
-
-            // Data item
-            int dataIndex = controller.getDataIndex(index);
-            if (dataIndex < 0 || dataIndex >= controller.listDownloadItems.length) {
-              return SizedBox();
-            }
-
             return GestureDetector(
-              onTap: () => controller.onSelectItem(dataIndex),
+              onTap: () => controller.onSelectItem(index),
               child: Container(
                 width: double.infinity,
                 height: 64,
@@ -221,14 +202,14 @@ class HistoryTabPage extends GetView<HistoryTabController> {
                             child: Stack(
                               children: [
                                 Positioned.fill(
-                                  child: controller.listDownloadItems[dataIndex].type == "video" && controller.listDownloadItems[dataIndex].thumbnail.isNotEmpty
+                                  child: controller.listDownloadItems[index].type == "video" && controller.listDownloadItems[index].thumbnail.isNotEmpty
                                       ? Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     clipBehavior: Clip.hardEdge,
                                     child: Image.memory(
-                                      Uint8List.fromList(controller.listDownloadItems[dataIndex].thumbnail),
+                                      Uint8List.fromList(controller.listDownloadItems[index].thumbnail),
                                       fit: BoxFit.cover,
                                       width: 81,
                                       height: 64,
@@ -265,7 +246,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  controller.listDownloadItems[dataIndex].name,
+                                  controller.listDownloadItems[index].name,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -278,7 +259,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
                                   height: 5,
                                 ),
                                 Text(
-                                  controller.listDownloadItems[dataIndex].size,
+                                  controller.listDownloadItems[index].size,
                                   style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
@@ -301,7 +282,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
                           iconColor: Colors.white,
                           color: AppColors.backgroundItemColor,
                           onSelected: (value) {
-                            controller.onSelectMenuItem(value, context, dataIndex);
+                            controller.onSelectMenuItem(value, context, index);
                           },
                           itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                             PopupMenuItem<String>(

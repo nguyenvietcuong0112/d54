@@ -3,10 +3,11 @@ import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 
 import '../../core/utils/app_util.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../tabbar/tabbar_controller.dart';
@@ -24,7 +25,6 @@ class QuestionController extends BaseController {
     // TODO: implement onInit
     super.onInit();
     initData();
-    reloadAds();
     FirebaseHelper.setTrackingScreenName("QuestionScreen");
   }
 
@@ -52,29 +52,6 @@ class QuestionController extends BaseController {
 
   onSelectBack() {
     Get.back();
-  }
-
-  reloadAds() {
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_question)) {
-      AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeQuestionAd, false, (_nativeAd) {
-        if (isClosed) {
-          _nativeAd.dispose();
-          return;
-        }
-        isNativeAdLoaded.value = false;
-        nativeAd = _nativeAd;
-        isNativeAdLoaded.value = true;
-      });
-      AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeQuestionAltAd, false, (_nativeAd) {
-        if (isClosed) {
-          _nativeAd.dispose();
-          return;
-        }
-        isNativeAltAdLoaded.value = false;
-        nativeAdAlt = _nativeAd;
-        isNativeAltAdLoaded.value = true;
-      });
-    }
   }
 
   onSelectItem(int index) {

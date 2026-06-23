@@ -20,11 +20,19 @@ import '../../easy_ads_flutter.dart';
 class AppLifecycleReactor with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  bool _onSplashScreen = false;
+  bool _onSplashScreen = true;
   bool _isExcludeScreen = false;
   bool _wasInactive = false;
 
+  bool _pausedByAd = false;
+  DateTime? _onSplashScreenFalseTime;
+  bool _allowAppOpenAd = false;
+
   AppLifecycleReactor({required this.navigatorKey});
+
+  void setAllowAppOpenAd(bool value) {
+    _allowAppOpenAd = value;
+  }
 
   void listenToAppStateChanges() {
     AppStateEventNotifier.startListening();
@@ -35,6 +43,9 @@ class AppLifecycleReactor with WidgetsBindingObserver {
 
   void setOnSplashScreen(bool value) {
     _onSplashScreen = value;
+    if (!value) {
+      _onSplashScreenFalseTime = DateTime.now();
+    }
   }
 
   void setIsExcludeScreen(bool value) {
@@ -42,28 +53,7 @@ class AppLifecycleReactor with WidgetsBindingObserver {
   }
 
   void _onAppStateChanged(AppState appState) async {
-    if (_onSplashScreen) {
-      return;
-    }
-
-    // No need to track background time anymore
-    // if (appState == AppState.background) {
-    //   print('[AppLifecycleReactor] App went to background');
-    // }
-    // // Show app open ad when back to foreground
-    // else if (appState == AppState.foreground) {
-    //   if (!_isExcludeScreen) {
-    //     if (navigatorKey.currentContext != null) {
-    //       if (EasyAds.instance.isFullscreenAdShowing) {
-    //         return;
-    //       }
-    //       // Load and show app open ad every time (no duration check)
-    //       _loadAndShowAppOpenAd();
-    //     } else {}
-    //   } else {
-    //     _isExcludeScreen = false;
-    //   }
-    // }
+    // Deprecated in favor of didChangeAppLifecycleState
   }
 
   @override
@@ -72,13 +62,30 @@ class AppLifecycleReactor with WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused) {
       _wasInactive = true;
+      if (EasyAds.instance.isFullscreenAdShowing ||
+          EasyAds.instance.isManualAppOpenAdShowing) {
+        _pausedByAd = true;
+      }
     } else if (state == AppLifecycleState.resumed && _wasInactive) {
       _wasInactive = false;
+      final wasPausedByAd = _pausedByAd;
+      _pausedByAd = false; // Reset
+
       if (_onSplashScreen) return;
+      if (!_allowAppOpenAd) return;
+
+      // Ignore transient resumes within 2 seconds of leaving the splash screen
+      if (_onSplashScreenFalseTime != null &&
+          DateTime.now().difference(_onSplashScreenFalseTime!).inSeconds < 2) {
+        return;
+      }
+
       if (_isExcludeScreen) {
         _isExcludeScreen = false;
         return;
       }
+
+      if (wasPausedByAd) return;
 
       if (navigatorKey.currentContext != null &&
           !EasyAds.instance.isFullscreenAdShowing &&

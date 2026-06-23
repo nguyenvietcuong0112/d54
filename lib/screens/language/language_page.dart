@@ -2,8 +2,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 import '../../core/values/app_colors.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import '../../utils/app_setting.dart';
 import 'language_controller.dart';
 
@@ -38,50 +41,20 @@ class LanguagePage extends GetView<LanguageController> {
                 left: 0,
                 right: 0,
                 child: Obx(() {
-                  return (controller.isNativeAdLoaded.value
-                      && controller.nativeAd != null && !AppSetting.isPremiumUser.value
-                      && !(controller.isShowAltAds.value && controller.nativeAdAlt != null && controller.isNativeAltAdLoaded.value)
-                      && controller.isShouldShowAds.value)
-                      ? Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 10,
-                            spreadRadius: 0,
-                            offset: const Offset(0, 4),
-                          )
-                        ]
-                    ),
-                    child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAd!),
-                  ) :
-                  Container();
-                }),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Obx(() {
-                  return (
-                      controller.isShowAltAds.value && controller.nativeAdAlt != null
-                          && !AppSetting.isPremiumUser.value
-                      && controller.isNativeAltAdLoaded.value
-                      && controller.isShouldShowAds.value)
-                      ? Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 10,
-                            spreadRadius: 0,
-                            offset: Offset(0, 4),
-                          )
-                        ]
-                    ),
-                    child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAdAlt!),
-                  ) :
-                  Container();
+                  final bool isShowAlt = controller.isShowAltAds.value;
+                  return isShowAlt
+                      ? EasyNativeAd(
+                          key: const ValueKey('language_alt'),
+                          factoryId: 'nativeMedia',
+                          adId: MyAdIdName.nativeLanguageClick.getId,
+                          height: AdDimen.mediumNativeHeight,
+                        )
+                      : EasyNativeAd(
+                          key: const ValueKey('language_std'),
+                          factoryId: 'nativeMedia',
+                          adId: MyAdIdName.nativeLanguage.getId,
+                          height: AdDimen.mediumNativeHeight,
+                        );
                 }),
               )
             ],

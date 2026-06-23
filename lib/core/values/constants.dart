@@ -57,8 +57,6 @@ class Constants {
 
   static const String IS_SHOW_INTRODUCE = "IS_SHOW_INTRODUCE";
 
-  static const String kIsPurchase = 'kIsPurchase';
-  static const String kIsRemoveAds = 'kIsRemoveAds';
   static const String kUserId = 'userId';
   static const String kUserName = 'userName';
   static const String kUserPhone = 'userPhone';

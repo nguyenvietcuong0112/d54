@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
-import 'easy_loading_splash.dart';
 
 class EasyInterstitialAd extends StatefulWidget {
   final AdNetwork adNetwork;
@@ -53,9 +52,10 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     EasyAds.instance.setFullscreenAdShowing(true);
-    _interstitialAd?.load();
+    
     _streamSubscription = EasyAds.instance.onEvent.listen((event) {
-      if (event.adUnitType == AdUnitType.interstitial) {
+      if (event.adUnitType == AdUnitType.interstitial &&
+          event.adUnitId == widget.adId) {
         switch (event.type) {
           case AdEventType.adLoaded:
             if (_appLifecycleState == AppLifecycleState.resumed) {
@@ -71,18 +71,31 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
             widget.onAdImpression?.call();
             break;
           case AdEventType.adFailedToLoad:
-            widget.onFailed?.call();
             EasyAds.instance.setFullscreenAdShowing(false);
             _streamSubscription?.cancel();
+            if (mounted && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+            widget.onFailed?.call();
             break;
           case AdEventType.adDismissed:
             EasyAds.instance.setFullscreenAdShowing(false);
-            widget.adDismissed?.call();
             _streamSubscription?.cancel();
+            if (mounted && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+            widget.adDismissed?.call();
             break;
           case AdEventType.adFailedToShow:
             if (_appLifecycleState != AppLifecycleState.resumed) {
               _adFailedToShow = true;
+            } else {
+              EasyAds.instance.setFullscreenAdShowing(false);
+              _streamSubscription?.cancel();
+              if (mounted && Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+              widget.onFailed?.call();
             }
             break;
           default:
@@ -90,6 +103,17 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
         }
       }
     });
+
+    if (_interstitialAd?.isAdLoaded == true) {
+      if (_appLifecycleState == AppLifecycleState.resumed) {
+        _showAd();
+      } else {
+        _adFailedToShow = true;
+      }
+    } else {
+      _interstitialAd?.load();
+    }
+
     super.initState();
   }
 
@@ -116,9 +140,13 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: EasyLoadingSplash(
-        customSplash: EasyAds.configuredLoadingSplash,
-        message: EasyAds.configuredLoadingMessage,
+      child: const Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
       ),
     );
   }

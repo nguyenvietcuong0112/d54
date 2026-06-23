@@ -2,9 +2,7 @@ import 'package:cscmobi_app/screens/popup_rename/popup_rename_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../Utils/app_setting.dart';
 import '../../core/values/app_colors.dart';
-import '../../helper/admob_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 
 class PopupRenamePage extends GetView<PopupRenameController> {

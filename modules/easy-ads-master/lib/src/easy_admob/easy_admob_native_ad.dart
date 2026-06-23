@@ -113,10 +113,7 @@ class EasyAdmobNativeAd extends EasyAdBase {
   dynamic show() {
     final ad = _nativeAd;
     if (_isAdLoading) {
-      return SizedBox(
-        height: _height,
-        child: const EasyLoadingAd(),
-      );
+      return EasyLoadingAd(height: _height);
     }
     if (ad == null || !_isAdLoaded) {
       return const SizedBox();

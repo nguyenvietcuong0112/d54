@@ -14,14 +14,10 @@ class FirebaseRemoteConfigService {
   static final String inter_splash = "inter_splash";
   static final String native_language = "native_language";
   static final String native_language_click = "native_language_click";
-  static final String native_language_2f = "native_language_2f";
-  static final String native_language_2f_click = "native_language_2f_click";
-  static final String native_onboarding_1_1 = "native_onboarding_1_1";
+  static final String native_onboarding_1 = "native_onboarding_1";
   static final String native_onboarding_full_1 = "native_onboarding_full_1";
-  static final String native_onboarding_4_1 = "native_onboarding_4_1";
-  static final String native_onboarding_1_2 = "native_onboarding_1_2";
+  static final String native_onboarding_4 = "native_onboarding_4";
   static final String native_onboarding_full_2 = "native_onboarding_full_2";
-  static final String native_onboarding_4_2 = "native_onboarding_4_2";
   static final String native_question = "native_question";
   static final String native_home = "native_home";
 
@@ -57,14 +53,10 @@ class FirebaseRemoteConfigService {
         "inter_splash": true,
         "native_language": true,
         "native_language_click": true,
-        "native_language_2f": true,
-        "native_language_2f_click": true,
-        "native_onboarding_1_1": true,
+        "native_onboarding_1": true,
         "native_onboarding_full_1": true,
-        "native_onboarding_4_1": true,
-        "native_onboarding_1_2": true,
+        "native_onboarding_4": true,
         "native_onboarding_full_2": true,
-        "native_onboarding_4_2": true,
         "native_question": true,
         "native_home": true,
 

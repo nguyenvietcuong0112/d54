@@ -11,8 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/app_util.dart';
 import '../../core/values/constants.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../language/language_controller.dart';
@@ -28,37 +26,18 @@ class SettingTabController extends BaseController {
 
   @override
   void onInit() async {
-    // TODO: implement onInit
     super.onInit();
     appVersion.value = await AppUtil().getAppVersion();
-    reloadAds();
   }
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
-
-  }
-
-  reloadAds() {
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_home)) {
-      AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeHomeAd, true, (_nativeAd) {
-        if (isClosed) {
-          _nativeAd.dispose();
-          return;
-        }
-        isNativeAdLoaded.value = false;
-        nativeAd = _nativeAd;
-        isNativeAdLoaded.value = true;
-        update();
-      });
-    }
+    super.onClose();
   }
 
   onSelectBack() {

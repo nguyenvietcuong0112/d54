@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
 import '../../core/values/app_colors.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import 'splash_controller.dart';
 
 class SplashPage extends GetView<SplashController> {
@@ -74,7 +76,7 @@ class SplashPage extends GetView<SplashController> {
                       bottom: true,
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             "This action can contain adversting",
                             style: TextStyle(
                                 fontSize: 14,
@@ -101,18 +103,15 @@ class SplashPage extends GetView<SplashController> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Obx(() => (controller.isBannerAdLoaded.value
-                        && controller.bannerAd != null
-                        && !AppSetting.isPremiumUser.value
-                        && !AppSetting.isRemoveAds.value)
-                        ? Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            color: Colors.white
-                        ),
-                        child: AdmobAdHelper().getBottomBannerAdWidget(ad: controller.bannerAd!)
+                    Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                          color: Colors.white
+                      ),
+                      child: EasyBannerAd(
+                        adId: MyAdIdName.bannerSplash.getId,
+                      ),
                     )
-                        : const SizedBox())
                   ],
                 ),
               ),

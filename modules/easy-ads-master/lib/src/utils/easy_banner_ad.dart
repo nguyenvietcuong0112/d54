@@ -8,12 +8,14 @@ class EasyBannerAd extends StatefulWidget {
   final AdSize? adSize;
   final String adId;
   final bool isCollapsible;
+  final int? reloadInterval;
 
   const EasyBannerAd({
     this.adNetwork = AdNetwork.admob,
     this.adSize,
     required this.adId,
     this.isCollapsible = false,
+    this.reloadInterval,
     Key? key,
   }) : super(key: key);
 
@@ -23,8 +25,8 @@ class EasyBannerAd extends StatefulWidget {
 
 class _EasyBannerAdState extends State<EasyBannerAd> {
   EasyAdBase? _bannerAd;
-
   StreamSubscription? _streamSubscription;
+  Timer? _reloadTimer;
 
   @override
   Widget build(BuildContext context) => _bannerAd?.show() ?? const SizedBox();
@@ -53,6 +55,31 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
         }
       }
     });
+
+    _startReloadTimer();
+  }
+
+  void _startReloadTimer() {
+    _reloadTimer?.cancel();
+    if (widget.reloadInterval != null && widget.reloadInterval! > 0) {
+      _reloadTimer = Timer.periodic(Duration(seconds: widget.reloadInterval!), (timer) {
+        _reloadAd();
+      });
+    }
+  }
+
+  void _reloadAd() {
+    _bannerAd?.dispose();
+    _bannerAd = EasyAds.instance.createBanner(
+      adNetwork: widget.adNetwork,
+      adSize: adSize,
+      adId: widget.adId,
+      isCollapsible: widget.isCollapsible,
+    );
+    _bannerAd?.load();
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -63,6 +90,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
 
   @override
   void dispose() {
+    _reloadTimer?.cancel();
     _bannerAd?.dispose();
     _streamSubscription?.cancel();
     super.dispose();

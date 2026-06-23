@@ -151,11 +151,11 @@ class _EasyAppOpenAdWithIdState extends State<EasyAppOpenAdWithId>
     EasyAds.instance.setFullscreenAdShowing(false);
     widget.onFailed?.call();
     // Use SchedulerBinding to ensure safe navigation
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (mounted && Navigator.of(context).canPop()) {
-    //     Navigator.of(context).pop();
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   @override

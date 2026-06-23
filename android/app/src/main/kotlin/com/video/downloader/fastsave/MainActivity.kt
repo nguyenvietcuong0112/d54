@@ -12,6 +12,7 @@ import android.webkit.MimeTypeMap
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin
 import java.io.File
 import java.io.FileInputStream
 import java.io.OutputStream
@@ -248,6 +249,23 @@ class MainActivity: FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+
+
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "nativeMedia",
+            NativeMediaFactory(layoutInflater)
+        )
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "nativeFull",
+            NativeFullFactory(layoutInflater)
+        )
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "nativeNoMedia",
+            NativeNoMediaFactory(layoutInflater)
+        )
     }
 
     private fun getAllAudioFiles(): List<Map<String, String>> {
@@ -457,5 +475,13 @@ class MainActivity: FlutterActivity() {
         }
 
         return itemUri
+    }
+
+
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        super.cleanUpFlutterEngine(flutterEngine)
+        GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeMedia")
+        GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeNoMedia")
+        GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeFull")
     }
 }

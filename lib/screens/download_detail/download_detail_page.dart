@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
+import '../../helper/firebase_remote_config_service.dart';
 
 class DownloadDetailPage extends GetView<DownloadDetailController> {
   @override
@@ -30,12 +34,14 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
               Expanded(
                 child: buildContent(),
               ),
-              Obx(() => (controller.isNativeAdLoaded.value && controller.nativeAd != null
-                  && !AppSetting.isPremiumUser.value)
-                  ? Container(
-                child: AdmobAdHelper().getNativeAdWidgetMedium(ad: controller.nativeAd!, color: AppColors.colorBgAds),
-              ) :
-              Container())
+              FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_home)
+                  ? EasyNativeAd(
+                      key: const ValueKey('download_detail_bottom'),
+                      factoryId: 'nativeMedia',
+                      adId: MyAdIdName.nativeHomeAd.getId,
+                      height: AdDimen.mediumNativeHeight,
+                    )
+                  : const SizedBox()
             ],
           ),
         ),
@@ -113,18 +119,14 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
             padding: EdgeInsets.only(bottom: 220, top: 5),
             itemBuilder: (context, index) {
               if (index == 0) {
-                return Container(
-                  margin: EdgeInsets.only(top: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Color(0xFF2E2E39),
-                  ),
-                  child: (controller.isNativeInlineAdLoaded.value
-                      && controller.nativeInlineAd != null && !AppSetting.isPremiumUser.value)
-                      ? SizedBox(
-                    child: AdmobAdHelper().getNativeAdWidgetInline(ad: controller.nativeInlineAd!),
-                  ) :
-                  Container(),
+                final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+                    FirebaseRemoteConfigService.native_home);
+                if (!showAd) return const SizedBox();
+                return EasyNativeAd(
+                  key: const ValueKey('download_detail_inline'),
+                  factoryId: 'nativeMedia',
+                  adId: MyAdIdName.nativeHomeAd.getId,
+                  height: AdDimen.mediumNativeHeight,
                 );
               }
               return GestureDetector(

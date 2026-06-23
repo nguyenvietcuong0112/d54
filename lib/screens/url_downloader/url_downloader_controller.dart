@@ -21,10 +21,8 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import '../../core/values/enums.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
+import '../../core/values/enums.dart';
 import '../popup_rename/popup_rename_controller.dart';
 import '../popup_rename/popup_rename_page.dart';
 

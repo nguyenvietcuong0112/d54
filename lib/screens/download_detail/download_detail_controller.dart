@@ -27,8 +27,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/utils/app_util.dart';
 import '../../core/values/app_colors.dart';
 import '../../customwidget/shimmer.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../helper/media_store_helper.dart';
@@ -51,8 +52,6 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
   RxList<FormatModel> videoList = <FormatModel>[].obs;
   List<FormatModel> allFormats = [];
   RxSet<int> selectedIndices = <int>{0}.obs;
-  RxBool isNativeInlineAdLoaded = false.obs;
-  NativeAd? nativeInlineAd;
   double currentDuration = 0.0;
 
   @override
@@ -63,7 +62,6 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
     tabController = TabController(length: 3, vsync: this);
     type = Get.arguments["type"];
     getData();
-    reloadAds();
   }
 
   @override
@@ -78,10 +76,6 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
     tabController.dispose();
     urlTextFieldController.dispose();
     super.onClose();
-  }
-
-  reloadAds() {
-    // No native ads in download detail page according to the 20 ad units spec
   }
 
   getData() {
@@ -337,26 +331,50 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
   }
 
   onSelectItem(index) async {
-    AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interPlayAd, onNextScreen: () async {
-      var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-      if (!existFile) {
-        AppUtil.showNormalToast("File not found".tr);
-        return;
-      }
-      openMyFile(listDownloadItems[index].url);
-    });
-  }
-
-  onSelectMenuItem(value, context, index) async {
-    if (value == 'open') {
-      AdmobAdsManager.showAdmobInterstitialAdWithType(InterAdType.interPlayAd, onNextScreen: () async {
+    EasyAds.instance.showInterstitialAd(
+      Get.context!,
+      adId: MyAdIdName.interPlayAd.getId,
+      adDissmissed: () async {
         var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
         if (!existFile) {
           AppUtil.showNormalToast("File not found".tr);
           return;
         }
         openMyFile(listDownloadItems[index].url);
-      });
+      },
+      onFailed: () async {
+        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+        if (!existFile) {
+          AppUtil.showNormalToast("File not found".tr);
+          return;
+        }
+        openMyFile(listDownloadItems[index].url);
+      },
+    );
+  }
+
+  onSelectMenuItem(value, context, index) async {
+    if (value == 'open') {
+      EasyAds.instance.showInterstitialAd(
+        Get.context!,
+        adId: MyAdIdName.interPlayAd.getId,
+        adDissmissed: () async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        },
+        onFailed: () async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        },
+      );
     } else if (value == 'play') {
       // Logic for play if any
     } else if (value == 'share') {

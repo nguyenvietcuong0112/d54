@@ -3,8 +3,6 @@ import 'package:cscmobi_app/core/utils/app_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../core/base/base_controller.dart';
-import '../../helper/admob_ads_manager.dart';
-import '../../helper/admod_ads_type.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import 'package:path/path.dart' as p;

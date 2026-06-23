@@ -3,7 +3,7 @@ description: Base project Flutter & Getx
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.1+1
+version: 0.0.2+1
 
 environment:
 #  sdk: ">=2.17.1 <3.0.0"
@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  easy_ads_flutter:
+    path: ./modules/easy-ads-master
 
   cupertino_icons: ^1.0.2
   intl: ^0.20.2
@@ -31,9 +33,8 @@ dependencies:
   http: ^1.2.2
   flutter_fgbg: ^0.7.1
   is_lock_screen2: ^2.0.3
-  google_mobile_ads:
-    path: ./libs/google_mobile_ads-6.0.0
-  adjust_sdk: ^4.38.1
+
+  adjust_sdk: ^5.6.2
   google_fonts: ^6.2.1
   lottie: ^3.1.2
   url_launcher: ^6.3.1
@@ -59,18 +60,18 @@ dependencies:
   modal_bottom_sheet: ^3.0.0
   mobile_device_identifier: ^0.0.3
   extended_image: ^10.0.1
-  gma_mediation_applovin:
-    path: ./libs/gma_mediation_applovin
-  gma_mediation_ironsource:
-    path: ./libs/gma_mediation_ironsource
-  gma_mediation_meta:
-    path: ./libs/gma_mediation_meta
-  gma_mediation_mintegral:
-    path: ./libs/gma_mediation_mintegral
-  gma_mediation_pangle:
-    path: ./libs/gma_mediation_pangle
-  gma_mediation_unity:
-    path: ./libs/gma_mediation_unity
+#  gma_mediation_applovin:
+#    path: ./libs/gma_mediation_applovin
+#  gma_mediation_ironsource:
+#    path: ./libs/gma_mediation_ironsource
+#  gma_mediation_meta:
+#    path: ./libs/gma_mediation_meta
+#  gma_mediation_mintegral:
+#    path: ./libs/gma_mediation_mintegral
+#  gma_mediation_pangle:
+#    path: ./libs/gma_mediation_pangle
+#  gma_mediation_unity:
+#    path: ./libs/gma_mediation_unity
   gal: ^2.3.0  # Phiên bản mới nhất, kiểm tra pub.dev
   dio: ^5.7.0     # Để download + progress
   path_provider: ^2.1.4

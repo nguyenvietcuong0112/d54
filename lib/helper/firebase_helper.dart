@@ -18,14 +18,6 @@ class FirebaseHelper {
   static const EVENT_CLICK_SERVICE_PLANT = 'click_service_plant';
   static const EVENT_RESULT_SUCCESS_PLANT = 'result_plant';
 
-  static const premium_view = "premium_view";
-  static const paywall_view = "paywall_view";
-  static const payment_successful = "payment_successful";
-  static const payment_failed = "payment_failed";
-  static const payment_cancel = "payment_cancel";
-  static const payment_restore = "payment_restore";
-  static const sale_popup_view = "sale_popup_view";
-  static const sale_banner_view = "sale_banner_view";
 
   static const inters_ad_view = "inters_ad_view";
   static const inter_splash_view = "inter_splash_view";
@@ -140,23 +132,6 @@ class FirebaseHelper {
   static const reload_native_language_alt_new =
       "reload_native_language_alt_new";
 
-  //Event purchase
-  static const EVENT_CLICK_PURCHASE_WEEKLY = 'click_purchase_weekly';
-  static const EVENT_CLICK_PURCHASE_MONTHLY = 'click_purchase_monthly';
-  static const EVENT_CLICK_PURCHASE_YEARLY = 'click_purchase_yearly';
-  static const EVENT_CLICK_PURCHASE_YEARLY_SALE = 'click_purchase_yearly_sale';
-  static const EVENT_CLICK_PURCHASE_LIFETIME = 'click_purchase_yearly';
-  static const EVENT_CLICK_PURCHASE_3MONTHS = 'click_purchase_3months';
-  static const EVENT_CLICK_PURCHASE_REMOVE_ADS = 'click_purchase_remove_ads';
-  static const EVENT_PURCHASE_SUCCESS_WEEKLY = 'purchase_success_weekly';
-  static const EVENT_PURCHASE_SUCCESS_MONTHLY = 'purchase_success_monthly';
-  static const EVENT_PURCHASE_SUCCESS_YEARLY = 'purchase_success_yearly';
-  static const EVENT_PURCHASE_SUCCESS_YEARLY_SALE = 'purchase_success_yearly';
-  static const EVENT_PURCHASE_SUCCESS_LIFETIME = 'purchase_success_yearly';
-  static const EVENT_PURCHASE_SUCCESS_3MONTHS = 'purchase_success_3months';
-  static const EVENT_PURCHASE_SUCCESS_REMOVE_ADS =
-      'purchase_success_remove_ads';
-  static const EVENT_PURCHASE_ERROR = 'purchase_error';
 
   static setUserId(String _userId) {
     analytics.setUserId();
@@ -247,79 +222,4 @@ class FirebaseHelper {
     );
   }
 
-  static logEventClickPurchaseWeely({required String productId}) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_WEEKLY,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchase3Months({required String productId}) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_WEEKLY,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchaseRemoveAds({required String productId}) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_REMOVE_ADS,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchaseMonthly({required String productId}) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_MONTHLY,
-      parameters: {
-        "product_id": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchaseYearly({
-    required String productId,
-  }) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_YEARLY,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchaseYearlySale({
-    required String productId,
-  }) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_YEARLY,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
-
-  static logEventClickPurchaseLifetime({
-    required String productId,
-  }) async {
-    await FirebaseAnalytics.instance.logEvent(
-      name: EVENT_CLICK_PURCHASE_YEARLY,
-      parameters: {
-        "productID": productId,
-        "store": Platform.isIOS ? "Apple" : "Google",
-      },
-    );
-  }
 }

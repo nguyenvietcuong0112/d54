@@ -1,9 +1,12 @@
+import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../Utils/app_setting.dart';
-import '../../helper/admob_helper.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../customwidget/shimmer.dart';
 import '../setting_tab/setting_tab_page.dart';
@@ -107,105 +110,21 @@ class HomeTabPage extends GetView<HomeTabController> {
               height: 20,
             ),
             buildSearchURL(),
-            Obx(() {
-              final bool isPremium = AppSetting.isPremiumUser.value ||
-                  AppSetting.isRemoveAds.value;
-              final bool isShowAd =
-                  FirebaseRemoteConfigService.getBoolConfigByKey(
-                      FirebaseRemoteConfigService.native_home);
-              if (isPremium || !isShowAd || controller.isNativeAdLoadingFailed.value) {
-                return const SizedBox();
-              }
-
-              return Container(
-                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                width: double.infinity,
-                height: 220,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: (controller.isNativeAdLoaded.value &&
-                          controller.nativeAd != null)
-                      ? Container(
-                          key: const ValueKey('ad_loaded'),
-                          child: AdmobAdHelper().getNativeAdWidgetMedium(
-                            ad: controller.nativeAd!,
-                            color: AppColors.colorBgAds,
-                          ),
-                        )
-                      : ClipRRect(
-                          key: const ValueKey('ad_loading'),
-                          borderRadius: BorderRadius.circular(12),
-                          child: Shimmer.fromColors(
-                            baseColor: const Color(0xFF2C2C3E),
-                            highlightColor: const Color(0xFF3D3D5C),
-                            child: Container(
-                              color: const Color(0xFF2C2C3E),
-                              width: double.infinity,
-                              height: 220,
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: double.infinity,
-                                              height: 16,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Container(
-                                              width: 120,
-                                              height: 12,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 38,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                ),
-              );
-            }),
             const SizedBox(
-              height: 20,
+              height: 10,
+            ),
+            if (FirebaseRemoteConfigService.getBoolConfigByKey(
+                FirebaseRemoteConfigService.native_home))
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: EasyNativeAd(
+                  factoryId: 'nativeNoMedia',
+                  adId: MyAdIdName.nativeHomeAd.getId,
+                  height: AdDimen.horizontalAdHeight,
+                ),
+              ),
+            const SizedBox(
+              height: 10,
             ),
             buildItem()
           ],

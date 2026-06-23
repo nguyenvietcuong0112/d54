@@ -35,7 +35,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.1' // Phù hợp với SDK 35 và Build-Tools 36
+        classpath 'com.android.tools.build:gradle:8.9.1' // Phù hợp với SDK 35 và Build-Tools 36
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:cscmobi_app/helper/admob_ads_manager.dart';
-import 'package:cscmobi_app/helper/admod_ads_type.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -37,8 +34,6 @@ class LanguageController extends BaseController {
     if (Get.arguments != null) {
       AppUtil.showLogFull("LanguageController onInit Get.arguments: ${Get.arguments}");
       isFirstLaunch.value = Get.arguments["isFirstLaunch"];
-      loadAds();
-      reloadAds();
     }else {
       AppUtil.showLogFull("LanguageController onInit NO ARGUMENTS");
     }
@@ -65,99 +60,10 @@ class LanguageController extends BaseController {
     }
   }
 
-  reloadAds() {
-    final bool isFirst = isFirstLaunch.value;
-    final String keyLanguage = isFirst 
-        ? FirebaseRemoteConfigService.native_language 
-        : FirebaseRemoteConfigService.native_language_2f;
-
-    if (!FirebaseRemoteConfigService.getBoolConfigByKey(keyLanguage)) {
-      return;
-    }
-    
-    // Tải Standard High Native trước
-    AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeLanguageHighAd, false, (_nativeAd) {
-      if (isClosed) {
-        _nativeAd.dispose();
-        return;
-      }
-      FirebaseHelper.logEventName(FirebaseHelper.reload_native_language_high_success, param: "");
-      isNativeAdLoaded.value = false;
-      nativeAd = _nativeAd;
-      isNativeAdLoaded.value = true;
-    });
-
-    // Hẹn giờ 3 giây tải Standard Normal Native làm dự phòng nếu High chưa tải xong hoặc lỗi
-    Future.delayed(const Duration(seconds: 3), () {
-      if (nativeAd == null && isClosed == false && !isShowAltAds.value) {
-        AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeLanguageAd, false, (_nativeAd) {
-          if (isClosed) {
-            _nativeAd.dispose();
-            return;
-          }
-          FirebaseHelper.logEventName(FirebaseHelper.reload_native_language_success, param: "");
-          isNativeAdLoaded.value = false;
-          nativeAd = _nativeAd;
-          isNativeAdLoaded.value = true;
-        });
-      }
-    });
-  }
-
-  loadAltAds() {
-    final bool isFirst = isFirstLaunch.value;
-    final String keyLanguageClick = isFirst 
-        ? FirebaseRemoteConfigService.native_language_click 
-        : FirebaseRemoteConfigService.native_language_2f_click;
-
-    if (!FirebaseRemoteConfigService.getBoolConfigByKey(keyLanguageClick)) {
-      return;
-    }
-
-    // Tải ad Alt High trước
-    AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeLanguageAltHighAd, false, (_nativeAd) {
-      if (isClosed) {
-        _nativeAd.dispose();
-        return;
-      }
-      FirebaseHelper.logEventName(FirebaseHelper.reload_native_language_alt_high_success, param: "");
-      isNativeAltAdLoaded.value = false;
-      nativeAdAlt = _nativeAd;
-      isNativeAltAdLoaded.value = true;
-    });
-
-    // Hẹn giờ 3 giây tải ad Alt Normal làm dự phòng
-    Future.delayed(const Duration(seconds: 3), () {
-      if (nativeAdAlt == null && isClosed == false) {
-        AdmobAdsManager.reloadNativeAdsWithType(NativeAdType.nativeLanguageAltAd, false, (_nativeAd) {
-          if (isClosed) {
-            _nativeAd.dispose();
-            return;
-          }
-          FirebaseHelper.logEventName(FirebaseHelper.reload_native_language_alt_success, param: "");
-          isNativeAltAdLoaded.value = false;
-          nativeAdAlt = _nativeAd;
-          isNativeAltAdLoaded.value = true;
-        });
-      }
-    });
-  }
-
-  loadAds() {
-    if (isFirstLaunch.value) {
-      AdmobAdsManager.loadAdmobNativeAdWithType(NativeAdType.nativeOnboard1Ad);
-      AdmobAdsManager.loadAdmobNativeAdWithType(NativeAdType.nativeOnboard2Ad);
-      AdmobAdsManager.loadAdmobNativeAdWithType(NativeAdType.nativeOnboardFull1Ad);
-      AdmobAdsManager.loadAdmobNativeAdWithType(NativeAdType.nativeOnboardFull2Ad);
-    }
-  }
-
   onSelectItem(int index) {
     selectedIndex.value = index;
     if (!isShowAltAds.value) {
       FirebaseHelper.logEventName(FirebaseHelper.language_next_view, param: Get.currentRoute);
-      // Kích hoạt tải ad Alt lúc này!
-      loadAltAds();
     }
     isShowAltAds.value = true;
     Future.delayed(Duration(seconds: 2), () {
