@@ -34,7 +34,7 @@ buildscript {
             url 'https://android-sdk.is.com/'
         }
     }
-    dependencies {
+    dependencies {com.al.quran.androidquran
         classpath 'com.android.tools.build:gradle:8.9.1' // Phù hợp với SDK 35 và Build-Tools 36
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
