@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import '../../ads/const/ad_id_name.dart';
+import '../../ads/const/ad_id_extension.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../core/base/base_controller.dart';
 import '../../core/utils/app_util.dart';
@@ -26,10 +30,21 @@ class LanguageController extends BaseController {
   RxBool isShouldShowNext = false.obs;
   RxBool isShouldShowAds = true.obs;
 
+  RxBool showLanguageAd = false.obs;
+  RxBool showLanguageClickAd = false.obs;
+
+  StreamSubscription? _adEventSubscription;
+  Timer? _timeoutTimer;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    showLanguageAd.value = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.native_language);
+    showLanguageClickAd.value = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.native_language_click);
+
     FirebaseHelper.setTrackingScreenName("LanguageScreen");
     if (Get.arguments != null) {
       AppUtil.showLogFull("LanguageController onInit Get.arguments: ${Get.arguments}");
@@ -65,10 +80,42 @@ class LanguageController extends BaseController {
     if (!isShowAltAds.value) {
       FirebaseHelper.logEventName(FirebaseHelper.language_next_view, param: Get.currentRoute);
     }
-    isShowAltAds.value = true;
-    Future.delayed(Duration(seconds: 2), () {
+
+    if (showLanguageClickAd.value) {
+      isShowAltAds.value = true;
+      isShouldShowNext.value = false;
+
+      _timeoutTimer?.cancel();
+      _timeoutTimer = Timer(const Duration(seconds: 3), () {
+        if (!isShouldShowNext.value && !isClosed) {
+          isShouldShowNext.value = true;
+        }
+      });
+
+      final ad = EasyAds.instance.getCachedNativeAd(MyAdIdName.nativeLanguageClick);
+      if (ad != null && ad.isAdLoaded) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (!isShouldShowNext.value && !isClosed) {
+            isShouldShowNext.value = true;
+          }
+        });
+      } else {
+        _adEventSubscription?.cancel();
+        _adEventSubscription = EasyAds.instance.onEvent.listen((event) {
+          if (event.adUnitId == MyAdIdName.nativeLanguageClick.getId &&
+              event.type == AdEventType.adLoaded) {
+            _adEventSubscription?.cancel();
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (!isShouldShowNext.value && !isClosed) {
+                isShouldShowNext.value = true;
+              }
+            });
+          }
+        });
+      }
+    } else {
       isShouldShowNext.value = true;
-    });
+    }
   }
 
   getPreviousSelectedLanguage() {
@@ -106,5 +153,12 @@ class LanguageController extends BaseController {
     } else {
       await Get.offWithController(controllerBuilder: () => OnboardController(), page: () => const OnboardPage());
     }
+  }
+
+  @override
+  void onClose() {
+    _adEventSubscription?.cancel();
+    _timeoutTimer?.cancel();
+    super.onClose();
   }
 }

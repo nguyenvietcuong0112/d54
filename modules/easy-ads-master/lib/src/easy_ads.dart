@@ -80,6 +80,9 @@ class EasyAds {
   /// All the rewarded ads will be stored in it
   final List<EasyAdBase> _rewardedAds = [];
 
+  /// Cache pool for preloaded Native Ads
+  final Map<String, EasyAdBase> _nativeAdCache = {};
+
   /// [_logger] is used to show Ad logs in the console
   final EasyLogger _logger = EasyLogger();
   AdSize? adSize;
@@ -233,6 +236,62 @@ class EasyAds {
     ad = EasyAdmobAppOpenAd(adId, _adRequest);
     _eventController.setupEvents(ad);
     return ad;
+  }
+
+  /// Preloads a native ad with a specific ID, factory ID, and height, and stores it in the cache under a unique cacheKey.
+  Future<void> preloadNativeAd({
+    required String adId,
+    required String factoryId,
+    required double height,
+    required String cacheKey,
+    AdNetwork adNetwork = AdNetwork.admob,
+  }) async {
+    if (adId.isEmpty || cacheKey.isEmpty) return;
+
+    // If already preloading or loaded, don't load again
+    if (_nativeAdCache.containsKey(cacheKey)) {
+      final cachedAd = _nativeAdCache[cacheKey]!;
+      if (cachedAd.isAdLoaded || cachedAd.isAdLoading) {
+        _logger.logInfo('Native Ad with cacheKey $cacheKey is already loaded or loading.');
+        return;
+      }
+    }
+
+    _logger.logInfo('Preloading Native Ad for cacheKey $cacheKey with adId $adId and height: $height');
+    final ad = createNative(
+      adNetwork: adNetwork,
+      factoryId: factoryId,
+      adId: adId,
+      height: height,
+    );
+
+    if (ad != null) {
+      _nativeAdCache[cacheKey] = ad;
+      await ad.load();
+    }
+  }
+
+  /// Retrieves a cached native ad by its cache key.
+  EasyAdBase? getCachedNativeAd(String cacheKey) {
+    return _nativeAdCache[cacheKey];
+  }
+
+  /// Disposes and removes a specific cached native ad.
+  void disposeCachedNativeAd(String cacheKey) {
+    if (_nativeAdCache.containsKey(cacheKey)) {
+      _logger.logInfo('Disposing cached Native Ad for cacheKey: $cacheKey');
+      _nativeAdCache[cacheKey]?.dispose();
+      _nativeAdCache.remove(cacheKey);
+    }
+  }
+
+  /// Disposes and clears all cached native ads.
+  void clearNativeAdCache() {
+    _logger.logInfo('Clearing all cached Native Ads');
+    for (final ad in _nativeAdCache.values) {
+      ad.dispose();
+    }
+    _nativeAdCache.clear();
   }
 
   Future<void> initAdmob({

@@ -6,6 +6,7 @@ import '../../core/values/app_colors.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
+import '../../helper/firebase_remote_config_service.dart';
 import 'splash_controller.dart';
 
 class SplashPage extends GetView<SplashController> {
@@ -103,15 +104,17 @@ class SplashPage extends GetView<SplashController> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                          color: Colors.white
-                      ),
-                      child: EasyBannerAd(
-                        adId: MyAdIdName.bannerSplash.getId,
-                      ),
-                    )
+                    if (FirebaseRemoteConfigService.getBoolConfigByKey(
+                        FirebaseRemoteConfigService.banner_splash))
+                      Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                            color: Colors.white
+                        ),
+                        child: EasyBannerAd(
+                          adId: MyAdIdName.bannerSplash.getId,
+                        ),
+                      )
                   ],
                 ),
               ),

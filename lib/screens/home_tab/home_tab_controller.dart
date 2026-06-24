@@ -79,101 +79,52 @@ class HomeTabController extends BaseController {
         arguments: {"type": type});
   }
 
+  _showAdAndNavigate(VoidCallback onDone) {
+    final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.inter_home);
+    if (showAd) {
+      EasyAds.instance.showInterstitialAd(
+        Get.context!,
+        adId: MyAdIdName.interHomeAd.getId,
+        adDissmissed: onDone,
+        onFailed: onDone,
+      );
+    } else {
+      onDone();
+    }
+  }
+
   // Sử dụng interHomeAd cho tất cả feature buttons trên Home (trừ Settings)
   onSelectFacebook() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.facebook);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.facebook);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.facebook));
   }
 
   onSelectInstagram() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.instagram);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.instagram);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.instagram));
   }
 
   onSelectTwitter() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.twitter);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.twitter);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.twitter));
   }
 
   onSelectTiktok() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.tiktok);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.tiktok);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.tiktok));
   }
 
   onSelectURLDownloader({String? validUrl = ""}) {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        Get.toWithController(
-            controllerBuilder: () => URLDownloaderController(),
-            page: () => URLDownloaderPage(),
-            arguments: {"type": DownloadType.webview, "url": validUrl});
-      },
-      onFailed: () {
-        Get.toWithController(
-            controllerBuilder: () => URLDownloaderController(),
-            page: () => URLDownloaderPage(),
-            arguments: {"type": DownloadType.webview, "url": validUrl});
-      },
-    );
+    _showAdAndNavigate(() {
+      Get.toWithController(
+          controllerBuilder: () => URLDownloaderController(),
+          page: () => URLDownloaderPage(),
+          arguments: {"type": DownloadType.webview, "url": validUrl});
+    });
   }
 
   onSelectPinterest() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.pinterest);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.pinterest);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.pinterest));
   }
 
   onSelectAddUrl() {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interHomeAd.getId,
-      adDissmissed: () {
-        goToScreenWithType(DownloadType.addUrl);
-      },
-      onFailed: () {
-        goToScreenWithType(DownloadType.addUrl);
-      },
-    );
+    _showAdAndNavigate(() => goToScreenWithType(DownloadType.addUrl));
   }
 }

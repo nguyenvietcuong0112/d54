@@ -330,51 +330,42 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
     });
   }
 
+  _showAdAndPlay(VoidCallback onDone) {
+    final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.inter_play);
+    if (showAd) {
+      EasyAds.instance.showInterstitialAd(
+        Get.context!,
+        adId: MyAdIdName.interPlayAd.getId,
+        adDissmissed: onDone,
+        onFailed: onDone,
+      );
+    } else {
+      onDone();
+    }
+  }
+
   onSelectItem(index) async {
-    EasyAds.instance.showInterstitialAd(
-      Get.context!,
-      adId: MyAdIdName.interPlayAd.getId,
-      adDissmissed: () async {
-        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-        if (!existFile) {
-          AppUtil.showNormalToast("File not found".tr);
-          return;
-        }
-        openMyFile(listDownloadItems[index].url);
-      },
-      onFailed: () async {
-        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-        if (!existFile) {
-          AppUtil.showNormalToast("File not found".tr);
-          return;
-        }
-        openMyFile(listDownloadItems[index].url);
-      },
-    );
+    _showAdAndPlay(() async {
+      var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+      if (!existFile) {
+        AppUtil.showNormalToast("File not found".tr);
+        return;
+      }
+      openMyFile(listDownloadItems[index].url);
+    });
   }
 
   onSelectMenuItem(value, context, index) async {
     if (value == 'open') {
-      EasyAds.instance.showInterstitialAd(
-        Get.context!,
-        adId: MyAdIdName.interPlayAd.getId,
-        adDissmissed: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        },
-        onFailed: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        },
-      );
+      _showAdAndPlay(() async {
+        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+        if (!existFile) {
+          AppUtil.showNormalToast("File not found".tr);
+          return;
+        }
+        openMyFile(listDownloadItems[index].url);
+      });
     } else if (value == 'play') {
       // Logic for play if any
     } else if (value == 'share') {

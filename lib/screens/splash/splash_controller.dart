@@ -15,6 +15,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/manager/my_ad_id_manager.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
+import '../../ads/dimens/ad_dimen.dart';
 import '../../routes/app_pages.dart';
 import '../language/language_controller.dart';
 import '../language/language_page.dart';
@@ -185,6 +186,29 @@ class SplashController extends BaseController {
   loadAds() async {
     FirebaseHelper.logEventName("Start_load_ads", param: "");
     EasyAds.instance.loadAd();
+
+    // Preload native language ads if enabled in Remote Config
+    final bool showLanguageAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.native_language);
+    final bool showLanguageClickAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.native_language_click);
+
+    if (showLanguageAd) {
+      EasyAds.instance.preloadNativeAd(
+        adId: MyAdIdName.nativeLanguage.getId,
+        factoryId: 'nativeMedia',
+        height: AdDimen.mediumNativeHeight,
+        cacheKey: MyAdIdName.nativeLanguage,
+      );
+    }
+    if (showLanguageClickAd) {
+      EasyAds.instance.preloadNativeAd(
+        adId: MyAdIdName.nativeLanguageClick.getId,
+        factoryId: 'nativeMedia',
+        height: AdDimen.mediumNativeHeight,
+        cacheKey: MyAdIdName.nativeLanguageClick,
+      );
+    }
   }
 
   logEvent() {}

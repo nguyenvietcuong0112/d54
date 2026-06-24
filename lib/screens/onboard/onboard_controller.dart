@@ -79,15 +79,14 @@ class OnboardController extends BaseController {
 
     isIntro1AdLoading.value =
         FirebaseRemoteConfigService.getBoolConfigByKey(keyOnboard1);
-    isIntro4AdLoading.value =
-        false; // Starts loading dynamically when the page is reached
+    isIntro4AdLoading.value = false;
     update();
 
     Future.delayed(const Duration(seconds: 3), () {
       isIntro1AdLoading.value = false;
       update();
     });
-
+  
     if (FirebaseRemoteConfigService.getBoolConfigByKey(keyOnboardFull1)) {
       nativeOnboardFull1 = EasyAds.instance.createNative(
         adNetwork: AdNetwork.admob,
@@ -124,11 +123,19 @@ class OnboardController extends BaseController {
     _adEventSubscription = EasyAds.instance.onEvent.listen((event) {
       if (event.type == AdEventType.adLoaded) {
         if (event.adUnitId == MyAdIdName.nativeOnboard1Ad.getId) {
-          isIntro1AdLoading.value = false;
-          update();
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (!isClosed) {
+              isIntro1AdLoading.value = false;
+              update();
+            }
+          });
         } else if (event.adUnitId == MyAdIdName.nativeOnboard4Ad.getId) {
-          isIntro4AdLoading.value = false;
-          update();
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (!isClosed) {
+              isIntro4AdLoading.value = false;
+              update();
+            }
+          });
         } else if (event.adUnitId == MyAdIdName.nativeOnboardFull1Ad.getId) {
           shouldShowAdsFull1.value = true;
           isShowingAdsFull1.value = true;
@@ -219,7 +226,6 @@ class OnboardController extends BaseController {
   onChangePage(int value) {
     currentIndex.value = value;
 
-    // Check if we navigated to Page 4 (Fast & Free)
     final steps = getSteps();
     if (value >= 0 &&
         value < steps.length &&
@@ -231,7 +237,6 @@ class OnboardController extends BaseController {
           FirebaseRemoteConfigService.getBoolConfigByKey(keyOnboard4);
       if (showAd4) {
         isIntro4AdLoading.value = true;
-        // 3-second timeout specifically for Intro 4
         Future.delayed(const Duration(seconds: 3), () {
           isIntro4AdLoading.value = false;
           update();
