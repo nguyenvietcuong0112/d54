@@ -142,7 +142,6 @@ class OnboardPage extends GetView<OnboardController> {
         final bool isCornerStyle = currentStep.image.contains("onboard1") || currentStep.image.contains("onboard4");
 
     if (isCornerStyle) {
-      // Pages with bottom ad (Intro 1 & 4): Dots and Next button in a Row, then Ad at the bottom
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -227,7 +226,6 @@ class OnboardPage extends GetView<OnboardController> {
         ],
       );
     } else {
-      // Pages without bottom ad (Intro 2 & 3): Dots indicator above, then full-width Next button
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -249,7 +247,6 @@ class OnboardPage extends GetView<OnboardController> {
             ),
           ),
           
-          // Full-width Next Button
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
             child: GestureDetector(

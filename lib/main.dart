@@ -25,9 +25,6 @@ import 'ads/const/ad_id_extension.dart';
 
 final navigatorKey = Get.key;
 
-String separateDataString = "o_____o";
-
-
 const bool isProduction = true;
 
 void main() async {

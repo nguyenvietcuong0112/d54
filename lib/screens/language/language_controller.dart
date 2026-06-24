@@ -104,7 +104,7 @@ class LanguageController extends BaseController {
       Get.back();
       Get.back();
     } else {
-      await Get.offWithController(controllerBuilder: () => OnboardController(), page: () => OnboardPage());
+      await Get.offWithController(controllerBuilder: () => OnboardController(), page: () => const OnboardPage());
     }
   }
 }

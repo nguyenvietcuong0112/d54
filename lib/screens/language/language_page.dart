@@ -7,10 +7,11 @@ import '../../core/values/app_colors.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
-import '../../utils/app_setting.dart';
 import 'language_controller.dart';
 
 class LanguagePage extends GetView<LanguageController> {
+  const LanguagePage({super.key});
+
   @override
   LanguageController get controller => Get.isRegistered<LanguageController>() ? Get.find<LanguageController>() : Get.put(LanguageController());
   
@@ -80,31 +81,29 @@ class LanguagePage extends GetView<LanguageController> {
                       controller.onSelectItem(index);
                     },
                     child: Obx(() => Container(
-                      height: 56, // Tăng chiều cao lên 56px cho sang trọng hơn
+                      height: 56,
                       width: double.infinity,
                       margin: const EdgeInsets.only(bottom: 12),
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12), // Bo góc 12px theo mockup
+                          borderRadius: BorderRadius.circular(12),
                           color: controller.selectedIndex.value == index
                               ? AppColors.main
-                              : const Color(0xFF2C2C3E), // Màu thẻ tối unselected
+                              : const Color(0xFF2C2C3E),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Đẩy Flag sang mép phải
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              // 1. Radio Button nằm bên TRÁI
                               controller.selectedIndex.value == index
                                   ? _buildSelectedRadio()
                                   : _buildUnselectedRadio(),
                               
                               const SizedBox(width: 16),
                               
-                              // 2. Chữ hiển thị ngôn ngữ
                               Text(
                                 controller.itemsList[index].title,
                                 style: TextStyle(
@@ -116,7 +115,6 @@ class LanguagePage extends GetView<LanguageController> {
                             ],
                           ),
                           
-                          // 3. Quốc kỳ (Flag) hiển thị lại ở bên PHẢI
                           Image.asset(
                             controller.itemsList[index].pngAsset,
                             width: 36,
@@ -151,7 +149,6 @@ class LanguagePage extends GetView<LanguageController> {
     );
   }
 
-  /// Cấu trúc App Navigation Bar chuẩn theo Mockup (Tiêu đề căn giữa, nút Save bên phải)
   buildNavigation() {
     return SizedBox(
       height: 64,
@@ -159,7 +156,6 @@ class LanguagePage extends GetView<LanguageController> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // 1. Nút Back (chỉ hiển thị nếu không phải lần đầu mở app)
           if (!controller.isFirstLaunch.value)
             Positioned(
               left: 10,
@@ -178,7 +174,6 @@ class LanguagePage extends GetView<LanguageController> {
               ),
             ),
           
-          // 2. Tiêu đề "Language" căn chính giữa màn hình
           Text(
             "Language".tr,
             style: const TextStyle(
@@ -188,7 +183,6 @@ class LanguagePage extends GetView<LanguageController> {
             ),
           ),
           
-          // 3. Nút hành động ở góc phải (Chữ thuần không có viền hộp - Next hoặc Save)
           Positioned(
             right: 20,
             child: Obx(() {
@@ -241,7 +235,6 @@ class LanguagePage extends GetView<LanguageController> {
     );
   }
 
-  /// Helper Widget: Vẽ nút Radio trạng thái Đã chọn (Màu đen nằm trong thẻ Lime)
   Widget _buildSelectedRadio() {
     return Container(
       width: 22,
@@ -266,7 +259,6 @@ class LanguagePage extends GetView<LanguageController> {
     );
   }
 
-  /// Helper Widget: Vẽ nút Radio trạng thái Chưa chọn (Đường viền xám mỏng)
   Widget _buildUnselectedRadio() {
     return Container(
       width: 22,

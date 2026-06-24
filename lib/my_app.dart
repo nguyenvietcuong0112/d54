@@ -159,14 +159,6 @@ class _MyAppState extends State<MyApp> {
         ;
   }
 
-  List<Locale> _getSupportedLocal() {
-    return [
-      const Locale('vi', ''), // Vietnam, no country code
-      const Locale('en', ''),
-      const Locale('bn', ''),
-    ];
-  }
-
   void configLoading() {
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.ring
