@@ -45,11 +45,11 @@ class QuestionPage extends GetView<QuestionController> {
             left: 0,
             right: 0,
             child: Obx(() {
+              final bool isShowAlt = controller.isShowAdsAlt.value;
               final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
                   FirebaseRemoteConfigService.native_question);
               if (!showAd) return const SizedBox();
 
-              final bool isShowAlt = controller.isShowAdsAlt.value;
               return isShowAlt
                   ? EasyNativeAd(
                       key: const ValueKey('question_alt'),

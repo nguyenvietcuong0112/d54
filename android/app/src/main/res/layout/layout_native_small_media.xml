@@ -94,7 +94,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/card_icon"
                 app:layout_constraintStart_toEndOf="@id/card_icon"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Loading..." />
+                android:text="" />
 
             <!-- Description/Body Text -->
             <TextView
@@ -109,7 +109,7 @@
                 app:layout_constraintTop_toBottomOf="@id/card_icon"
                 app:layout_constraintStart_toStartOf="@id/card_icon"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="loading...." />
+                android:text="" />
 
             <!-- Action Button / CTA -->
             <androidx.appcompat.widget.AppCompatButton
