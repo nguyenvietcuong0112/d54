@@ -28,6 +28,10 @@ class AppLifecycleReactor with WidgetsBindingObserver {
   DateTime? _onSplashScreenFalseTime;
   bool _allowAppOpenAd = false;
 
+  // Track transient transitions like device rotation or keyboard toggles
+  Orientation? _inactiveOrientation;
+  DateTime? _inactiveTime;
+
   AppLifecycleReactor({required this.navigatorKey});
 
   void setAllowAppOpenAd(bool value) {
@@ -61,7 +65,17 @@ class AppLifecycleReactor with WidgetsBindingObserver {
     // Track inactive → resumed path (e.g., recent apps view)
     if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused) {
-      _wasInactive = true;
+      if (!_wasInactive) {
+        _wasInactive = true;
+        _inactiveTime = DateTime.now();
+        if (navigatorKey.currentContext != null) {
+          try {
+            _inactiveOrientation = MediaQuery.maybeOf(navigatorKey.currentContext!)?.orientation;
+          } catch (e) {
+            _inactiveOrientation = null;
+          }
+        }
+      }
       if (EasyAds.instance.isFullscreenAdShowing ||
           EasyAds.instance.isManualAppOpenAdShowing) {
         _pausedByAd = true;
@@ -86,6 +100,34 @@ class AppLifecycleReactor with WidgetsBindingObserver {
       }
 
       if (wasPausedByAd) return;
+
+      // Suppress ad if it was a quick transition (e.g., orientation change, keyboard popup)
+      if (_inactiveTime != null) {
+        final timeDiff = DateTime.now().difference(_inactiveTime!);
+        Orientation? currentOrientation;
+        if (navigatorKey.currentContext != null) {
+          try {
+            currentOrientation = MediaQuery.maybeOf(navigatorKey.currentContext!)?.orientation;
+          } catch (e) {
+            currentOrientation = null;
+          }
+        }
+
+        final orientationChanged = _inactiveOrientation != null &&
+            currentOrientation != null &&
+            _inactiveOrientation != currentOrientation;
+
+        // Reset tracking variables
+        _inactiveTime = null;
+        _inactiveOrientation = null;
+
+        // If orientation changed or time spent inactive is very short (< 1500ms),
+        // or if it changed orientation within a reasonable timeframe (< 4000ms), suppress ad.
+        if (timeDiff.inMilliseconds < 1500 || (orientationChanged && timeDiff.inMilliseconds < 4000)) {
+          debugPrint("AppLifecycleReactor: Suppressing app open ad (orientationChanged: $orientationChanged, duration: ${timeDiff.inMilliseconds}ms)");
+          return;
+        }
+      }
 
       if (navigatorKey.currentContext != null &&
           !EasyAds.instance.isFullscreenAdShowing &&

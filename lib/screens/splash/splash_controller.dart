@@ -209,9 +209,10 @@ class SplashController extends BaseController {
             FirebaseRemoteConfigService.inter_splash_high);
 
     if (showInterSplash) {
-      EasyAds.instance.showInterstitialAd(
+      EasyAds.instance.showInterstitialAdSplashWith2Id(
         Get.context!,
-        adId: MyAdIdName.interSplash.getId,
+        interSplashHigh: MyAdIdName.interSplashHigh.getId,
+        interSplashAll: MyAdIdName.interSplash.getId,
         adDissmissed: () {
           goNextScreen();
         },

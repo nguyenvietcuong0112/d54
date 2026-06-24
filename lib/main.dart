@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cscmobi_app/screens/splash/splash_page.dart';
 import 'package:cscmobi_app/customwidget/ad_loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:get/get.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
-import 'dart:ui';
 
 import '/flavors/build_config.dart';
 import '/flavors/env_config.dart';

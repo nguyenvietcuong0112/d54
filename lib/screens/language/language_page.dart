@@ -73,7 +73,7 @@ class LanguagePage extends GetView<LanguageController> {
             child: ListView.builder(
                 itemCount: controller.itemsList.length,
                 scrollDirection: Axis.vertical,
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 250, top: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom:  AdDimen.mediumNativeHeight + 10, top: 20),
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
