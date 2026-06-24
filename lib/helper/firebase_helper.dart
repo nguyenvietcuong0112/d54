@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../core/utils/app_util.dart';
+import '../ads/const/ad_id.dart';
+import '../ads/const/ad_id_name.dart';
 
 class FirebaseHelper {
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -148,51 +150,80 @@ class FirebaseHelper {
     }
   }
 
-  static logAdmobAdImpressionBanner({required Ad ad}) async {
-    /*  await analytics.logAdImpression(
-      adFormat: 'Banner',
-      adPlatform: 'Admob',
-      adSource: ad.responseInfo?.loadedAdapterResponseInfo?.adSourceName,
-      adUnitName: ad.adUnitId,
-      currency: 'USD',
-      // value: revenue
-    );*/
+  static String? getAdPlacementEventName(String? adUnitId) {
+    if (adUnitId == null) return null;
+    final prodMap = myAdsId['prod'] ?? {};
+    final devMap = myAdsId['dev'] ?? {};
+    
+    String? matchKey;
+    prodMap.forEach((key, val) {
+      if (val == adUnitId) matchKey = key;
+    });
+    if (matchKey == null) {
+      devMap.forEach((key, val) {
+        if (val == adUnitId) matchKey = key;
+      });
+    }
+    
+    if (matchKey != null) {
+      switch (matchKey) {
+        case MyAdIdName.appOpenResume:
+          return "resume_open_app";
+        case MyAdIdName.bannerSplash:
+          return "banner_splash";
+        case MyAdIdName.interSplashHigh:
+          return "inter_splash_high";
+        case MyAdIdName.interSplash:
+          return "inter_splash";
+        case MyAdIdName.nativeLanguage:
+          return "native_language";
+        case MyAdIdName.nativeLanguageClick:
+          return "native_language_click";
+        case MyAdIdName.nativeOnboard1Ad:
+          return "native_onboarding_1";
+        case MyAdIdName.nativeOnboardFull1Ad:
+          return "native_onboarding_full_1";
+        case MyAdIdName.nativeOnboard4Ad:
+          return "native_onboarding_4";
+        case MyAdIdName.nativeOnboardFull2Ad:
+          return "native_onboarding_full_2";
+        case MyAdIdName.nativeQuestionAd:
+          return "native_question";
+        case MyAdIdName.bannerHome:
+          return "banner_home";
+        case MyAdIdName.interHomeAd:
+          return "inter_home";
+        case MyAdIdName.nativeHomeAd:
+          return "native_home";
+        case MyAdIdName.nativeDownloadAd:
+          return "native_download";
+        case MyAdIdName.interPlayAd:
+          return "inter_play";
+      }
+    }
+    return null;
   }
 
-  static logAdmobAdImpressionOpenAd({required Ad ad}) async {
-/*    await analytics.logAdImpression(
-      adFormat: 'OpenAd',
-      // adFormat: ad.responseInfo?.responseExtras,
-      adPlatform: 'Admob',
-      adSource: ad.responseInfo?.loadedAdapterResponseInfo?.adSourceName,
-      adUnitName: ad.adUnitId,
-      currency: 'USD',
-      // value: revenue
-    );*/
-  }
+  static logAdmobAdImpression({required Ad ad}) async {
+    try {
+      // 1. Log custom ad placement event matching the checklist
+      final placementEvent = getAdPlacementEventName(ad.adUnitId);
+      if (placementEvent != null) {
+        await analytics.logEvent(name: placementEvent);
+        AppUtil.showLog('Firebase logged ad placement event: $placementEvent');
+      }
 
-  static logAdmobAdImpressionNative({required Ad ad}) async {
-    /* await analytics.logAdImpression(
-      adFormat: 'Native',
-      // adFormat: ad.responseInfo?.responseExtras,
-      adPlatform: 'Admob',
-      adSource: ad.responseInfo?.loadedAdapterResponseInfo?.adSourceName,
-      adUnitName: ad.adUnitId,
-      currency: 'USD',
-      // value: revenue
-    );*/
-  }
-
-  static logAdmobAdImpressionInterstitial({required InterstitialAd ad}) async {
-    /* await analytics.logAdImpression(
-      adFormat: 'Interstitial',
-      // adFormat: ad.responseInfo?.responseExtras,
-      adPlatform: 'Admob',
-      adSource: ad.responseInfo?.loadedAdapterResponseInfo?.adSourceName,
-      adUnitName: ad.adUnitId,
-      currency: 'USD',
-      // value: revenue
-    );*/
+      // 2. Log standard Firebase ad_impression
+      await analytics.logAdImpression(
+        adFormat: ad is BannerAd ? 'Banner' : (ad is AppOpenAd ? 'OpenAd' : (ad is NativeAd ? 'Native' : 'Interstitial')),
+        adPlatform: 'Admob',
+        adSource: ad.responseInfo?.loadedAdapterResponseInfo?.adSourceName,
+        adUnitName: ad.adUnitId,
+        currency: 'USD',
+      );
+    } catch (e) {
+      print("error logAdmobAdImpression: $e");
+    }
   }
 
   static logEventName(String eventName, {required String param}) async {

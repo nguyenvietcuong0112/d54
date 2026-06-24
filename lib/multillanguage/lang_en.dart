@@ -85,6 +85,20 @@ final Map<String, String> enUS = {
   "Something went wrong while starting the download.": "Something went wrong while starting the download.",
   "Video saved to gallery successfully.": "Video saved to gallery successfully.",
   "Failed to save video to gallery.": "Failed to save video to gallery.",
-
-
+  "HD Video Downloader & Player": "HD Video Downloader & Player",
+  "Lost Connection": "Lost Connection",
+  "We can't download videos without internet. Please reconnect and try again.": "We can't download videos without internet. Please reconnect and try again.",
+  "Go to setting": "Go to setting",
+  "Download Success!": "Download Success!",
+  "URL is unavailable. Please try another method.": "URL is unavailable. Please try another method.",
+  "Downloaded file is too small or corrupted.": "Downloaded file is too small or corrupted.",
+  "Downloaded file is corrupted.": "Downloaded file is corrupted.",
+  "Downloaded file is not a valid video.": "Downloaded file is not a valid video.",
+  "Please select at least one video": "Please select at least one video",
+  "Video Stream": "Video Stream",
+  "HLS Stream (.m3u8)": "HLS Stream (.m3u8)",
+  "DASH Chunk (Fragment)": "DASH Chunk (Fragment)",
+  "Audio Stream": "Audio Stream",
+  "Preview Video / Thumbnail": "Preview Video / Thumbnail",
+  "MP4 Stream": "MP4 Stream",
 };

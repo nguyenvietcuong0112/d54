@@ -85,9 +85,9 @@ class HistoryTabPage extends GetView<HistoryTabController> {
               padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
               child: EasyNativeAd(
                 key: const ValueKey('history_download_native'),
-                factoryId: 'nativeNoMedia',
+                factoryId: 'nativeMediaSmall',
                 adId: MyAdIdName.nativeDownloadAd.getId,
-                height: AdDimen.horizontalAdHeight,
+                height: AdDimen.smallNativeAdHeight,
               ),
             ),
           Expanded(

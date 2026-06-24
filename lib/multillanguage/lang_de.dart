@@ -85,6 +85,20 @@ final Map<String, String> deDE = {
   "Something went wrong while starting the download.": "Beim Start des Downloads ist ein Fehler aufgetreten.",
   "Video saved to gallery successfully.": "Video wurde erfolgreich in der Galerie gespeichert.",
   "Failed to save video to gallery.": "Video konnte nicht in der Galerie gespeichert werden.",
-
-
+  "HD Video Downloader & Player": "HD Video Downloader & Player",
+  "Lost Connection": "Verbindung verloren",
+  "We can't download videos without internet. Please reconnect and try again.": "Ohne Internet können keine Videos heruntergeladen werden. Bitte verbinden Sie sich erneut und versuchen Sie es noch einmal.",
+  "Go to setting": "Zu den Einstellungen gehen",
+  "Download Success!": "Download erfolgreich!",
+  "URL is unavailable. Please try another method.": "URL ist nicht verfügbar. Bitte versuchen Sie eine andere Methode.",
+  "Downloaded file is too small or corrupted.": "Die heruntergeladene Datei ist zu klein oder beschädigt.",
+  "Downloaded file is corrupted.": "Die heruntergeladene Datei ist beschädigt.",
+  "Downloaded file is not a valid video.": "Die heruntergeladene Datei ist kein gültiges Video.",
+  "Please select at least one video": "Bitte wählen Sie mindestens ein Video aus",
+  "Video Stream": "Video-Stream",
+  "HLS Stream (.m3u8)": "HLS-Stream (.m3u8)",
+  "DASH Chunk (Fragment)": "DASH-Chunk (Fragment)",
+  "Audio Stream": "Audio-Stream",
+  "Preview Video / Thumbnail": "Vorschau-Video / Thumbnail",
+  "MP4 Stream": "MP4-Stream",
 };

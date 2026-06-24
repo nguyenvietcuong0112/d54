@@ -266,6 +266,11 @@ class MainActivity: FlutterActivity() {
             "nativeNoMedia",
             NativeNoMediaFactory(layoutInflater)
         )
+        GoogleMobileAdsPlugin.registerNativeAdFactory(
+            flutterEngine,
+            "nativeMediaSmall",
+            NativeMediaSmallFactory(layoutInflater)
+        )
     }
 
     private fun getAllAudioFiles(): List<Map<String, String>> {
@@ -483,5 +488,6 @@ class MainActivity: FlutterActivity() {
         GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeMedia")
         GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeNoMedia")
         GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeFull")
+        GoogleMobileAdsPlugin.unregisterNativeAdFactory(flutterEngine, "nativeMediaSmall")
     }
 }

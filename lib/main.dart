@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cscmobi_app/screens/splash/splash_page.dart';
+import 'package:cscmobi_app/customwidget/ad_loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -30,7 +31,7 @@ final navigatorKey = Get.key;
 String separateDataString = "o_____o";
 
 
-const bool isProduction = false;
+const bool isProduction = true;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -138,7 +139,7 @@ Future<void> _initializeAds() async {
       adMobAdRequest: const AdRequest(httpTimeoutMillis: 60000),
       admobConfiguration: RequestConfiguration(testDeviceIds: ['']),
       navigatorKey: navigatorKey,
-      loadingSplash: const SplashPage(),
+      loadingSplash: const AdLoadingPage(),
     );
 
     print('✅ EasyAds initialized');

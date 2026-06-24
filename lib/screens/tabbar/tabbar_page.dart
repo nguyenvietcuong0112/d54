@@ -12,6 +12,7 @@ import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../customwidget/shimmer.dart';
+import '../../core/widget/route_observer_widget.dart';
 
 class TabbarPage extends GetView<TabbarController> {
   @override
@@ -93,19 +94,22 @@ class TabbarPage extends GetView<TabbarController> {
                       );
                     }),
                   ),
-                  FirebaseRemoteConfigService.getBoolConfigByKey(
-                          FirebaseRemoteConfigService.banner_home)
-                      ? Container(
-                          height: 60,
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: EasyBannerAd(
-                            adId: MyAdIdName.bannerHome.getId,
-                            isCollapsible: true,
-                            reloadInterval: 15,
-                          ),
-                        )
-                      : const SizedBox()
+                  RouteObserverWidget(
+                    didPushNext: () => controller.showHomeBanner.value = false,
+                    didPopNext: () => controller.showHomeBanner.value = true,
+                    child: Obx(() {
+                      final showAd = controller.showHomeBanner.value &&
+                          FirebaseRemoteConfigService.getBoolConfigByKey(
+                              FirebaseRemoteConfigService.banner_home);
+                      return showAd
+                          ? EasyBannerAd(
+                              adId: MyAdIdName.bannerHome.getId,
+                              isCollapsible: true,
+                              reloadInterval: 15,
+                            )
+                          : const SizedBox();
+                    }),
+                  )
                 ],
               ),
             );

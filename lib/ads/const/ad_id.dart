@@ -16,7 +16,7 @@ Map<String, Map<String, String>> myAdsId = {
     MyAdIdName.nativeDownloadAd: 'ca-app-pub-3940256099942544/2247696110',
     MyAdIdName.nativeQuestionAd: 'ca-app-pub-3940256099942544/2247696110',
     MyAdIdName.bannerHome: 'ca-app-pub-3940256099942544/6300978111',
-    MyAdIdName.bannerHome: 'ca-app-pub-3940256099942544/6300978111',
+    MyAdIdName.bannerSplash: 'ca-app-pub-3940256099942544/6300978111',
     MyAdIdName.interPlayAd: 'ca-app-pub-3940256099942544/1033173712',
   },
   'prod': {

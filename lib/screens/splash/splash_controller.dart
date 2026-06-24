@@ -9,7 +9,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../Utils/app_setting.dart';
 import '../../core/utils/app_util.dart';
 import '../../core/values/constants.dart';
-import '../../helper/adjust_helper.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -129,22 +128,23 @@ class SplashController extends BaseController {
       // 1. Paid Event (Revenue)
       if (event.type == AdEventType.onPaidEvent) {
         AppSetting.adImpressionCount++;
+        if (event.ad != null && event.valueMicros != null && event.currencyCode != null && event.precision != null) {
+          AdjustHelper.adjustTrackAdRevenue(
+            ad: event.ad!,
+            valueMicros: event.valueMicros!,
+            precision: event.precision!,
+            currencyCode: event.currencyCode!,
+            adOnScreen: Get.currentRoute,
+            adUnit: event.ad!.adUnitId,
+            adImpressionsCount: AppSetting.adImpressionCount,
+          );
+        }
       }
       
       // 2. Impression Logging
       else if (event.type == AdEventType.onAdImpression) {
         if (event.ad == null) return;
-        if (event.adUnitType == AdUnitType.banner) {
-          FirebaseHelper.logAdmobAdImpressionBanner(ad: event.ad!);
-        } else if (event.adUnitType == AdUnitType.appOpen) {
-          FirebaseHelper.logAdmobAdImpressionOpenAd(ad: event.ad!);
-        } else if (event.adUnitType == AdUnitType.native) {
-          FirebaseHelper.logAdmobAdImpressionNative(ad: event.ad!);
-        } else if (event.adUnitType == AdUnitType.interstitial) {
-          if (event.ad is InterstitialAd) {
-            FirebaseHelper.logAdmobAdImpressionInterstitial(ad: event.ad as InterstitialAd);
-          }
-        }
+        FirebaseHelper.logAdmobAdImpression(ad: event.ad!);
       }
       
       // 3. Interstitial Show Count

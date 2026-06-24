@@ -17,6 +17,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 class TabbarController extends BaseController with GetTickerProviderStateMixin {
   RxInt selectedIndex = 0.obs;
+  RxBool showHomeBanner = true.obs;
   PageController pageController = PageController(
       keepPage: true,
       initialPage: 0
@@ -35,10 +36,12 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
     Get.put<HistoryTabController>(HistoryTabController());
     Get.put<SettingTabController>(SettingTabController());
 
-    EasyAds.instance.appLifecycleReactor?.setAllowAppOpenAd(true);
-
     FirebaseHelper.setTrackingScreenName("HomeScreen");
-    requestPermission();
+    requestPermission().then((_) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        EasyAds.instance.appLifecycleReactor?.setAllowAppOpenAd(true);
+      });
+    });
     borderRadiusAnimationController = AnimationController(
         duration: Duration(milliseconds: 500),
         vsync: this
@@ -64,7 +67,7 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
     borderRadiusAnimationController.dispose();
   }
 
-  requestPermission() async {
+  Future<void> requestPermission() async {
     PermissionStatus status = await Permission.notification.request();
     final notificationSettings = await FirebaseMessaging.instance.requestPermission(provisional: true);
     final apnsToken = await FirebaseMessaging.instance.getAPNSToken();

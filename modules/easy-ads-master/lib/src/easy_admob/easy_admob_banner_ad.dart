@@ -134,7 +134,7 @@ class EasyAdmobBannerAd extends EasyAdBase {
           if (_isAdLoading)
             Container(
               color: Colors.white,
-              child: const EasyLoadingAd(),
+              child: EasyLoadingAd(height: adSize.height.toDouble()),
             ),
         ],
       ),

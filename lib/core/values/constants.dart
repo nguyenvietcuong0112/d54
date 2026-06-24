@@ -8,6 +8,8 @@ class Constants {
   static var privacy = "https://sites.google.com/view/noobgame-studio";
   static var termOfUser = "https://sites.google.com/view/noobgame-studio";
   static int timeReloadNativeAd = 15;
+  static const String adjustToken = '5ws3bsjnd2ww';
+  static const String adjustEventTokenIAP = '7hfyzb';
 
   static String GSMAccessToken = "";
 

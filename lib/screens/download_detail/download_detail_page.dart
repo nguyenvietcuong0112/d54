@@ -37,9 +37,9 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
               FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.native_home)
                   ? EasyNativeAd(
                       key: const ValueKey('download_detail_bottom'),
-                      factoryId: 'nativeMedia',
+                      factoryId: 'nativeMediaSmall',
                       adId: MyAdIdName.nativeHomeAd.getId,
-                      height: AdDimen.mediumNativeHeight,
+                      height: AdDimen.smallNativeAdHeight,
                     )
                   : const SizedBox()
             ],
@@ -124,9 +124,9 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                 if (!showAd) return const SizedBox();
                 return EasyNativeAd(
                   key: const ValueKey('download_detail_inline'),
-                  factoryId: 'nativeMedia',
+                  factoryId: 'nativeMediaSmall',
                   adId: MyAdIdName.nativeHomeAd.getId,
-                  height: AdDimen.mediumNativeHeight,
+                  height: AdDimen.smallNativeAdHeight,
                 );
               }
               return GestureDetector(
@@ -690,7 +690,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                 ),
               ),
               Text(
-                "HD Video Downloader & Player",
+                "HD Video Downloader & Player".tr,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,

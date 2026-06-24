@@ -85,6 +85,20 @@ final Map<String, String> arAR = {
   "Something went wrong while starting the download.": "حدث خطأ ما أثناء بدء التنزيل.",
   "Video saved to gallery successfully.": "تم حفظ الفيديو في المعرض بنجاح.",
   "Failed to save video to gallery.": "فشل حفظ الفيديو في المعرض.",
-
-
+  "HD Video Downloader & Player": "برنامج تنزيل وتشغيل الفيديو عالي الدقة",
+  "Lost Connection": "الاتصال مفقود",
+  "We can't download videos without internet. Please reconnect and try again.": "لا يمكننا تنزيل مقاطع الفيديو بدون إنترنت. يرجى إعادة الاتصال والمحاولة مرة أخرى.",
+  "Go to setting": "اذهب إلى الإعدادات",
+  "Download Success!": "تم التنزيل بنجاح!",
+  "URL is unavailable. Please try another method.": "رابط URL غير متوفر. يرجى تجربة طريقة أخرى.",
+  "Downloaded file is too small or corrupted.": "الملف الذي تم تنزيله صغير جداً أو تالف.",
+  "Downloaded file is corrupted.": "الملف الذي تم تنزيله تالف.",
+  "Downloaded file is not a valid video.": "الملف الذي تم تنزيله ليس فيديو صالحاً.",
+  "Please select at least one video": "يرجى تحديد مقطع فيديو واحد على الأقل",
+  "Video Stream": "بث الفيديو",
+  "HLS Stream (.m3u8)": "بث HLS (.m3u8)",
+  "DASH Chunk (Fragment)": "جزء DASH (مقطع)",
+  "Audio Stream": "بث الصوت",
+  "Preview Video / Thumbnail": "معاينة الفيديو / الصورة المصغرة",
+  "MP4 Stream": "بث MP4",
 };

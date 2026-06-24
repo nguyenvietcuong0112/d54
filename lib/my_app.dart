@@ -21,7 +21,6 @@ import 'core/widget/widgets.dart';
 import '/flavors/build_config.dart';
 import '/flavors/env_config.dart';
 import 'flavors/environment.dart';
-import 'helper/adjust_helper.dart';
 import 'routes/app_pages.dart';
 import 'multillanguage/app_translation.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -87,6 +86,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   initPlatformState() async {
+    AdjustHelper.init(
+      token: Constants.adjustToken,
+      iapToken: Constants.adjustEventTokenIAP,
+      isProd: BuildConfig.instance.environment == Environment.PRODUCTION,
+    );
+
     AdjustConfig config = AdjustConfig(
         AdjustHelper.adjustToken,
         BuildConfig.instance.environment == Environment.DEVELOPMENT

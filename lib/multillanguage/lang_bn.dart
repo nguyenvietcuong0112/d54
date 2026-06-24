@@ -85,6 +85,20 @@ final Map<String, String> bnBN = {
   "Something went wrong while starting the download.": "ডাউনলোড শুরু করার সময় কিছু ভুল হয়েছে।",
   "Video saved to gallery successfully.": "ভিডিওটি সফলভাবে গ্যালারিতে সংরক্ষণ করা হয়েছে।",
   "Failed to save video to gallery.": "গ্যালারিতে ভিডিও সংরক্ষণ করতে ব্যর্থ হয়েছে।",
-
-
+  "HD Video Downloader & Player": "এইচডি ভিডিও ডাউনলোডার এবং প্লেয়ার",
+  "Lost Connection": "সংযোগ বিচ্ছিন্ন",
+  "We can't download videos without internet. Please reconnect and try again.": "ইন্টারনেট ছাড়া আমরা ভিডিও ডাউনলোড করতে পারি না। দয়া করে পুনরায় সংযোগ করুন এবং আবার চেষ্টা করুন।",
+  "Go to setting": "সেটিংসে যান",
+  "Download Success!": "ডাউনলোড সফল হয়েছে!",
+  "URL is unavailable. Please try another method.": "ইউআরএল অনুপলব্ধ। দয়া করে অন্য পদ্ধতি চেষ্টা করুন।",
+  "Downloaded file is too small or corrupted.": "ডাউনলোড করা ফাইলটি খুব ছোট বা দূষিত।",
+  "Downloaded file is corrupted.": "ডাউনলোড করা ফাইলটি দূষিত হয়েছে।",
+  "Downloaded file is not a valid video.": "ডাউনলোড করা ফাইলটি একটি বৈধ ভিডিও নয়।",
+  "Please select at least one video": "অনুগ্রহ করে অন্তত একটি ভিডিও নির্বাচন করুন",
+  "Video Stream": "ভিডিও স্ট্রিম",
+  "HLS Stream (.m3u8)": "এইচএলএস স্ট্রিম (.m3u8)",
+  "DASH Chunk (Fragment)": "ড্যাশ চাঙ্ক (খণ্ড)",
+  "Audio Stream": "অডিও স্ট্রিম",
+  "Preview Video / Thumbnail": "ভিডিও প্রিভিউ / থাম্বনেইল",
+  "MP4 Stream": "এমপি৪ স্ট্রিম",
 };
