@@ -7,6 +7,7 @@ import 'package:cscmobi_app/models/response_model.dart';
 import 'package:cscmobi_app/models/format_model.dart';
 import 'package:cscmobi_app/helper/media_store_helper.dart';
 import 'package:cscmobi_app/core/utils/app_util.dart';
+import 'package:cscmobi_app/core/utils/dialog_util.dart';
 import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:cscmobi_app/helper/firebase_remote_config_service.dart';
 import 'package:cscmobi_app/screens/history_tab/history_tab_controller.dart';
@@ -50,13 +51,20 @@ class URLDownloaderController extends BaseController {
     String initialUrl = Get.arguments != null ? (Get.arguments["url"] ?? "") : "";
     if (initialUrl.isNotEmpty) {
       initialUrl = initialUrl.trim();
-      final bool isUrl = initialUrl.contains('.') && !initialUrl.contains(' ');
-      if (isUrl) {
-        if (!initialUrl.startsWith(RegExp(r'https?://', caseSensitive: false))) {
-          initialUrl = 'https://$initialUrl';
-        }
+      if (Utils.isYoutubeUrl(initialUrl)) {
+        Future.delayed(Duration.zero, () {
+          DialogUtil.showYoutubeNotSupportedPopup();
+        });
+        initialUrl = "";
       } else {
-        initialUrl = 'https://www.google.com/search?q=${Uri.encodeComponent(initialUrl)}';
+        final bool isUrl = initialUrl.contains('.') && !initialUrl.contains(' ');
+        if (isUrl) {
+          if (!initialUrl.startsWith(RegExp(r'https?://', caseSensitive: false))) {
+            initialUrl = 'https://$initialUrl';
+          }
+        } else {
+          initialUrl = 'https://www.google.com/search?q=${Uri.encodeComponent(initialUrl)}';
+        }
       }
     }
     url.value = initialUrl;
@@ -426,7 +434,7 @@ class URLDownloaderController extends BaseController {
     if (trimmedText.isEmpty) return;
 
     if (Utils.isYoutubeUrl(trimmedText)) {
-      AppUtil.showNormalToast("YouTube URL is not supported".tr);
+      DialogUtil.showYoutubeNotSupportedPopup();
       return;
     }
 

@@ -391,4 +391,70 @@ class DialogUtil {
     );
   }
 
+  static void showYoutubeNotSupportedPopup() {
+    Get.bottomSheet(
+      SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  Container(
+                    alignment: AlignmentGeometry.centerRight,
+                    child: GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16,),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Tips".tr,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFF89434), // yellowPrimary orange color
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Due to legal restrictions, videos on YouTube CANNOT be downloaded.".tr,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF323232), // textColorPrimary
+                  fontWeight: FontWeight.w400,
+                  decoration: TextDecoration.none,
+                  height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      isDismissible: false,
+      enableDrag: false,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+    );
+  }
+
 }

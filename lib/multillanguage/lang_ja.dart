@@ -1,4 +1,5 @@
 final Map<String, String> jaJP = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "法的制限により、YouTubeの動画はダウンロードできません。",
   "Enter URL here": "ここにURLを入力",
   "Please enter URL": "URLを入力してください",
   "Downloading from YouTube is not supported": "YouTubeからのダウンロードはサポートされていません",
@@ -102,7 +103,7 @@ final Map<String, String> jaJP = {
   "Preview Video / Thumbnail": "プレビュー動画 / サムネイル",
   "MP4 Stream": "MP4ストリーム",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "すべてのプラットフォームからウォーターマークなしでHD動画をダウンロードし、フィード、投稿、ストーリー、MP3オーディオ、写真のスライドショーを動画として簡単に保存できます - 高速かつ無料。",
-  "Download from Any Platform": "すべてのプラットフォームからダウンロード",
+  "Download from multiple platforms": "複数のプラットフォームからダウンロード",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "お気に入りのすべてのプラットフォームの動画を1か所に保存。高速、簡単、手間いらず。",
   "No Watermark, Full Quality": "ウォーターマークなし、高画質",
   "Download videos in HD without watermarks. Keep the original quality every time.": "ウォーターマークなしでHD動画をダウンロード。いつでも元の画質をキープ。",

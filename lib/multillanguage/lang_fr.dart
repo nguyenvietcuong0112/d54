@@ -1,4 +1,5 @@
 final Map<String, String> frFR = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "En raison de restrictions légales, les vidéos sur YouTube NE peuvent PAS être téléchargées.",
   "Enter URL here": "Entrez l’URL ici",
   "Please enter URL": "Veuillez entrer l’URL",
   "Downloading from YouTube is not supported": "Le téléchargement depuis YouTube n’est pas pris en charge",
@@ -102,7 +103,7 @@ final Map<String, String> frFR = {
   "Preview Video / Thumbnail": "Aperçu vidéo / Miniature",
   "MP4 Stream": "Flux MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Téléchargez des vidéos HD à partir de toutes les plateformes sans filigrane, et enregistrez facilement des flux, des publications, des stories, de l'audio MP3 et des diaporamas photo sous forme de vidéos - rapide et gratuit.",
-  "Download from Any Platform": "Télécharger depuis n'importe quelle plateforme",
+  "Download from multiple platforms": "Télécharger depuis plusieurs plateformes",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Enregistrez les vidéos de toutes vos plateformes préférées en un seul endroit. Rapide, facile et sans tracas.",
   "No Watermark, Full Quality": "Sans filigrane, qualité totale",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Téléchargez des vidéos en HD sans filigrane. Conservez la qualité d'origine à chaque fois.",

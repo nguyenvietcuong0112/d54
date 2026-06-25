@@ -34,6 +34,5 @@ abstract class AppTranslation {
     "fil": filFIL,
     "th": thTH,
     "tr": trTR,
-    "vi": viVN
   };
 }

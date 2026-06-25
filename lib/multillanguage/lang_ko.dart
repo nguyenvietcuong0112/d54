@@ -1,4 +1,5 @@
 final Map<String, String> koKR = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "법적 제한으로 인해 YouTube 동영상은 다운로드할 수 없습니다.",
   "Enter URL here": "여기에 URL 입력",
   "Please enter URL": "URL을 입력해 주세요",
   "Downloading from YouTube is not supported": "YouTube에서의 다운로드는 지원되지 않습니다",
@@ -102,7 +103,7 @@ final Map<String, String> koKR = {
   "Preview Video / Thumbnail": "미리보기 비디오 / 썸네일",
   "MP4 Stream": "MP4 스트림",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "워터마크 없이 모든 플랫폼에서 HD 비디오를 다운로드하고 피드, 게시물, 스토리, MP3 오디오 및 사진 슬라이드쇼를 비디오로 쉽게 저장하십시오 - 빠르고 무료입니다.",
-  "Download from Any Platform": "모든 플랫폼에서 다운로드",
+  "Download from multiple platforms": "여러 플랫폼에서 다운로드",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "좋아하는 모든 플랫폼의 비디오를 한 곳에 저장하세요. 빠르고 쉽고 번거롭지 않습니다.",
   "No Watermark, Full Quality": "워터마크 없음, 원본 화질",
   "Download videos in HD without watermarks. Keep the original quality every time.": "워터마크 없이 HD로 비디오를 다운로드하세요. 매번 원본 화질을 유지합니다.",

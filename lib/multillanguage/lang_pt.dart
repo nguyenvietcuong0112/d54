@@ -1,4 +1,5 @@
 final Map<String, String> ptBR = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Devido a restrições legais, os vídeos do YouTube NÃO podem ser baixados.",
   "Enter URL here": "Insira o URL aqui",
   "Please enter URL": "Por favor, insira o URL",
   "Downloading from YouTube is not supported": "O download do YouTube não é suportado",
@@ -102,7 +103,7 @@ final Map<String, String> ptBR = {
   "Preview Video / Thumbnail": "Vídeo de visualização / Miniatura",
   "MP4 Stream": "Transmissão MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Baixe vídeos HD de todas as plataformas sem marcas d'água e salve facilmente feeds, postagens, stories, áudio MP3 e apresentações de slides de fotos como vídeos - rápido e gratuito.",
-  "Download from Any Platform": "Baixar de qualquer plataforma",
+  "Download from multiple platforms": "Baixar de várias plataformas",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Salve vídeos de todas as suas plataformas favoritas em um só lugar. Rápido, fácil e sem complicações.",
   "No Watermark, Full Quality": "Sem marca d'água, qualidade total",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Baixe vídeos em HD sem marcas d'água. Mantenha a qualidade original sempre.",

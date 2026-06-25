@@ -1,4 +1,5 @@
 final Map<String, String> arAR = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "بسبب القيود القانونية، لا يمكن تنزيل مقاطع الفيديو من يوتيوب.",
   "Enter URL here": "أدخل الرابط هنا",
   "Please enter URL": "يرجى إدخال الرابط",
   "Downloading from YouTube is not supported": "تنزيل المحتوى من يوتيوب غير مدعوم",
@@ -102,7 +103,7 @@ final Map<String, String> arAR = {
   "Preview Video / Thumbnail": "معاينة الفيديو / الصورة المصغرة",
   "MP4 Stream": "بث MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "قم بتنزيل مقاطع فيديو عالية الدقة من جميع المنصات بدون علامات مائية، واحفظ بسهولة خلاصات الأخبار، والمنشورات، والقصص، وصوت MP3، وعروض الشرائح كفيديو - سريع ومجاني.",
-  "Download from Any Platform": "التنزيل من أي منصة",
+  "Download from multiple platforms": "التنزيل من منصات متعددة",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "احفظ مقاطع الفيديو من جميع منصاتك المفضلة في مكان واحد. سريع وسهل وخالٍ من المتاعب.",
   "No Watermark, Full Quality": "بدون علامة مائية، جودة كاملة",
   "Download videos in HD without watermarks. Keep the original quality every time.": "قم بتنزيل مقاطع الفيديو بدقة HD وبدون علامات مائية. حافظ على الجودة الأصلية في كل مرة.",

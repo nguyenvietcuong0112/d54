@@ -1,4 +1,5 @@
 final Map<String, String> esES = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Debido a restricciones legales, NO se pueden descargar videos de YouTube.",
   "Enter URL here": "Introduce la URL aquí",
   "Please enter URL": "Por favor, introduce la URL",
   "Downloading from YouTube is not supported": "La descarga desde YouTube no es compatible",
@@ -102,7 +103,7 @@ final Map<String, String> esES = {
   "Preview Video / Thumbnail": "Video de vista previa / Miniatura",
   "MP4 Stream": "Transmisión MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Descargue videos HD de todas las plataformas sin marcas de agua y guarde fácilmente feeds, publicaciones, historias, audio MP3 y presentaciones de fotos como videos: rápido y gratis.",
-  "Download from Any Platform": "Descarga desde cualquier plataforma",
+  "Download from multiple platforms": "Descarga desde múltiples plataformas",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Guarda videos de todas tus plataformas favoritas en un solo lugar. Rápido, fácil y sin complicaciones.",
   "No Watermark, Full Quality": "Sin marca de agua, calidad completa",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Descarga videos en HD sin marcas de agua. Mantén la calidad original en todo momento.",

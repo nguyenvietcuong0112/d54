@@ -1,4 +1,5 @@
 final Map<String, String> viVN = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Do giới hạn pháp lý, không hỗ trợ tải xuống video từ YouTube.",
   'Enter URL here': 'Nhập URL tại đây',
   "Please enter URL": "Vui lòng nhập URL",
   "Downloading from YouTube is not supported": "Không hỗ trợ tải xuống từ YouTube",
@@ -102,7 +103,7 @@ final Map<String, String> viVN = {
   "Preview Video / Thumbnail": "Video xem trước / Ảnh thu nhỏ",
   "MP4 Stream": "Luồng MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Tải video HD từ mọi nền tảng không có logo/watermark, dễ dàng lưu bảng tin, bài viết, tin tức, âm thanh MP3 và trình chiếu ảnh dưới dạng video - nhanh chóng và miễn phí.",
-  "Download from Any Platform": "Tải xuống từ mọi nền tảng",
+  "Download from multiple platforms": "Tải xuống từ nhiều nền tảng",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Lưu video từ tất cả các nền tảng yêu thích của bạn ở một nơi. Nhanh chóng, dễ dàng và không phiền phức.",
   "No Watermark, Full Quality": "Không có logo/hình mờ, chất lượng tối đa",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Tải xuống video ở độ phân giải HD không có logo/hình mờ. Luôn giữ nguyên chất lượng gốc.",

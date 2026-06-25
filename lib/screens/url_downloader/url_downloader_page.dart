@@ -6,6 +6,8 @@ import 'package:cscmobi_app/screens/url_downloader/url_downloader_controller.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
+import '../../utils/Utils.dart';
+import '../../core/utils/dialog_util.dart';
 
 class URLDownloaderPage extends GetView<URLDownloaderController> {
   @override
@@ -62,6 +64,12 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
                 if (!["http", "https"].contains(uri.scheme)) {
                   return NavigationActionPolicy.CANCEL; // Chặn lỗi trên WebView
                 }
+
+                if (Utils.isYoutubeUrl(uri.toString())) {
+                  DialogUtil.showYoutubeNotSupportedPopup();
+                  return NavigationActionPolicy.CANCEL;
+                }
+
                 return NavigationActionPolicy.ALLOW;
               },
               initialOptions: InAppWebViewGroupOptions(

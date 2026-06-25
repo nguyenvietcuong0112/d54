@@ -8,7 +8,6 @@ import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
-import '../../core/utils/app_util.dart';
 import '../question/question_controller.dart';
 import '../question/question_page.dart';
 
@@ -159,7 +158,7 @@ class OnboardController extends BaseController {
 
     // Onboard 1
     steps.add(OnboardStep(
-      title: "Download from Any Platform".tr,
+      title: "Download from multiple platforms".tr,
       desc:
           "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free."
               .tr,

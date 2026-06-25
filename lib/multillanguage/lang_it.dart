@@ -1,4 +1,5 @@
 final Map<String, String> itIT = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "A causa di restrizioni legali, i video di YouTube NON possono essere scaricati.",
   "Enter URL here": "Inserisci l’URL qui",
   "Please enter URL": "Inserisci l’URL",
   "Downloading from YouTube is not supported": "Il download da YouTube non è supportato",
@@ -102,7 +103,7 @@ final Map<String, String> itIT = {
   "Preview Video / Thumbnail": "Anteprima video / Miniatura",
   "MP4 Stream": "Flusso MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Scarica video HD da tutte le piattaforme senza filigrana e salva facilmente feed, post, storie, audio MP3 e presentazioni fotografiche come video - veloce e gratuito.",
-  "Download from Any Platform": "Scarica da qualsiasi piattaforma",
+  "Download from multiple platforms": "Scarica da più piattaforme",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Salva i video da tutte le tue piattaforme preferite in un unico posto. Veloce, facile e senza problemi.",
   "No Watermark, Full Quality": "Senza filigrana, massima qualità",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Scarica video in HD senza filigrana. Mantieni la qualità originale ogni volta.",

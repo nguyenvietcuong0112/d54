@@ -1,4 +1,5 @@
 final Map<String, String> filFIL = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Dahil sa mga legal na paghihigpit, HINDI maaaring i-download ang mga video sa YouTube.",
   "Enter URL here": "Ilagay ang URL dito",
   "Please enter URL": "Mangyaring ilagay ang URL",
   "Downloading from YouTube is not supported": "Hindi sinusuportahan ang pag-download mula sa YouTube",
@@ -102,7 +103,7 @@ final Map<String, String> filFIL = {
   "Preview Video / Thumbnail": "Preview Video / Thumbnail",
   "MP4 Stream": "MP4 Stream",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Mag-download ng mga HD na video mula sa lahat ng platform nang walang watermark, at madaling i-save ang mga feed, post, story, MP3 audio, at mga photo slideshow bilang mga video - mabilis at libre.",
-  "Download from Any Platform": "Mag-download mula sa Anumang Platform",
+  "Download from multiple platforms": "Mag-download mula sa Maramihang Platform",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "I-save ang mga video mula sa lahat ng paborito mong platform sa isang lugar. Mabilis, madali, at walang problema.",
   "No Watermark, Full Quality": "Walang Watermark, Buong Kalidad",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Mag-download ng mga video sa HD nang walang watermark. Panatilihin ang orihinal na kalidad sa bawat oras.",

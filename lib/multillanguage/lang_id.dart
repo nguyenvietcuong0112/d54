@@ -1,4 +1,5 @@
 final Map<String, String> idID = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Karena batasan hukum, video di YouTube TIDAK BISA diunduh.",
   'Enter URL here': 'Masukkan URL di sini',
   "Please enter URL": "Silakan masukkan URL",
   "Downloading from YouTube is not supported": "Mengunduh dari YouTube tidak didukung",
@@ -102,7 +103,7 @@ final Map<String, String> idID = {
   "Preview Video / Thumbnail": "Pratinjau Video / Gambar Mini",
   "MP4 Stream": "Aliran MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Unduh video HD dari semua platform tanpa tanda air, dan simpan feed, postingan, cerita, audio MP3, serta tayangan slide foto sebagai video dengan mudah - cepat dan gratis.",
-  "Download from Any Platform": "Unduh dari Semua Platform",
+  "Download from multiple platforms": "Unduh dari Beberapa Platform",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Simpan video dari semua platform favorit Anda di satu tempat. Cepat, mudah, dan bebas repot.",
   "No Watermark, Full Quality": "Tanpa Tanda Air, Kualitas Penuh",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Unduh video dalam format HD tanpa tanda air. Jaga kualitas asli setiap saat.",

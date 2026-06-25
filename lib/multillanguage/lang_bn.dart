@@ -1,4 +1,5 @@
 final Map<String, String> bnBN = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "আইনি বিধিনিষেধের কারণে, YouTube থেকে ভিডিও ডাউনলোড করা যাবে না।",
   "Enter URL here": "এখানে URL লিখুন",
   "Please enter URL": "অনুগ্রহ করে URL লিখুন",
   "Downloading from YouTube is not supported": "YouTube থেকে ডাউনলোড সমর্থিত নয়",
@@ -102,7 +103,7 @@ final Map<String, String> bnBN = {
   "Preview Video / Thumbnail": "ভিডিও প্রিভিউ / থাম্বনেইল",
   "MP4 Stream": "এমপি৪ স্ট্রিম",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "ওয়াটারমার্ক ছাড়া সব প্ল্যাটফর্ম থেকে এইচডি ভিডিও ডাউনলোড করুন এবং সহজেই ফিড, পোস্ট, স্টোরি, এমপি৩ অডিও এবং ফটো স্লাইডশো ভিডিও হিসেবে সংরক্ষণ করুন - দ্রুত এবং বিনামূল্যে।",
-  "Download from Any Platform": "যেকোনো প্ল্যাটফর্ম থেকে ডাউনলোড করুন",
+  "Download from multiple platforms": "একাধিক প্ল্যাটফর্ম থেকে ডাউনলোড করুন",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "আপনার সমস্ত প্রিয় প্ল্যাটফর্মের ভিডিও এক জায়গায় সংরক্ষণ করুন। দ্রুত, সহজ এবং ঝামেলাহীন।",
   "No Watermark, Full Quality": "ওয়াটারমার্ক ছাড়া, পূর্ণ কোয়ালিটি",
   "Download videos in HD without watermarks. Keep the original quality every time.": "ওয়াটারমার্ক ছাড়া এইচডি ভিডিও ডাউনলোড করুন। প্রতিবার মূল গুণমান বজায় রাখুন।",

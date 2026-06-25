@@ -1,4 +1,5 @@
 final Map<String, String> hiHI = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "कानूनी प्रतिबंधों के कारण, YouTube से video डाउनलोड नहीं किए जा सकते।",
   "Enter URL here": "यहाँ URL दर्ज करें",
   "Please enter URL": "कृपया URL दर्ज करें",
   "Downloading from YouTube is not supported": "YouTube से डाउनलोड करना समर्थित नहीं है",
@@ -102,7 +103,7 @@ final Map<String, String> hiHI = {
   "Preview Video / Thumbnail": "वीडियो पूर्वावलोकन / थंबनेल",
   "MP4 Stream": "एमपी4 स्ट्रीम",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "बिना वॉटरमार्क के सभी प्लेटफॉर्म से एचडी वीडियो डाउनलोड करें, और फ़ीड, पोस्ट, स्टोरीज़, एमपी3 ऑडियो और फोटो स्लाइडशो को आसानी से वीडियो के रूप में सहेजें - तेज़ और मुफ़्त।",
-  "Download from Any Platform": "किसी भी प्लेटफॉर्म से डाउनलोड करें",
+  "Download from multiple platforms": "कई प्लेटफॉर्म से डाउनलोड करें",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "अपने सभी पसंदीदा प्लेटफार्मों से वीडियो एक ही स्थान पर सहेजें। तेज़, आसान और परेशानी मुक्त।",
   "No Watermark, Full Quality": "कोई वॉटरमार्क नहीं, पूर्ण गुणवत्ता",
   "Download videos in HD without watermarks. Keep the original quality every time.": "वॉटरमार्क के बिना एचडी में वीडियो डाउनलोड करें। हर बार मूल गुणवत्ता बनाए रखें।",

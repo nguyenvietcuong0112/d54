@@ -1,4 +1,5 @@
 final Map<String, String> trTR = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Yasal kısıtlamalar nedeniyle, YouTube'daki videolar İNDİRİLEMEZ.",
   'Enter URL here': 'URL\'yi buraya girin',
   "Please enter URL": "Lütfen URL girin",
   "Downloading from YouTube is not supported": "YouTube'dan indirme desteklenmiyor",
@@ -102,7 +103,7 @@ final Map<String, String> trTR = {
   "Preview Video / Thumbnail": "Önizleme Videosu / Küçük Resim",
   "MP4 Stream": "MP4 Akışı",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Filigran olmadan tüm platformlardan HD videolar indirin ve akışları, gönderileri, hikayeleri, MP3 seslerini ve fotoğraf slayt gösterilerini kolayca video olarak kaydedin - hızlı ve ücretsiz.",
-  "Download from Any Platform": "Herhangi Bir Platformdan İndir",
+  "Download from multiple platforms": "Birden Çok Platformdan İndir",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "En sevdiğiniz tüm platformlardaki videoları tek bir yerde kaydedin. Hızlı, kolay ve zahmetsiz.",
   "No Watermark, Full Quality": "Filigransız, Tam Kalite",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Videoları filigran olmadan HD kalitesinde indirin. Orijinal kaliteyi her zaman koruyun.",

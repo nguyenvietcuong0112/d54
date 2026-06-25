@@ -1,4 +1,5 @@
 final Map<String, String> enUS = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Due to legal restrictions, videos on YouTube CANNOT be downloaded.",
   'Enter URL here': 'Enter URL here',
   "Please enter URL": "Please enter URL",
   "Downloading from YouTube is not supported": "Downloading from YouTube is not supported",
@@ -102,7 +103,7 @@ final Map<String, String> enUS = {
   "Preview Video / Thumbnail": "Preview Video / Thumbnail",
   "MP4 Stream": "MP4 Stream",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.",
-  "Download from Any Platform": "Download from Any Platform",
+  "Download from multiple platforms": "Download from multiple platforms",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.",
   "No Watermark, Full Quality": "No Watermark, Full Quality",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Download videos in HD without watermarks. Keep the original quality every time.",

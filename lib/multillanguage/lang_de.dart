@@ -1,4 +1,5 @@
 final Map<String, String> deDE = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "Aufgrund rechtlicher Einschränkungen können Videos von YouTube NICHT heruntergeladen werden.",
   "Enter URL here": "URL hier eingeben",
   "Please enter URL": "Bitte URL eingeben",
   "Downloading from YouTube is not supported": "Das Herunterladen von YouTube wird nicht unterstützt",
@@ -102,7 +103,7 @@ final Map<String, String> deDE = {
   "Preview Video / Thumbnail": "Vorschau-Video / Thumbnail",
   "MP4 Stream": "MP4-Stream",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "Laden Sie HD-Videos von allen Plattformen ohne Wasserzeichen herunter und speichern Sie Feeds, Beiträge, Stories, MP3-Audio und Foto-Diashows ganz einfach als Videos - schnell und kostenlos.",
-  "Download from Any Platform": "Von jeder Plattform herunterladen",
+  "Download from multiple platforms": "Von mehreren Plattformen herunterladen",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "Speichern Sie Videos von all Ihren Lieblingsplattformen an einem Ort. Schnell, einfach und problemlos.",
   "No Watermark, Full Quality": "Kein Wasserzeichen, volle Qualität",
   "Download videos in HD without watermarks. Keep the original quality every time.": "Laden Sie Videos in HD ohne Wasserzeichen herunter. Behalten Sie jedes Mal die Originalqualität bei.",

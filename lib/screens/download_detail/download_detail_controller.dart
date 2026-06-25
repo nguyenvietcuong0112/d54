@@ -25,6 +25,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/app_util.dart';
+import '../../core/utils/dialog_util.dart';
 import '../../core/values/app_colors.dart';
 import '../../customwidget/shimmer.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -126,7 +127,7 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
         return;
       }
       if (Utils.isYoutubeUrl(urlTextFieldController.text)) {
-        AppUtil.showNormalToast("YouTube URL is not supported".tr);
+        DialogUtil.showYoutubeNotSupportedPopup();
         return;
       }
       AppUtil.showLoading();

@@ -1,4 +1,5 @@
 final Map<String, String> thTH = {
+  "Due to legal restrictions, videos on YouTube CANNOT be downloaded.": "เนื่องจากข้อจำกัดทางกฎหมาย ไม่สามารถดาวน์โหลดวิดีโอจาก YouTube ได้",
   'Enter URL here': 'ใส่ URL ที่นี่',
   "Please enter URL": "โปรดใส่ URL",
   "Downloading from YouTube is not supported": "ไม่รองรับการดาวน์โหลดจาก YouTube",
@@ -102,7 +103,7 @@ final Map<String, String> thTH = {
   "Preview Video / Thumbnail": "ตัวอย่างวิดีโอ / ภาพย่อ",
   "MP4 Stream": "สตรีม MP4",
   "Download HD videos from all platforms without watermarks, and easily save feeds, posts, stories, MP3 audio, and photo slideshows as videos - fast and free.": "ดาวน์โหลดวิดีโอ HD จากทุกแพลตฟอร์มโดยไม่มีลายน้ำ และบันทึกฟีด โพสต์ สตอรี่ เสียง MP3 และสไลด์โชว์ภาพถ่ายเป็นวิดีโอได้อย่างง่ายดาย - รวดเร็วและฟรี",
-  "Download from Any Platform": "ดาวน์โหลดจากทุกแพลตฟอร์ม",
+  "Download from multiple platforms": "ดาวน์โหลดจากหลายแพลตฟอร์ม",
   "Save videos from all your favorite platforms in one place. Fast, easy, and hassle-free.": "บันทึกวิดีโอจากทุกแพลตฟอร์มที่คุณโปรดปรานไว้ในที่เดียว รวดเร็ว ง่ายดาย และไม่ยุ่งยาก",
   "No Watermark, Full Quality": "ไม่มีลายน้ำ คุณภาพสูงสุด",
   "Download videos in HD without watermarks. Keep the original quality every time.": "ดาวน์โหลดวิดีโอแบบ HD โดยไม่มีลายน้ำ รักษาคุณภาพต้นฉบับไว้ทุกครั้ง",
