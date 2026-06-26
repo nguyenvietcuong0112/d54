@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
+import 'easy_loading_ad.dart';
 
 class EasyNativeAdCached extends StatefulWidget {
   final AdNetwork adNetwork;
@@ -69,7 +70,7 @@ class _EasyNativeAdCachedState extends State<EasyNativeAdCached> {
     final ad = _nativeAd;
 
     if (ad == null || ad.isAdLoading) {
-      return widget.loadingWidget ?? const SizedBox();
+      return widget.loadingWidget ?? EasyLoadingAd(height: widget.height);
     }
 
     if (ad.isAdLoadedFailed) {

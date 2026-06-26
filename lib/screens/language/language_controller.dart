@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
@@ -17,8 +15,6 @@ import '../../routes/app_pages.dart';
 import '../../utils/app_setting.dart';
 import '../onboard/onboard_controller.dart';
 import '../onboard/onboard_page.dart';
-import '../tabbar/tabbar_controller.dart';
-import '../tabbar/tabbar_page.dart';
 
 class LanguageController extends BaseController {
   RxList<LanguageModel> itemsList = RxList();
@@ -29,6 +25,8 @@ class LanguageController extends BaseController {
   RxBool isShowAltAds = false.obs;
   RxBool isShouldShowNext = false.obs;
   RxBool isShouldShowAds = true.obs;
+  RxBool isLoading = true.obs;
+  RxBool isButtonLoading = false.obs;
 
   RxBool showLanguageAd = false.obs;
   RxBool showLanguageClickAd = false.obs;
@@ -40,6 +38,10 @@ class LanguageController extends BaseController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    Timer(const Duration(milliseconds: 2500), () {
+      isLoading.value = false;
+    });
+
     showLanguageAd.value = FirebaseRemoteConfigService.getBoolConfigByKey(
         FirebaseRemoteConfigService.native_language);
     showLanguageClickAd.value = FirebaseRemoteConfigService.getBoolConfigByKey(
@@ -76,6 +78,12 @@ class LanguageController extends BaseController {
   }
 
   onSelectItem(int index) {
+    if (selectedIndex.value == 100) {
+      isButtonLoading.value = true;
+      Timer(const Duration(seconds: 2), () {
+        isButtonLoading.value = false;
+      });
+    }
     selectedIndex.value = index;
     if (!isShowAltAds.value) {
       FirebaseHelper.logEventName(FirebaseHelper.language_next_view, param: Get.currentRoute);
@@ -94,7 +102,7 @@ class LanguageController extends BaseController {
 
       final ad = EasyAds.instance.getCachedNativeAd(MyAdIdName.nativeLanguageClick);
       if (ad != null && ad.isAdLoaded) {
-        Future.delayed(const Duration(milliseconds: 500), () {
+        Future.delayed(const Duration(milliseconds: 800), () {
           if (!isShouldShowNext.value && !isClosed) {
             isShouldShowNext.value = true;
           }
@@ -105,7 +113,7 @@ class LanguageController extends BaseController {
           if (event.adUnitId == MyAdIdName.nativeLanguageClick.getId &&
               event.type == AdEventType.adLoaded) {
             _adEventSubscription?.cancel();
-            Future.delayed(const Duration(milliseconds: 500), () {
+            Future.delayed(const Duration(milliseconds: 800), () {
               if (!isShouldShowNext.value && !isClosed) {
                 isShouldShowNext.value = true;
               }
@@ -131,7 +139,6 @@ class LanguageController extends BaseController {
     } else {
       selectedIndex.value = 0;
     }
-    Locale locale = Locale(itemsList[selectedIndex.value].languageCode);
     isShouldShowNext.value = true;
   }
 

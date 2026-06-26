@@ -1,15 +1,9 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/routes/app_pages.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import '../../ads/const/ad_id_name.dart';
-import '../../ads/const/ad_id_extension.dart';
 
 import '../../core/utils/app_util.dart';
 import '../../helper/firebase_helper.dart';
-import '../../helper/firebase_remote_config_service.dart';
 import '../tabbar/tabbar_controller.dart';
 import '../tabbar/tabbar_page.dart';
 
@@ -18,7 +12,6 @@ class QuestionController extends BaseController {
   RxBool isShouldShowNext = false.obs;
   List<String> listQuestion = [];
   List<int> listIndexSelected = [];
-  RxBool isShowAdsAlt = false.obs;
 
   @override
   void onInit() {
@@ -61,9 +54,6 @@ class QuestionController extends BaseController {
       listIndexSelected.add(index);
     }
     isShouldShowNext.value = listIndexSelected.isNotEmpty;
-    if (!isShowAdsAlt.value) {
-      isShowAdsAlt.value = true;
-    }
     update();
   }
 

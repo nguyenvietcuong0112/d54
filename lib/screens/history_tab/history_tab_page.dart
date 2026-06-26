@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
@@ -10,7 +9,6 @@ import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 
-import '../../Utils/app_setting.dart';
 import '../../helper/video_download_helper.dart';
 import 'history_tab_controller.dart';
 

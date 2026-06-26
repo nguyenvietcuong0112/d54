@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cscmobi_app/Utils/app_setting.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/core/values/enums.dart';
@@ -15,7 +14,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/utils/app_util.dart';
-import '../../helper/firebase_remote_config_service.dart';
 import '../../helper/media_store_helper.dart';
 import '../../models/realm/download_realm_model.dart';
 import '../../utils/Utils.dart';
@@ -32,14 +30,6 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
   @override
   void onInit() {
     super.onInit();
-    // Load inter_play ad cho video play
-    if (FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.inter_play)) {
-      EasyAds.instance.createInterstitial(
-        adNetwork: AdNetwork.admob,
-        adId: MyAdIdName.interPlayAd.getId, // interPlay is interPlayAd in new IDs
-        immersiveModeEnabled: true,
-      )?.load();
-    }
     tabController = TabController(length: 2, vsync: this);
     getData();
   }
@@ -285,7 +275,7 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
 
   onStartDownload(String url, String name, DownloadType type, {String? audioUrl, double? duration, String? size, Map<String, String>? headers}) async {
     FirebaseHelper.logEventName("Download_" + type.name, param: "");
-    var result = await VideoDownloadHelper.instance.download(
+    await VideoDownloadHelper.instance.download(
       videoUrl: url,
       title: name,
       type: type,

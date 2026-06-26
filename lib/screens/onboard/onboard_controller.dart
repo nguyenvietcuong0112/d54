@@ -48,6 +48,8 @@ class OnboardController extends BaseController {
   RxBool isIntro4AdLoading = false.obs;
 
   StreamSubscription? _adEventSubscription;
+  RxBool isFullAdNextButtonVisible = false.obs;
+  Timer? _fullAdTimer;
 
   @override
   void onInit() {
@@ -59,6 +61,7 @@ class OnboardController extends BaseController {
   @override
   void onClose() {
     _adEventSubscription?.cancel();
+    _fullAdTimer?.cancel();
     nativeOnboardFull1?.dispose();
     nativeOnboardFull2?.dispose();
     pageController.dispose();
@@ -122,14 +125,14 @@ class OnboardController extends BaseController {
     _adEventSubscription = EasyAds.instance.onEvent.listen((event) {
       if (event.type == AdEventType.adLoaded) {
         if (event.adUnitId == MyAdIdName.nativeOnboard1Ad.getId) {
-          Future.delayed(const Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 800), () {
             if (!isClosed) {
               isIntro1AdLoading.value = false;
               update();
             }
           });
         } else if (event.adUnitId == MyAdIdName.nativeOnboard4Ad.getId) {
-          Future.delayed(const Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 800), () {
             if (!isClosed) {
               isIntro4AdLoading.value = false;
               update();
@@ -226,20 +229,32 @@ class OnboardController extends BaseController {
     currentIndex.value = value;
 
     final steps = getSteps();
-    if (value >= 0 &&
-        value < steps.length &&
-        steps[value].title == "Fast & Free".tr) {
-      final String keyOnboard4 =
-          FirebaseRemoteConfigService.native_onboarding_4;
-
-      final bool showAd4 =
-          FirebaseRemoteConfigService.getBoolConfigByKey(keyOnboard4);
-      if (showAd4) {
-        isIntro4AdLoading.value = true;
-        Future.delayed(const Duration(seconds: 3), () {
-          isIntro4AdLoading.value = false;
+    if (value >= 0 && value < steps.length) {
+      final step = steps[value];
+      if (step.fullAd != null) {
+        isFullAdNextButtonVisible.value = false;
+        _fullAdTimer?.cancel();
+        _fullAdTimer = Timer(const Duration(seconds: 1), () {
+          isFullAdNextButtonVisible.value = true;
           update();
         });
+      } else {
+        isFullAdNextButtonVisible.value = false;
+      }
+
+      if (step.title == "Fast & Free".tr) {
+        final String keyOnboard4 =
+            FirebaseRemoteConfigService.native_onboarding_4;
+
+        final bool showAd4 =
+            FirebaseRemoteConfigService.getBoolConfigByKey(keyOnboard4);
+        if (showAd4) {
+          isIntro4AdLoading.value = true;
+          Future.delayed(const Duration(seconds: 3), () {
+            isIntro4AdLoading.value = false;
+            update();
+          });
+        }
       }
     }
 

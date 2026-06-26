@@ -45,6 +45,9 @@ class OnboardPage extends GetView<OnboardController> {
                 Expanded(
                   child: PageView.builder(
                     controller: controller.pageController,
+                    physics: OnlyForwardScrollPhysics(
+                      getCurrentPage: () => controller.currentIndex.value,
+                    ),
                     itemCount: steps.length,
                     onPageChanged: (index) {
                       controller.onChangePage(index);
@@ -294,33 +297,68 @@ class OnboardPage extends GetView<OnboardController> {
           Positioned(
             right: 20,
             top: 20,
-            child: SafeArea(
-              child: GestureDetector(
-                onTap: () => controller.onSelectNext(steps),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.main,
-                    shape: BoxShape.circle,
-                    border: Border.all(
+            child: Obx(() {
+              if (!controller.isFullAdNextButtonVisible.value) {
+                return const SizedBox();
+              }
+              return SafeArea(
+                child: GestureDetector(
+                  onTap: () => controller.onSelectNext(steps),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
                       color: AppColors.main,
-                      width: 1,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.main,
+                        width: 1,
+                      ),
                     ),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      CupertinoIcons.arrow_right,
-                      color: AppColors.black,
-                      size: 24,
+                    child: const Center(
+                      child: Icon(
+                        CupertinoIcons.arrow_right,
+                        color: AppColors.black,
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ],
       ),
     );
+  }
+}
+
+class OnlyForwardScrollPhysics extends ScrollPhysics {
+  final int Function() getCurrentPage;
+
+  const OnlyForwardScrollPhysics({
+    required this.getCurrentPage,
+    super.parent,
+  });
+
+  @override
+  OnlyForwardScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return OnlyForwardScrollPhysics(
+      getCurrentPage: getCurrentPage,
+      parent: buildParent(ancestor),
+    );
+  }
+
+  @override
+  double applyBoundaryConditions(ScrollMetrics position, double value) {
+    final double viewport = position.viewportDimension;
+    if (viewport <= 0) {
+      return super.applyBoundaryConditions(position, value);
+    }
+    final double minPixels = getCurrentPage() * viewport;
+    if (value < minPixels) {
+      return value - minPixels;
+    }
+    return super.applyBoundaryConditions(position, value);
   }
 }

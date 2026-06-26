@@ -13,6 +13,7 @@ export 'package:easy_ads_flutter/src/utils/easy_banner_ad.dart';
 export 'package:easy_ads_flutter/src/utils/easy_native_ad.dart';
 export 'package:easy_ads_flutter/src/utils/easy_native_ad_high.dart';
 export 'package:easy_ads_flutter/src/utils/easy_native_ad_cached.dart';
+export 'package:easy_ads_flutter/src/utils/easy_native_ad_high_cached.dart';
 export 'package:easy_ads_flutter/src/utils/easy_interstitial_ad.dart';
 export 'package:easy_ads_flutter/src/utils/easy_reward_ad.dart';
 export 'package:easy_ads_flutter/src/utils/i_ad_id_manager.dart';

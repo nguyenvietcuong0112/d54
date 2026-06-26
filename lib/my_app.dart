@@ -22,6 +22,8 @@ import '/flavors/build_config.dart';
 import '/flavors/env_config.dart';
 import 'flavors/environment.dart';
 import 'routes/app_pages.dart';
+import 'screens/splash/splash_binding.dart';
+import 'screens/splash/splash_page.dart';
 import 'multillanguage/app_translation.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
@@ -115,6 +117,11 @@ class _MyAppState extends State<MyApp> {
             initialRoute: AppPages.INITIAL,
             initialBinding: AppBinding(),
             getPages: AppPages.routes,
+            unknownRoute: GetPage(
+              name: AppPages.INITIAL,
+              page: () => const SplashPage(),
+              binding: SplashBinding(),
+            ),
             navigatorObservers: [
               routeObserver,
             ],

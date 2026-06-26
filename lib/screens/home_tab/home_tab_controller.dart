@@ -60,7 +60,7 @@ class HomeTabController extends BaseController {
       barrierColor: Colors.black.withOpacity(0.65),
     );
 
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 4), () {
       if (Get.isDialogOpen == true) {
         Get.back();
       }

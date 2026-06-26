@@ -129,17 +129,6 @@ class SplashController extends BaseController {
       // 1. Paid Event (Revenue)
       if (event.type == AdEventType.onPaidEvent) {
         AppSetting.adImpressionCount++;
-        if (event.ad != null && event.valueMicros != null && event.currencyCode != null && event.precision != null) {
-          AdjustHelper.adjustTrackAdRevenue(
-            ad: event.ad!,
-            valueMicros: event.valueMicros!,
-            precision: event.precision!,
-            currencyCode: event.currencyCode!,
-            adOnScreen: Get.currentRoute,
-            adUnit: event.ad!.adUnitId,
-            adImpressionsCount: AppSetting.adImpressionCount,
-          );
-        }
       }
       
       // 2. Impression Logging
@@ -187,29 +176,32 @@ class SplashController extends BaseController {
     FirebaseHelper.logEventName("Start_load_ads", param: "");
     EasyAds.instance.loadAd();
 
-    // Preload native language ads if enabled in Remote Config
-    final bool showLanguageAd = FirebaseRemoteConfigService.getBoolConfigByKey(
-        FirebaseRemoteConfigService.native_language);
-    final bool showLanguageClickAd = FirebaseRemoteConfigService.getBoolConfigByKey(
-        FirebaseRemoteConfigService.native_language_click);
 
-    if (showLanguageAd) {
-      EasyAds.instance.preloadNativeAd(
-        adId: MyAdIdName.nativeLanguage.getId,
-        factoryId: 'nativeMedia',
-        height: AdDimen.mediumNativeHeight,
-        cacheKey: MyAdIdName.nativeLanguage,
-      );
+    if(!isNoFirstOpenApp.value) {
+      final bool showLanguageAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+          FirebaseRemoteConfigService.native_language);
+      final bool showLanguageClickAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+          FirebaseRemoteConfigService.native_language_click);
+
+      if (showLanguageAd) {
+        EasyAds.instance.preloadNativeAd(
+          adId: MyAdIdName.nativeLanguage.getId,
+          factoryId: 'nativeMedia',
+          height: AdDimen.mediumNativeHeight,
+          cacheKey: MyAdIdName.nativeLanguage,
+        );
+      }
+      if (showLanguageClickAd) {
+        EasyAds.instance.preloadNativeAd(
+          adId: MyAdIdName.nativeLanguageClick.getId,
+          factoryId: 'nativeMedia',
+          height: AdDimen.mediumNativeHeight,
+          cacheKey: MyAdIdName.nativeLanguageClick,
+        );
+      }
     }
-    if (showLanguageClickAd) {
-      EasyAds.instance.preloadNativeAd(
-        adId: MyAdIdName.nativeLanguageClick.getId,
-        factoryId: 'nativeMedia',
-        height: AdDimen.mediumNativeHeight,
-        cacheKey: MyAdIdName.nativeLanguageClick,
-      );
     }
-  }
+
 
   logEvent() {}
 

@@ -133,7 +133,7 @@ class _EasyInterstitialAdSplashWith2IdState
 
   Future<void> _waitForAdResult() async {
     int attempts = 0;
-    const int maxAttempts = 120; // 6 seconds max (50ms * 120)
+    const int maxAttempts = 300; // 15 seconds max (50ms * 300)
 
     while (attempts < maxAttempts && mounted && !_adShown) {
       await Future.delayed(const Duration(milliseconds: 50));

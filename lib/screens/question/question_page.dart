@@ -3,11 +3,9 @@
 
 import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:cscmobi_app/screens/question/question_controller.dart';
-import 'package:cscmobi_app/screens/tabbar/tabbar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/app_setting.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
@@ -44,26 +42,15 @@ class QuestionPage extends GetView<QuestionController> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: Obx(() {
-              final bool isShowAlt = controller.isShowAdsAlt.value;
-              final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
-                  FirebaseRemoteConfigService.native_question);
-              if (!showAd) return const SizedBox();
-
-              return isShowAlt
-                  ? EasyNativeAd(
-                      key: const ValueKey('question_alt'),
-                      factoryId: 'nativeMedia',
-                      adId: MyAdIdName.nativeQuestionAd.getId,
-                      height: AdDimen.mediumNativeHeight,
-                    )
-                  : EasyNativeAd(
-                      key: const ValueKey('question_std'),
-                      factoryId: 'nativeMedia',
-                      adId: MyAdIdName.nativeQuestionAd.getId,
-                      height: AdDimen.mediumNativeHeight,
-                    );
-            }),
+            child: FirebaseRemoteConfigService.getBoolConfigByKey(
+                    FirebaseRemoteConfigService.native_question)
+                ? EasyNativeAd(
+                    key: const ValueKey('question_std'),
+                    factoryId: 'nativeMedia',
+                    adId: MyAdIdName.nativeQuestionAd.getId,
+                    height: AdDimen.mediumNativeHeight,
+                  )
+                : const SizedBox(),
           )
         ],
       ),

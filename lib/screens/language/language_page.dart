@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -14,64 +13,67 @@ class LanguagePage extends GetView<LanguageController> {
 
   @override
   LanguageController get controller => Get.isRegistered<LanguageController>() ? Get.find<LanguageController>() : Get.put(LanguageController());
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      buildNavigation(),
-                      Flexible(
-                        flex: 1,
-                        child: buildContent(),
-                      )
-                    ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          backgroundColor: AppColors.backgroundColor,
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        buildNavigation(),
+                        Flexible(
+                          flex: 1,
+                          child: buildContent(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Obx(() {
-                  final bool showStd = controller.showLanguageAd.value;
-                  final bool showAlt = controller.showLanguageClickAd.value;
-                  final bool isShowAlt = controller.isShowAltAds.value;
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Obx(() {
+                    final bool showStd = controller.showLanguageAd.value;
+                    final bool showAlt = controller.showLanguageClickAd.value;
+                    final bool isShowAlt = controller.isShowAltAds.value;
 
-                  if (isShowAlt) {
-                    return showAlt
-                        ? EasyNativeAdCached(
-                            key: const ValueKey('language_alt'),
-                            factoryId: 'nativeMedia',
-                            adId: MyAdIdName.nativeLanguageClick.getId,
-                            cacheKey: MyAdIdName.nativeLanguageClick,
-                            height: AdDimen.mediumNativeHeight,
-                          )
-                        : const SizedBox();
-                  } else {
-                    return showStd
-                        ? EasyNativeAdCached(
-                            key: const ValueKey('language_std'),
-                            factoryId: 'nativeMedia',
-                            adId: MyAdIdName.nativeLanguage.getId,
-                            cacheKey: MyAdIdName.nativeLanguage,
-                            height: AdDimen.mediumNativeHeight,
-                          )
-                        : const SizedBox();
-                  }
-                }),
-              )
-            ],
-          ),
-        )
+                    if (isShowAlt) {
+                      return showAlt
+                          ? EasyNativeAdCached(
+                              key: const ValueKey('language_alt'),
+                              factoryId: 'nativeMedia',
+                              adId: MyAdIdName.nativeLanguageClick.getId,
+                              cacheKey: MyAdIdName.nativeLanguageClick,
+                              height: AdDimen.mediumNativeHeight,
+                            )
+                          : const SizedBox();
+                    } else {
+                      return showStd
+                          ? EasyNativeAdCached(
+                              key: const ValueKey('language_std'),
+                              factoryId: 'nativeMedia',
+                              adId: MyAdIdName.nativeLanguage.getId,
+                              cacheKey: MyAdIdName.nativeLanguage,
+                              height: AdDimen.mediumNativeHeight,
+                            )
+                          : const SizedBox();
+                    }
+                  }),
+                )
+              ],
+            ),
+          )
+      ),
     );
   }
 
@@ -83,6 +85,16 @@ class LanguagePage extends GetView<LanguageController> {
         children: [
           Positioned.fill(
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return Center(
+                  child: Lottie.asset(
+                    'assets/json/loading.json',
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
+                  ),
+                );
+              }
               final bool showAd = (controller.isShowAltAds.value && controller.showLanguageClickAd.value) ||
                                   (!controller.isShowAltAds.value && controller.showLanguageAd.value);
               final double bottomPadding = showAd ? (AdDimen.mediumNativeHeight + 10) : 20.0;
@@ -147,7 +159,7 @@ class LanguagePage extends GetView<LanguageController> {
           Positioned(
             top: 22,
             right: 20,
-            child: Obx(() => !controller.isShowAltAds.value
+            child: Obx(() => (!controller.isShowAltAds.value && !controller.isLoading.value)
                 ? IgnorePointer(
               ignoring: true,
               child: Container(
@@ -204,34 +216,7 @@ class LanguagePage extends GetView<LanguageController> {
             child: Obx(() {
               final bool isFirst = controller.isFirstLaunch.value;
               if (controller.selectedIndex.value == 100) {
-                return Opacity(
-                  opacity: 0.4,
-                  child: Container(
-                    color: Colors.transparent,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!isFirst) ...[
-                          const Icon(
-                            Icons.check,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 5),
-                        ],
-                        Text(
-                          isFirst ? "Next".tr : "Save".tr,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.white
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return const SizedBox();
               }
               
               if (controller.isShouldShowNext.value) {
