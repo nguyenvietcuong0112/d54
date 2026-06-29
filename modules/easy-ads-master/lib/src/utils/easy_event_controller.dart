@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:easy_ads_flutter/src/services/easy_firebase_service.dart';
 
 import '../services/easy_adjust_service.dart';
 import '../services/easy_shared_pref_service.dart';
@@ -107,12 +106,7 @@ class EasyEventController {
       currencyCode,
     );
 
-    EasyAdjustService().logAdRevenue60Percent(
-      adNetwork,
-      ad,
-      valueMicros,
-      currencyCode,
-    );
+
 
     if (valueMicros > 0) {
       EasySharedPrefService().setFullAdsValue();
@@ -137,12 +131,7 @@ class EasyEventController {
     String currencyCode,
     double valueMicros,
   ) {
-    EasyFirebaseService().logAdImpression(
-      adNetwork: adNetwork,
-      ad: ad,
-      valueMicros: valueMicros,
-      currencyCode: currencyCode,
-    );
+
 
     _onEventController.add(AdEvent(
       type: AdEventType.onAdImpression,

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,7 +28,7 @@ class EasyFirebaseService {
     }
 
     await _analytics!.logEvent(
-      name: 'ad_impression_ios',
+      name: Platform.isIOS ? 'ad_impression_ios' : 'ad_impression_android',
       parameters: {
         'ad_unit_id': ad.adUnitId,
         'value': valueMicros / 1000000,
