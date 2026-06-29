@@ -39,7 +39,6 @@ class SplashController extends BaseController {
     isNoFirstOpenApp.value = AppUtil.getBool("isNoFirstOpenApp");
     _checkInternetConnection();
     _listenToConnectivityChanges();
-    fakeDuration();
   }
 
   @override
@@ -104,9 +103,12 @@ class SplashController extends BaseController {
           '_handleConnectivityResult _isConnected: TRUE');
       initMobileAdsSDK();
       initFirebase();
+      fakeDuration();
     } else {
       AppUtil.showLogFull(
           '_handleConnectivityResult _isConnected: FALSE');
+      _timer?.cancel();
+
     }
   }
 

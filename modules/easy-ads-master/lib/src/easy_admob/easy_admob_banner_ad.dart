@@ -122,18 +122,14 @@ class EasyAdmobBannerAd extends EasyAdBase {
       height: adSize.height.toDouble(),
       width: adSize.width.toDouble(),
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.black, width: 2),
-          bottom: BorderSide(color: Colors.black, width: 2),
-        ),
+        color: Colors.transparent,
       ),
       child: Stack(
         children: [
           if (ad != null && isAdLoaded) AdWidget(ad: ad),
           if (_isAdLoading)
             Container(
-              color: Colors.white,
+              color: Colors.transparent,
               child: EasyLoadingAd(height: adSize.height.toDouble()),
             ),
         ],

@@ -36,10 +36,17 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
     if (adSize != null) {
       return;
     }
+    bool needRebuild = false;
     if (widget.adSize != null) {
       adSize = widget.adSize!;
     } else {
       adSize = EasyAds.instance.adSize;
+      if (adSize == null && mounted) {
+        final screenWidth = MediaQuery.of(context).size.width.round();
+        adSize = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(screenWidth);
+        EasyAds.instance.adSize = adSize;
+        needRebuild = true;
+      }
     }
     _bannerAd = EasyAds.instance.createBanner(
       adNetwork: widget.adNetwork,
@@ -57,6 +64,9 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
     });
 
     _startReloadTimer();
+    if (needRebuild && mounted) {
+      setState(() {});
+    }
   }
 
   void _startReloadTimer() {

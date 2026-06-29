@@ -168,37 +168,37 @@ class FirebaseHelper {
     if (matchKey != null) {
       switch (matchKey) {
         case MyAdIdName.appOpenResume:
-          return "resume_open_app";
+          return "resume_open_app_view";
         case MyAdIdName.bannerSplash:
-          return "banner_splash";
+          return "banner_splash_view";
         case MyAdIdName.interSplashHigh:
-          return "inter_splash_high";
+          return "inter_splash_view";
         case MyAdIdName.interSplash:
-          return "inter_splash";
+          return "inter_splash_view";
         case MyAdIdName.nativeLanguage:
-          return "native_language";
+          return "native_language_view";
         case MyAdIdName.nativeLanguageClick:
-          return "native_language_click";
+          return "native_language_view";
         case MyAdIdName.nativeOnboard1Ad:
-          return "native_onboarding_1";
+          return "native_onboarding_1_view";
         case MyAdIdName.nativeOnboardFull1Ad:
-          return "native_onboarding_full_1";
+          return "native_onboarding_full_1_view";
         case MyAdIdName.nativeOnboard4Ad:
-          return "native_onboarding_4";
+          return "native_onboarding_4_view";
         case MyAdIdName.nativeOnboardFull2Ad:
-          return "native_onboarding_full_2";
+          return "native_onboarding_full_2_view";
         case MyAdIdName.nativeQuestionAd:
-          return "native_question";
+          return "native_question_view";
         case MyAdIdName.bannerHome:
-          return "banner_home";
+          return "banner_home_view";
         case MyAdIdName.interHomeAd:
-          return "inter_home";
+          return "inter_home_view";
         case MyAdIdName.nativeHomeAd:
-          return "native_home";
+          return "native_home_view";
         case MyAdIdName.nativeDownloadAd:
-          return "native_download";
+          return "native_download_view";
         case MyAdIdName.interPlayAd:
-          return "inter_play";
+          return "inter_play_view";
       }
     }
     return null;

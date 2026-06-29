@@ -109,7 +109,7 @@ class SplashPage extends GetView<SplashController> {
                       Container(
                         width: double.infinity,
                         decoration: const BoxDecoration(
-                            color: Colors.white
+                            color: Colors.transparent
                         ),
                         child: EasyBannerAd(
                           adId: MyAdIdName.bannerSplash.getId,
