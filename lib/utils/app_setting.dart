@@ -11,11 +11,20 @@ class AppSetting {
   static String selectedLanguageCode = AppUtil().getUserChoosedLanguage();
   static RxBool isInitRemoteConfig = false.obs;
   static bool shouldShowSound = true;
-  static int interval_inter_ad = 15;
+  static int interval_inter_ad = 35;
   static bool appInBackground = false;
   static var realm = Realm(Configuration.local([]));
   static int time_reload_native_collap = 15;
   static int time_reload_native_all = 15;
+  static DateTime? lastTimeShowAd;
+
+  static bool canShowInterstitial() {
+    if (lastTimeShowAd == null) {
+      return true;
+    }
+    final difference = DateTime.now().difference(lastTimeShowAd!).inSeconds;
+    return difference >= interval_inter_ad;
+  }
 
 
   static initAppSetting() {

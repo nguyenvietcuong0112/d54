@@ -14,6 +14,7 @@ import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../download_detail/download_detail_page.dart';
+import '../../utils/app_setting.dart';
 
 class HomeTabController extends BaseController {
   var title_facebook = "Facebook".obs;
@@ -82,10 +83,13 @@ class HomeTabController extends BaseController {
   _showAdAndNavigate(VoidCallback onDone) {
     final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
         FirebaseRemoteConfigService.inter_home);
-    if (showAd) {
+    if (showAd && AppSetting.canShowInterstitial()) {
       EasyAds.instance.showInterstitialAd(
         Get.context!,
         adId: MyAdIdName.interHomeAd.getId,
+        onShowed: () {
+          AppSetting.lastTimeShowAd = DateTime.now();
+        },
         adDissmissed: onDone,
         onFailed: onDone,
       );

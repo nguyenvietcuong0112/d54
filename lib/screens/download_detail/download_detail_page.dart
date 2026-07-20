@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/app_setting.dart';
+import '../../utils/app_setting.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:cscmobi_app/ads/dimens/ad_dimen.dart';
 import '../../ads/const/ad_id_name.dart';

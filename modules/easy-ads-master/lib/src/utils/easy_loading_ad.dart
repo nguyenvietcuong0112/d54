@@ -19,7 +19,7 @@ class EasyLoadingAd extends StatelessWidget {
       width: double.infinity,
       height: adHeight,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: const Color(0xFF1E1E2A),
         borderRadius: BorderRadius.circular(12),
       ),
       padding: EdgeInsets.all(isBanner ? 8 : 12),

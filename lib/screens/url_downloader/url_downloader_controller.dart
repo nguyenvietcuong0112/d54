@@ -111,6 +111,7 @@ class URLDownloaderController extends BaseController {
     String url = resource.url.toString();
     // Tránh trùng
     if (videoList.any((v) => v['url'] == url)) return;
+    if (Utils.isYoutubeUrl(url)) return;
     bool isVideo = isVideoUrl(url);
 
     if (isVideo) {

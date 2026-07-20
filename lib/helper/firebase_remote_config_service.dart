@@ -65,7 +65,7 @@ class FirebaseRemoteConfigService {
         "native_download": true,
         "inter_play": true,
 
-        "interval_inter_ad": 15,
+        "interval_inter_ad": 35,
         "title_facebook": "Facebook",
         "title_instagram": "Instagram",
         "title_pinterest": "Pinterest",

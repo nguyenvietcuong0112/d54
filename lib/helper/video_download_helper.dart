@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
-import 'package:cscmobi_app/Utils/app_setting.dart';
+import 'package:cscmobi_app/utils/app_setting.dart';
 import 'package:cscmobi_app/core/utils/app_util.dart';
 import 'package:cscmobi_app/core/values/enums.dart';
 import 'package:cscmobi_app/helper/media_store_helper.dart';

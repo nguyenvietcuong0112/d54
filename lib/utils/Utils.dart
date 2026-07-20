@@ -37,15 +37,16 @@ class Utils {
     // Regex để match các domain YouTube phổ biến
     final RegExp youtubeRegex = RegExp(
       r'(?:'
-      r'(?:https?:\/\/)?'                  // optional protocol
-      r'(?:www\.|m\.|music\.|shorts\.)?'   // optional subdomain
+      r'(?:https?:\/\/)?'
+      r'(?:www\.|m\.|music\.|shorts\.)?'
       r'(?:'
-      r'youtube\.com'                      // youtube.com
-      r'|youtu\.be'                        // youtu.be
-      r'|youtube-nocookie\.com'            // youtube-nocookie.com
-      r'|youtube\.googleapis\.com'         // api (ít dùng nhưng có thể)
+      r'youtube\.com'
+      r'|youtu\.be'
+      r'|youto\.be'
+      r'|youtube-nocookie\.com'
+      r'|youtube\.googleapis\.com'
       r')'
-      r'(?:\/|$|[?#])'                     // kết thúc domain hoặc có path/query
+      r'(?:\/|$|[?#])'
       r')',
       caseSensitive: false,
     );

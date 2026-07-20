@@ -18,58 +18,61 @@ class OnboardPage extends GetView<OnboardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: GetBuilder<OnboardController>(
-        builder: (_) {
-          final steps = controller.getSteps();
-          
-          if (steps.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.main),
-            );
-          }
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: GetBuilder<OnboardController>(
+          builder: (_) {
+            final steps = controller.getSteps();
 
-          if (controller.currentIndex.value >= steps.length) {
-            controller.currentIndex.value = steps.length - 1;
-          }
-          if (controller.currentIndex.value < 0) {
-            controller.currentIndex.value = 0;
-          }
+            if (steps.isEmpty) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.main),
+              );
+            }
 
-          final currentStep = steps[controller.currentIndex.value];
+            if (controller.currentIndex.value >= steps.length) {
+              controller.currentIndex.value = steps.length - 1;
+            }
+            if (controller.currentIndex.value < 0) {
+              controller.currentIndex.value = 0;
+            }
 
-          return SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: PageView.builder(
-                    controller: controller.pageController,
-                    physics: OnlyForwardScrollPhysics(
-                      getCurrentPage: () => controller.currentIndex.value,
+            final currentStep = steps[controller.currentIndex.value];
+
+            return SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PageView.builder(
+                      controller: controller.pageController,
+                      physics: OnlyForwardScrollPhysics(
+                        getCurrentPage: () => controller.currentIndex.value,
+                      ),
+                      itemCount: steps.length,
+                      onPageChanged: (index) {
+                        controller.onChangePage(index);
+                      },
+                      itemBuilder: (context, index) {
+                        final step = steps[index];
+                        if (step.fullAd != null) {
+                          return _buildFullAdPage(controller, step);
+                        } else {
+                          return _buildOnboardContent(controller, step);
+                        }
+                      },
                     ),
-                    itemCount: steps.length,
-                    onPageChanged: (index) {
-                      controller.onChangePage(index);
-                    },
-                    itemBuilder: (context, index) {
-                      final step = steps[index];
-                      if (step.fullAd != null) {
-                        return _buildFullAdPage(controller, step);
-                      } else {
-                        return _buildOnboardContent(controller, step);
-                      }
-                    },
                   ),
-                ),
-                
-                if (currentStep.fullAd == null) ...[
-                  _buildBottomControls(controller, steps, currentStep),
+
+                  if (currentStep.fullAd == null) ...[
+                    _buildBottomControls(controller, steps, currentStep),
+                  ],
                 ],
-              ],
-            ),
-          );
-        },
+              ),
+            );
+          },
+        ),
       ),
     );
   }

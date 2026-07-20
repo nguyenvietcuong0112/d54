@@ -49,20 +49,17 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
               initialSettings: InAppWebViewSettings(
                 javaScriptEnabled: true,
                 domStorageEnabled: true,
-                // Cực kỳ quan trọng: Dùng User-Agent của Chrome trên Android thực tế
                 userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36",
                 allowsInlineMediaPlayback: true,
-                useShouldOverrideUrlLoading: true, // Để bắt link app fb://
+                useShouldOverrideUrlLoading: true,
                 cacheEnabled: true,
-                // Một số máy Android bị trắng trang nếu không bật cái này
                 mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
               ),
               shouldOverrideUrlLoading: (controller, navigationAction) async {
                 var uri = navigationAction.request.url!;
 
-                // Nếu link không phải web (fb://, intent://, ...)
                 if (!["http", "https"].contains(uri.scheme)) {
-                  return NavigationActionPolicy.CANCEL; // Chặn lỗi trên WebView
+                  return NavigationActionPolicy.CANCEL;
                 }
 
                 if (Utils.isYoutubeUrl(uri.toString())) {
@@ -74,9 +71,38 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
               },
               initialOptions: InAppWebViewGroupOptions(
                 crossPlatform: InAppWebViewOptions(
-                  useOnLoadResource: true,  // Bật để nhận onLoadResource
+                  useOnLoadResource: true,
                 ),
               ),
+              onLoadStart: (webController, url) async {
+                this.controller.webViewController = webController;
+                if (url != null) {
+                  controller.searchTextFieldController.text = url.toString();
+                  if (Utils.isYoutubeUrl(url.toString())) {
+                    await webController.stopLoading();
+                    DialogUtil.showYoutubeNotSupportedPopup();
+                    if (await webController.canGoBack()) {
+                      await webController.goBack();
+                    } else {
+                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("")));
+                    }
+                  }
+                }
+              },
+              onUpdateVisitedHistory: (webController, url, isReload) async {
+                if (url != null) {
+                  controller.searchTextFieldController.text = url.toString();
+                  if (Utils.isYoutubeUrl(url.toString())) {
+                    await webController.stopLoading();
+                    DialogUtil.showYoutubeNotSupportedPopup();
+                    if (await webController.canGoBack()) {
+                      await webController.goBack();
+                    } else {
+                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("")));
+                    }
+                  }
+                }
+              },
               onTitleChanged: (webController, title) {
                 this.controller.webViewController = webController;
                 controller.title.value = title ?? '';
@@ -85,24 +111,19 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
                 this.controller.webViewController = webController;
               },
               onLoadResource: (controller, resource) {
-                // Khi có resource được load, kiểm tra và thêm video nếu hợp lệ
                 String url = resource.url.toString();
-                // Facebook thường dùng các domain như .fbcdn.net và chứa các pattern video
-                // TikTok dùng các domain như .tiktokv.com hoặc .akamaized.net
                 if (url.contains(".mp4") ||
                     url.contains("video_mp4") ||
                     url.contains("/video/") ||
                     url.contains(".m4v") ||
                     url.contains("blob:")) {
                   print("Phát hiện URL nghi vấn video: $url");
-                  // Tại đây bạn có thể lưu URL này lại để xử lý
                 }
                 print("Loaded resource: ${resource.url}");
                 this.controller.addVideoIfValid(resource);
               },
               onProgressChanged: (controller, progress) {
                 print("Progress load: $progress%");
-                // Detect trang đang load thêm (progress không 100 ngay)
               },
             ),
           ),

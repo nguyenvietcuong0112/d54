@@ -6,7 +6,7 @@ import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../../Utils/app_setting.dart';
+import '../../utils/app_setting.dart';
 import '../../core/utils/app_util.dart';
 import '../../core/values/constants.dart';
 import '../../helper/firebase_helper.dart';
@@ -221,16 +221,20 @@ class SplashController extends BaseController {
     Get.updateLocale(locale);
     update();
 
-    bool showInterSplash = FirebaseRemoteConfigService.getBoolConfigByKey(
+    bool showInterSplash = (FirebaseRemoteConfigService.getBoolConfigByKey(
             FirebaseRemoteConfigService.inter_splash) ||
         FirebaseRemoteConfigService.getBoolConfigByKey(
-            FirebaseRemoteConfigService.inter_splash_high);
+            FirebaseRemoteConfigService.inter_splash_high)) &&
+        AppSetting.canShowInterstitial();
 
     if (showInterSplash) {
       EasyAds.instance.showInterstitialAdSplashWith2Id(
         Get.context!,
         interSplashHigh: MyAdIdName.interSplashHigh.getId,
         interSplashAll: MyAdIdName.interSplash.getId,
+        onShowed: () {
+          AppSetting.lastTimeShowAd = DateTime.now();
+        },
         adDissmissed: () {
           goNextScreen();
         },

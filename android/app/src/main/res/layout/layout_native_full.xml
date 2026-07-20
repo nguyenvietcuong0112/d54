@@ -96,7 +96,7 @@
             app:layout_constraintStart_toEndOf="@id/ad_app_icon" />
 
         <!-- Call to Action Button -->
-        <androidx.appcompat.widget.AppCompatButton
+        <com.video.downloader.fastsave.ShimmerButton
             android:id="@+id/ad_call_to_action"
             android:layout_width="0dp"
             android:layout_height="40dp"

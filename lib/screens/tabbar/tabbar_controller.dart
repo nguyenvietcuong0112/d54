@@ -9,7 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../Utils/app_setting.dart';
+import '../../utils/app_setting.dart';
 import '../../helper/firebase_helper.dart';
 import '../popup_confirm_quit/popup_confirm_quit_controller.dart';
 import '../popup_confirm_quit/popup_confirm_quit_page.dart';

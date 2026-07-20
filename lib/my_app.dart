@@ -10,7 +10,7 @@ import 'package:flutter_fgbg/flutter_fgbg.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:get/get.dart';
 
-import 'Utils/app_setting.dart';
+import 'utils/app_setting.dart';
 import 'api_rest/api_repository.dart';
 import 'app_binding.dart';
 import 'core/utils/app_util.dart';

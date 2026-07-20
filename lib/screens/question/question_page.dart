@@ -18,41 +18,44 @@ class QuestionPage extends GetView<QuestionController> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: SafeArea(
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: Column(
-                  children: [
-                    buildNavigation(),
-                    Expanded(
-                      child: buildContent(),
-                    )
-                  ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SafeArea(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Column(
+                    children: [
+                      buildNavigation(),
+                      Expanded(
+                        child: buildContent(),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: FirebaseRemoteConfigService.getBoolConfigByKey(
-                    FirebaseRemoteConfigService.native_question)
-                ? EasyNativeAd(
-                    key: const ValueKey('question_std'),
-                    factoryId: 'nativeMedia',
-                    adId: MyAdIdName.nativeQuestionAd.getId,
-                    height: AdDimen.mediumNativeHeight,
-                  )
-                : const SizedBox(),
-          )
-        ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: FirebaseRemoteConfigService.getBoolConfigByKey(
+                      FirebaseRemoteConfigService.native_question)
+                  ? EasyNativeAd(
+                      key: const ValueKey('question_std'),
+                      factoryId: 'nativeMedia',
+                      adId: MyAdIdName.nativeQuestionAd.getId,
+                      height: AdDimen.mediumNativeHeight,
+                    )
+                  : const SizedBox(),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:cscmobi_app/Utils/app_setting.dart';
+import 'package:cscmobi_app/utils/app_setting.dart';
+import '../../helper/firebase_remote_config_service.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/core/values/enums.dart';
 import 'package:cscmobi_app/helper/firebase_helper.dart';
@@ -23,14 +24,15 @@ import '../popup_rename/popup_rename_controller.dart';
 import '../popup_rename/popup_rename_page.dart';
 
 class HistoryTabController extends BaseController with GetTickerProviderStateMixin  {
-  late final TabController tabController;
+  TabController? _tabController;
+  TabController get tabController => _tabController!;
   RxList<DownloadRealmModel> listDownloadItems = <DownloadRealmModel>[].obs;
   var realm = AppSetting.realm;
 
   @override
   void onInit() {
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
+    _tabController ??= TabController(length: 2, vsync: this);
     getData();
   }
 
@@ -41,6 +43,7 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
 
   @override
   void onClose() {
+    _tabController?.dispose();
     super.onClose();
   }
 
@@ -78,31 +81,37 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     listDownloadItems.value = realm.all<DownloadRealmModel>().toList();
   }
 
+  _showAdAndPlay(VoidCallback onDone) {
+    final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
+        FirebaseRemoteConfigService.inter_play);
+    if (showAd && AppSetting.canShowInterstitial()) {
+      EasyAds.instance.showInterstitialAd(
+        Get.context!,
+        adId: MyAdIdName.interPlayAd.getId,
+        onShowed: () {
+          AppSetting.lastTimeShowAd = DateTime.now();
+        },
+        adDissmissed: onDone,
+        onFailed: onDone,
+      );
+    } else {
+      onDone();
+    }
+  }
+
   // inter_play: hiển thị khi user click play video trong list Download
   onSelectItem(index) async {
     // Kiểm tra xem item có phải video không
     if (index < listDownloadItems.length && listDownloadItems[index].type == "video") {
       // Hiển thị inter_play trước khi mở video
-      EasyAds.instance.showInterstitialAd(
-        Get.context!,
-        adId: MyAdIdName.interPlayAd.getId,
-        adDissmissed: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        },
-        onFailed: () async {
-          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-          if (!existFile) {
-            AppUtil.showNormalToast("File not found".tr);
-            return;
-          }
-          openMyFile(listDownloadItems[index].url);
-        },
-      );
+      _showAdAndPlay(() async {
+        var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+        if (!existFile) {
+          AppUtil.showNormalToast("File not found".tr);
+          return;
+        }
+        openMyFile(listDownloadItems[index].url);
+      });
     } else {
       // Non-video items: mở trực tiếp không qua inter
       var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
@@ -118,26 +127,14 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     if (value == 'open') {
       // open with: cũng kiểm tra inter_play nếu là video
       if (index < listDownloadItems.length && listDownloadItems[index].type == "video") {
-        EasyAds.instance.showInterstitialAd(
-          Get.context!,
-          adId: MyAdIdName.interPlayAd.getId,
-          adDissmissed: () async {
-            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-            if (!existFile) {
-              AppUtil.showNormalToast("File not found".tr);
-              return;
-            }
-            openMyFile(listDownloadItems[index].url);
-          },
-          onFailed: () async {
-            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-            if (!existFile) {
-              AppUtil.showNormalToast("File not found".tr);
-              return;
-            }
-            openMyFile(listDownloadItems[index].url);
-          },
-        );
+        _showAdAndPlay(() async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        });
       } else {
         var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
         if (!existFile) {
@@ -149,26 +146,14 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
     } else if (value == 'play') {
       // play: hiển thị inter_play
       if (index < listDownloadItems.length) {
-        EasyAds.instance.showInterstitialAd(
-          Get.context!,
-          adId: MyAdIdName.interPlayAd.getId,
-          adDissmissed: () async {
-            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-            if (!existFile) {
-              AppUtil.showNormalToast("File not found".tr);
-              return;
-            }
-            openMyFile(listDownloadItems[index].url);
-          },
-          onFailed: () async {
-            var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
-            if (!existFile) {
-              AppUtil.showNormalToast("File not found".tr);
-              return;
-            }
-            openMyFile(listDownloadItems[index].url);
-          },
-        );
+        _showAdAndPlay(() async {
+          var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);
+          if (!existFile) {
+            AppUtil.showNormalToast("File not found".tr);
+            return;
+          }
+          openMyFile(listDownloadItems[index].url);
+        });
       }
     } else if (value == 'share') {
       var existFile = await MediaStoreHelper.fileExists(listDownloadItems[index].url);

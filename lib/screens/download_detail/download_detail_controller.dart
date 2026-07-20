@@ -13,7 +13,7 @@ import 'package:cscmobi_app/screens/how_to_use/how_to_use_controller.dart';
 import 'package:cscmobi_app/screens/how_to_use/how_to_use_page.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:path/path.dart' as p;
-import 'package:cscmobi_app/Utils/app_setting.dart';
+import 'package:cscmobi_app/utils/app_setting.dart';
 import 'package:cscmobi_app/api_rest/api_repository.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:cscmobi_app/core/values/enums.dart';
@@ -45,7 +45,8 @@ import '../url_downloader/url_downloader_page.dart';
 class DownloadDetailController extends BaseController with GetTickerProviderStateMixin  {
   RxBool isSearching = false.obs;
   TextEditingController urlTextFieldController = TextEditingController();
-  late final TabController tabController;
+  TabController? _tabController;
+  TabController get tabController => _tabController!;
   DownloadType type = DownloadType.facebook;
   RxList<DownloadRealmModel> listDownloadItems = <DownloadRealmModel>[].obs;
   var realm = AppSetting.realm;
@@ -60,7 +61,7 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
     // TODO: implement onInit
     super.onInit();
     FirebaseHelper.setTrackingScreenName("DownloadDetailScreen");
-    tabController = TabController(length: 3, vsync: this);
+    _tabController ??= TabController(length: 3, vsync: this);
     type = Get.arguments["type"];
     getData();
   }
@@ -74,7 +75,7 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
   @override
   void onClose() {
     focusNode.dispose();
-    tabController.dispose();
+    _tabController?.dispose();
     urlTextFieldController.dispose();
     super.onClose();
   }
@@ -334,10 +335,13 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
   _showAdAndPlay(VoidCallback onDone) {
     final bool showAd = FirebaseRemoteConfigService.getBoolConfigByKey(
         FirebaseRemoteConfigService.inter_play);
-    if (showAd) {
+    if (showAd && AppSetting.canShowInterstitial()) {
       EasyAds.instance.showInterstitialAd(
         Get.context!,
         adId: MyAdIdName.interPlayAd.getId,
+        onShowed: () {
+          AppSetting.lastTimeShowAd = DateTime.now();
+        },
         adDissmissed: onDone,
         onFailed: onDone,
       );

@@ -3,7 +3,7 @@ import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/app_setting.dart';
+import '../../utils/app_setting.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
@@ -20,34 +20,36 @@ class HomeTabPage extends GetView<HomeTabController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    buildHeader(),
-                    Flexible(
-                      flex: 1,
-                      child: buildContent(context),
-                    )
-                  ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      buildHeader(),
+                      Flexible(
+                        flex: 1,
+                        child: buildContent(context),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // 1. Phần Header: Căn giữa tiêu đề và phụ đề, tích hợp nút Setting góc trên bên phải
   Widget buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),

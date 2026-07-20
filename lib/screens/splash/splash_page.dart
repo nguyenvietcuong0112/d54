@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../Utils/app_setting.dart';
+import '../../utils/app_setting.dart';
 import '../../core/values/app_colors.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
