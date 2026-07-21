@@ -92,6 +92,7 @@ class HomeTabController extends BaseController {
         },
         adDissmissed: onDone,
         onFailed: onDone,
+        timeout: const Duration(seconds: 15),
       );
     } else {
       onDone();

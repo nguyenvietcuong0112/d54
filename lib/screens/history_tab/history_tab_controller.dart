@@ -93,6 +93,7 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
         },
         adDissmissed: onDone,
         onFailed: onDone,
+        timeout: const Duration(seconds: 15),
       );
     } else {
       onDone();
@@ -201,6 +202,7 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
   }
 
   Future<void> openMyFile(String path) async {
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     final uri = Uri.parse(path);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw "Could not open $path";
@@ -259,6 +261,7 @@ class HistoryTabController extends BaseController with GetTickerProviderStateMix
   }
 
   onStartDownload(String url, String name, DownloadType type, {String? audioUrl, double? duration, String? size, Map<String, String>? headers}) async {
+    tabController.animateTo(0);
     FirebaseHelper.logEventName("Download_" + type.name, param: "");
     await VideoDownloadHelper.instance.download(
       videoUrl: url,

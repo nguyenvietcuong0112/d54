@@ -35,6 +35,8 @@ class FirebaseRemoteConfigService {
   static final String title_tiktok = "title_tiktok";
 
   static final String android_app_version = "android_app_version";
+  static final String download_url_api = "download_url_api";
+  static final String download_tiktok_api = "download_tiktok_api";
 
   static Future<void> initFirebaseRemoteConfig() async {
     try {
@@ -72,6 +74,8 @@ class FirebaseRemoteConfigService {
         "title_twitter": "Twitter",
         "title_tiktok": "TikTok",
         "android_app_version": "1.0.0",
+        "download_url_api": "http://20.198.254.31:7002/download",
+        "download_tiktok_api": "http://20.198.254.31:7002/tiktok",
       });
 
       await remoteConfig.fetchAndActivate();

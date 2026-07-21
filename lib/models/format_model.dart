@@ -26,12 +26,13 @@ class FormatModel {
   });
 
   factory FormatModel.fromJson(Map<String, dynamic> json, String title, String thumbnailUrl) {
+    num? rawSize = (json['filesize'] as num?) ?? (json['filesize_approx'] as num?);
     return FormatModel(
       formatId: json['format_id'] ?? "",
       height: (json['height'] as num?)?.toDouble() ?? 0.0,
       width: (json['width'] as num?)?.toDouble() ?? 0.0,
       ext: json['ext'] ?? "",
-      fileSize: (json['filesize'] as num?)?.toDouble() ?? 0.0,
+      fileSize: rawSize?.toDouble() ?? 0.0,
       url: json['url'] ?? "",
       title: title,
       thumbnailUrl: thumbnailUrl,

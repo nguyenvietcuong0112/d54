@@ -353,7 +353,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
           if ((item.type != controller.type) || item.taskId.isEmpty) {
             return Container();
           }
-          return Obx(() => Container(
+          return Container(
             width: double.infinity,
             height: 64,
             margin: EdgeInsets.only(top: 15),
@@ -419,7 +419,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                               child: SizedBox(
                                 height: 4,
                                 child: LinearProgressIndicator(
-                                  value: item.progress.value,
+                                  value: null,
                                   color: AppColors.main,
                                   backgroundColor: AppColors.backgroundItemColor,
                                   semanticsLabel: '',
@@ -427,10 +427,10 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
                             if (item.size != null && item.size!.isNotEmpty) ...[
+                              const SizedBox(
+                                width: 10,
+                              ),
                               Text(
                                 item.size!,
                                 style: const TextStyle(
@@ -439,18 +439,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                                   color: AppColors.textColor
                                 ),
                               ),
-                              const SizedBox(
-                                width: 10,
-                              ),
                             ],
-                            Text(
-                              "${(item.progress.value * 100).toStringAsFixed(0)}%",
-                              style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.textColor
-                              ),
-                            )
                           ],
                         ),
                       )
@@ -459,7 +448,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                 )
               ],
             ),
-          ));
+          );
         },
       ) : buildEmpty()),
     );

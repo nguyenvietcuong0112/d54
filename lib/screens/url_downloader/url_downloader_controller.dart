@@ -12,6 +12,7 @@ import 'package:cscmobi_app/core/values/app_colors.dart';
 import 'package:cscmobi_app/helper/firebase_remote_config_service.dart';
 import 'package:cscmobi_app/screens/history_tab/history_tab_controller.dart';
 import 'package:cscmobi_app/screens/tabbar/tabbar_controller.dart';
+import 'package:cscmobi_app/helper/video_download_helper.dart';
 import 'package:cscmobi_app/utils/Utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,15 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../helper/firebase_helper.dart';
 import '../../core/values/enums.dart';
 import '../popup_rename/popup_rename_controller.dart';
 import '../popup_rename/popup_rename_page.dart';
 
 class URLDownloaderController extends BaseController {
+  static const String _keyLastSearchedUrl = "last_entered_searched_url";
+
   InAppWebViewController? webViewController;
   final List<String> videoExtensions = [
     '.mp4', '.mkv', '.webm', '.mov', '.avi', '.wmv', '.flv', '.f4v',
@@ -36,6 +40,7 @@ class URLDownloaderController extends BaseController {
   RxList<Map<String, dynamic>> videoList = RxList();
   TextEditingController searchTextFieldController = TextEditingController();
   RxBool isSearching = false.obs;
+  RxBool hasSearchText = false.obs;
   var url = "".obs;
   RxSet<int> selectedIndices = <int>{0}.obs;
   var title = ''.obs;
@@ -49,6 +54,14 @@ class URLDownloaderController extends BaseController {
     FirebaseHelper.setTrackingScreenName("URLDownloaderScreen");
     downloadType = Get.arguments != null ? (Get.arguments["type"] ?? DownloadType.webview) : DownloadType.webview;
     String initialUrl = Get.arguments != null ? (Get.arguments["url"] ?? "") : "";
+    if (initialUrl.isEmpty) {
+      try {
+        if (Get.isRegistered<SharedPreferences>()) {
+          final prefs = Get.find<SharedPreferences>();
+          initialUrl = prefs.getString(_keyLastSearchedUrl) ?? "";
+        }
+      } catch (_) {}
+    }
     if (initialUrl.isNotEmpty) {
       initialUrl = initialUrl.trim();
       if (Utils.isYoutubeUrl(initialUrl)) {
@@ -69,10 +82,34 @@ class URLDownloaderController extends BaseController {
     }
     url.value = initialUrl;
     searchTextFieldController.text = url.value;
+    hasSearchText.value = searchTextFieldController.text.isNotEmpty;
+    searchTextFieldController.addListener(() {
+      hasSearchText.value = searchTextFieldController.text.isNotEmpty;
+    });
     if (url.value.isNotEmpty) {
     } else {
       focusNode.requestFocus();
     }
+  }
+
+  void saveLastSearchedUrl(String text) {
+    String trimmed = text.trim();
+    if (trimmed.isEmpty || trimmed.contains("about:blank")) return;
+    try {
+      if (Get.isRegistered<SharedPreferences>()) {
+        final prefs = Get.find<SharedPreferences>();
+        prefs.setString(_keyLastSearchedUrl, trimmed);
+      }
+    } catch (_) {}
+  }
+
+  void clearLastSearchedUrl() {
+    try {
+      if (Get.isRegistered<SharedPreferences>()) {
+        final prefs = Get.find<SharedPreferences>();
+        prefs.remove(_keyLastSearchedUrl);
+      }
+    } catch (_) {}
   }
 
   @override
@@ -128,22 +165,65 @@ class URLDownloaderController extends BaseController {
 
   void fetchVideoSize(String url) async {
     try {
-      final uri = Uri.parse(url);
+      // 1. Thử giải mã tham số 'efg' trong URL (chứa duration_s và bitrate mã hóa base64 của Facebook)
+      try {
+        final uriParsed = Uri.parse(url);
+        final efgParam = uriParsed.queryParameters["efg"];
+        if (efgParam != null && efgParam.isNotEmpty) {
+          final decodedUrl = Uri.decodeComponent(efgParam);
+          final jsonBytes = base64.decode(base64.normalize(decodedUrl));
+          final jsonStr = utf8.decode(jsonBytes);
+          final mapData = json.decode(jsonStr);
+          if (mapData is Map && mapData.containsKey("duration_s") && mapData.containsKey("bitrate")) {
+            final durationS = double.tryParse(mapData["duration_s"].toString()) ?? 0;
+            final bitrate = double.tryParse(mapData["bitrate"].toString()) ?? 0;
+            if (durationS > 0 && bitrate > 0) {
+              final estimatedBytes = ((durationS * bitrate) / 8).toInt();
+              if (estimatedBytes > 0) {
+                final sizeStr = MediaStoreHelper.convertFileSizeToString(estimatedBytes);
+                final idx = videoList.indexWhere((v) => v['url'] == url);
+                if (idx != -1) {
+                  videoList[idx]['size'] = sizeStr;
+                  videoList.refresh();
+                }
+                return;
+              }
+            }
+          }
+        }
+      } catch (_) {}
+
+      // 2. Thử xóa bytestart/byteend và gửi HTTP HEAD
+      String cleanUrlStr = url;
+      try {
+        final uriParsed = Uri.parse(url);
+        if (uriParsed.queryParameters.containsKey("bytestart") ||
+            uriParsed.queryParameters.containsKey("byteend") ||
+            uriParsed.queryParameters.containsKey("range")) {
+          final newQueryParameters = Map<String, String>.from(uriParsed.queryParameters);
+          newQueryParameters.remove("bytestart");
+          newQueryParameters.remove("byteend");
+          newQueryParameters.remove("range");
+          cleanUrlStr = uriParsed.replace(queryParameters: newQueryParameters).toString();
+        }
+      } catch (_) {}
+
       final headers = {
         "User-Agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36",
       };
-      
       if (url.contains("facebook.com") || url.contains(".fbcdn.net")) {
         headers["Referer"] = "https://www.facebook.com/";
       } else if (url.contains("instagram.com")) {
         headers["Referer"] = "https://www.instagram.com/";
       }
 
-      var response = await http.head(uri, headers: headers).timeout(const Duration(seconds: 2));
-      
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      var response = await http.head(Uri.parse(cleanUrlStr), headers: headers).timeout(const Duration(seconds: 2));
+      if (response.statusCode == 403 || response.statusCode == 400 || response.statusCode == 404) {
+        response = await http.head(Uri.parse(url), headers: headers).timeout(const Duration(seconds: 2));
+      }
+      if (response.statusCode != 200 && response.statusCode != 201 && response.statusCode != 206) {
         headers["Range"] = "bytes=0-0";
-        response = await http.get(uri, headers: headers).timeout(const Duration(seconds: 2));
+        response = await http.get(Uri.parse(url), headers: headers).timeout(const Duration(seconds: 2));
       }
 
       if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 206) {
@@ -292,8 +372,39 @@ class URLDownloaderController extends BaseController {
     Get.back();
     Get.back();
 
+    if (Get.isRegistered<TabbarController>()) {
+      var tabbarController = Get.isRegistered<TabbarController>() ? Get.find<TabbarController>() : Get.put(TabbarController());
+      tabbarController.onChangeTabbarIndex(1);
+    }
+    if (Get.isRegistered<HistoryTabController>()) {
+      var historyController = Get.isRegistered<HistoryTabController>() ? Get.find<HistoryTabController>() : Get.put(HistoryTabController());
+      historyController.tabController.animateTo(0);
+    }
+
+    String initialTitle = "${dType.getName}_Video_${DateTime.now().millisecondsSinceEpoch}";
+    if (selectedIndices.isNotEmpty && selectedIndices.first < videoList.length) {
+      var selected = videoList[selectedIndices.first];
+      if (selected['title'] != null && (selected['title'] as String).trim().isNotEmpty) {
+        initialTitle = selected['title'].trim();
+      }
+    }
+
+    List<DownloadItem> pendingItems = [];
+
     if (useBackendParser && pageUrl != null) {
-      AppUtil.showLoading();
+      if (selectedIndices.isNotEmpty) {
+        for (var index in selectedIndices) {
+          if (index < videoList.length) {
+            var itemTitle = videoList[index]['title'] != null ? videoList[index]['title'].toString().trim() : initialTitle;
+            if (itemTitle.isEmpty) itemTitle = initialTitle;
+            pendingItems.add(VideoDownloadHelper.instance.addPendingItem(title: itemTitle, type: dType));
+          }
+        }
+      }
+      if (pendingItems.isEmpty) {
+        pendingItems.add(VideoDownloadHelper.instance.addPendingItem(title: initialTitle, type: dType));
+      }
+
       try {
         ResponseModel resultUrl;
         if (dType == DownloadType.tiktok) {
@@ -356,11 +467,16 @@ class URLDownloaderController extends BaseController {
 
             var newName = bestFormat.title.trim();
             if (newName.isEmpty) {
-              newName = "${dType.getName}_Video_${DateTime.now().millisecondsSinceEpoch}";
+              newName = initialTitle;
             }
             if (newName.length > 100) {
               newName = newName.substring(0, 100);
             }
+
+            for (var item in pendingItems) {
+              VideoDownloadHelper.instance.removePendingItem(item);
+            }
+            pendingItems.clear();
 
             if (Get.isRegistered<TabbarController>()) {
               var tabbarController = Get.isRegistered<TabbarController>() ? Get.find<TabbarController>() : Get.put(TabbarController());
@@ -376,16 +492,34 @@ class URLDownloaderController extends BaseController {
                   size: bestFormat.fileSize > 0 ? MediaStoreHelper.convertFileSizeToString(bestFormat.fileSize.toInt()) : null,
                   headers: headers,
                 );
+
+                // Tải thêm các video khác nếu user chọn nhiều hơn 1 item trong list
+                if (selectedIndices.length > 1) {
+                  for (int i = 1; i < selectedIndices.length; i++) {
+                    var idx = selectedIndices.elementAt(i);
+                    if (idx < videoList.length) {
+                      var v = videoList[idx];
+                      var vUrl = v['url'];
+                      var vName = v['title'] ?? '';
+                      if (vUrl != null) {
+                        controller.onStartDownload(vUrl, vName, dType, headers: headers);
+                      }
+                    }
+                  }
+                }
               }
             }
-            AppUtil.hideLoading();
             return;
           }
         }
       } catch (e) {
         print("Error parsing page url in WebView download: $e");
       }
-      AppUtil.hideLoading();
+
+      for (var item in pendingItems) {
+        VideoDownloadHelper.instance.removePendingItem(item);
+      }
+      pendingItems.clear();
     }
 
     // Fallback if not FB/Insta/TikTok or if API parsing failed
@@ -420,12 +554,24 @@ class URLDownloaderController extends BaseController {
 
   onTextSearchChange(String text) {
     url.value = text;
+    hasSearchText.value = text.isNotEmpty;
+    update();
+  }
+
+  onClearSearchText() {
+    searchTextFieldController.clear();
+    url.value = "";
+    hasSearchText.value = false;
+    clearLastSearchedUrl();
+    focusNode.requestFocus();
     update();
   }
 
   onEndSearch() {
     isSearching.value = false;
-    searchTextFieldController.text = "";
+    if (url.value.isNotEmpty && !url.value.contains("about:blank")) {
+      searchTextFieldController.text = url.value;
+    }
     FocusManager.instance.primaryFocus?.unfocus();
     update();
   }
@@ -459,6 +605,7 @@ class URLDownloaderController extends BaseController {
 
     url.value = finalUrl;
     searchTextFieldController.text = finalUrl;
+    saveLastSearchedUrl(finalUrl);
 
     webViewController!.loadUrl(urlRequest: URLRequest(
       url: WebUri(finalUrl)
@@ -492,6 +639,10 @@ class URLDownloaderController extends BaseController {
                     padding: EdgeInsets.only(bottom: 100),
                     itemBuilder: (context, index) {
                       final video = videoList[index];
+                      print("aaaaaaaaaasizeeeeee:${video['size']}");
+                      print("aaaaaaaaaasizeeeeeeaaaaa:${video["url"]}");
+                      debugPrint("aaaaaaa123123123ádasdas123:${video['url']}");
+
                       return GestureDetector(
                         onTap: () {
                           if (selectedIndices.contains(index)) {

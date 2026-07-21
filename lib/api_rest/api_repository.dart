@@ -13,6 +13,8 @@ import '../core/values/constants.dart';
 import '../flavors/build_config.dart';
 import '../flavors/environment.dart';
 
+import '../helper/firebase_remote_config_service.dart';
+
 class ApiRepository extends BaseProvider {
   static String baseAPIAuth = BuildConfig.instance.config.baseUrlAuthen;
   static String baseAPIUtility = BuildConfig.instance.config.baseUrlUtility;
@@ -29,8 +31,15 @@ class ApiRepository extends BaseProvider {
   String urlUploadAvatar = '$baseAPIUtility/fileUpload/uploadAvatar';
 
   //downloadURL
-  String downloadUrlAPI = "http://20.198.254.31:7002/download";
-  String downloadTiktokAPI = "http://20.198.254.31:7002/tiktok";
+  String get downloadUrlAPI {
+    String remoteUrl = FirebaseRemoteConfigService.getStringConfigByKey(FirebaseRemoteConfigService.download_url_api);
+    return remoteUrl.isNotEmpty ? remoteUrl : "https://api.1teps.com/videodownloader/download";
+  }
+
+  String get downloadTiktokAPI {
+    String remoteUrl = FirebaseRemoteConfigService.getStringConfigByKey(FirebaseRemoteConfigService.download_tiktok_api);
+    return remoteUrl.isNotEmpty ? remoteUrl : "https://api.1teps.com/videodownloader/tiktok";
+  }
 
 
   String urlLogin = '/api/auth/login';

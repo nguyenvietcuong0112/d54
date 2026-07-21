@@ -77,28 +77,38 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
               onLoadStart: (webController, url) async {
                 this.controller.webViewController = webController;
                 if (url != null) {
-                  controller.searchTextFieldController.text = url.toString();
-                  if (Utils.isYoutubeUrl(url.toString())) {
+                  final urlStr = url.toString();
+                  if (!urlStr.contains("about:blank")) {
+                    controller.url.value = urlStr;
+                    controller.searchTextFieldController.text = urlStr;
+                    controller.saveLastSearchedUrl(urlStr);
+                  }
+                  if (Utils.isYoutubeUrl(urlStr)) {
                     await webController.stopLoading();
                     DialogUtil.showYoutubeNotSupportedPopup();
                     if (await webController.canGoBack()) {
                       await webController.goBack();
                     } else {
-                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("")));
+                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("about:blank")));
                     }
                   }
                 }
               },
               onUpdateVisitedHistory: (webController, url, isReload) async {
                 if (url != null) {
-                  controller.searchTextFieldController.text = url.toString();
-                  if (Utils.isYoutubeUrl(url.toString())) {
+                  final urlStr = url.toString();
+                  if (!urlStr.contains("about:blank")) {
+                    controller.url.value = urlStr;
+                    controller.searchTextFieldController.text = urlStr;
+                    controller.saveLastSearchedUrl(urlStr);
+                  }
+                  if (Utils.isYoutubeUrl(urlStr)) {
                     await webController.stopLoading();
                     DialogUtil.showYoutubeNotSupportedPopup();
                     if (await webController.canGoBack()) {
                       await webController.goBack();
                     } else {
-                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("")));
+                      await webController.loadUrl(urlRequest: URLRequest(url: WebUri("about:blank")));
                     }
                   }
                 }
@@ -194,29 +204,50 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
                   color: Colors.white,
                 borderRadius: BorderRadius.circular(25)
               ),
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
-              child: TextField(
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter URL here'.tr,
-                  hintStyle: TextStyle(
-                      color: AppColors.grayText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400
+              padding: const EdgeInsets.only(left: 15, right: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                        hintText: 'Enter URL here'.tr,
+                        hintStyle: const TextStyle(
+                            color: AppColors.grayText,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                      focusNode: controller.focusNode,
+                      controller: controller.searchTextFieldController,
+                      onTap: () => controller.onStartSearch(),
+                      onChanged: (text) => controller.onTextSearchChange(text),
+                      onSubmitted: (text) => controller.onSubmitSearch(text),
+                      style: const TextStyle(
+                          color: AppColors.blackText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400
+                      ),
+                    ),
                   ),
-                ),
-                focusNode: controller.focusNode,
-                controller: controller.searchTextFieldController,
-                onTap: () => controller.onStartSearch(),
-                onChanged: (text) => controller.onTextSearchChange(text),
-                onSubmitted: (text) => controller.onSubmitSearch(text),
-                // onTapOutside: (event) => controller.onEndSearch(),
-                style: TextStyle(
-                    color: AppColors.blackText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400
-                ),
+                  Obx(() => controller.hasSearchText.value
+                      ? GestureDetector(
+                          onTap: () => controller.onClearSearchText(),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            color: Colors.transparent,
+                            child: const Icon(
+                              Icons.cancel,
+                              color: AppColors.grayText,
+                              size: 18,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink()),
+                ],
               ),
             ),
           ),

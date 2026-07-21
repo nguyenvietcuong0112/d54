@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -28,7 +29,7 @@ class DownloadItem {
   final Rx<DownloadTaskStatus> status = DownloadTaskStatus.undefined.obs; // RxEnum
   double totalDurationMs = 0;
   String? audioUrl;
-  final String? size;
+  String? size;
   final Map<String, String>? headers;
 
   DownloadItem(
@@ -109,15 +110,7 @@ class VideoDownloadHelper {
 
         item.status.value = DownloadTaskStatus.values[statusIndex];
         item.progress.value = progressValue / 100.0;
-
-        final now = DateTime.now();
-        final shouldUpdate = _lastUiUpdateTime == null ||
-            now.difference(_lastUiUpdateTime!).inMilliseconds >= 400; // 400ms ~ 2-3 lần/giây, đủ mượt
-
-        if (shouldUpdate) {
-          _lastUiUpdateTime = now;
-          onProgressChanged?.call(item);
-        }
+        onProgressChanged?.call(item);
 
         // Xử lý complete/failed NGAY LẬP TỨC (không throttle)
         if (item.status.value == DownloadTaskStatus.complete) {
@@ -169,32 +162,38 @@ class VideoDownloadHelper {
 
     final headerStr = _buildFFmpegHeaders(item.headers);
 
-    // Bước 1: Lấy thông tin video để biết tổng thời lượng (Duration)
-    final session = await FFmpegKit.execute("$headerStr-i \"${item.videoUrl}\"");
-    final output = await session.getOutput();
-
-    // Parse thời lượng từ log (định dạng Duration: 00:00:10.00)
-    RegExp regExp = RegExp(r"Duration: (\d{2}):(\d{2}):(\d{2})\.(\d{2})");
-    Match? match = regExp.firstMatch(output ?? "");
-
-    if (match != null) {
-      int hours = int.parse(match.group(1)!);
-      int minutes = int.parse(match.group(2)!);
-      int seconds = int.parse(match.group(3)!);
-      item.totalDurationMs = (hours * 3600 + minutes * 60 + seconds) * 1000.0;
-    }
-
-    // Bước 2: Bắt đầu tải và convert
+    // Bắt đầu tải và convert trực tiếp không block
     final ffmpegCommand = '$headerStr-i "${item.videoUrl}" -c copy -bsf:a aac_adtstoasc "$outputPath" -y';
+
+    Timer? smoothTimer;
+    smoothTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      if (item.progress.value < 0.92 && item.status.value == DownloadTaskStatus.running) {
+        if (item.totalDurationMs <= 0) {
+          item.progress.value += 0.03;
+        }
+      } else {
+        timer.cancel();
+      }
+    });
 
     await FFmpegKit.executeAsync(
         ffmpegCommand,
         (session) async {
+          smoothTimer?.cancel();
           // Callback khi hoàn thành
           final returnCode = await session.getReturnCode();
           if (ReturnCode.isSuccess(returnCode)) {
             item.progress.value = 1.0;
             item.status.value = DownloadTaskStatus.complete;
+            try {
+              final file = File(outputPath);
+              if (await file.exists()) {
+                final len = await file.length();
+                if (len > 0) {
+                  item.size = MediaStoreHelper.convertFileSizeToString(len);
+                }
+              }
+            } catch (_) {}
             bool saved = await _saveToGallery(item);
             if (saved) {
               onCompleted?.call(item);
@@ -209,25 +208,27 @@ class VideoDownloadHelper {
             _removeTask(item);
           }
         },
-        (log) => print(log.getMessage()), // LogCallback
+        (log) {
+          final message = log.getMessage();
+          if (item.totalDurationMs <= 0 && message.contains("Duration:")) {
+            RegExp regExp = RegExp(r"Duration: (\d{2}):(\d{2}):(\d{2})\.(\d{2})");
+            Match? match = regExp.firstMatch(message);
+            if (match != null) {
+              int hours = int.parse(match.group(1)!);
+              int minutes = int.parse(match.group(2)!);
+              int seconds = int.parse(match.group(3)!);
+              item.totalDurationMs = (hours * 3600 + minutes * 60 + seconds) * 1000.0;
+            }
+          }
+        },
         (statistics) {
-          // StatisticsCallback: Nơi tính progress
-          if (item.totalDurationMs > 0) {
-            // time là thời gian đã xử lý được (tính bằng miliseconds)
-            double timeInMs = statistics.getTime().toDouble();
+          // StatisticsCallback: Nơi tính progress real-time
+          double timeInMs = statistics.getTime().toDouble();
+          if (item.totalDurationMs > 0 && timeInMs > 0) {
             double progress = timeInMs / item.totalDurationMs;
-
-            // Giới hạn progress từ 0.0 đến 0.95 (để dành 5% cho việc finalize file)
-            if (progress <= 0.95) {
+            if (progress > item.progress.value && progress <= 0.95) {
               item.progress.value = progress;
-
-              // Trigger UI update thông qua throttle giống như cũ
-              final now = DateTime.now();
-              if (_lastUiUpdateTime == null ||
-                  now.difference(_lastUiUpdateTime!).inMilliseconds >= 400) {
-                _lastUiUpdateTime = now;
-                onProgressChanged?.call(item);
-              }
+              onProgressChanged?.call(item);
             }
           }
         }
@@ -243,14 +244,36 @@ class VideoDownloadHelper {
     // Lệnh gộp luồng video và luồng audio sử dụng FFmpeg copy cực kỳ nhanh
     final ffmpegCommand = '$headerStr-i "${item.videoUrl}" $headerStr-i "${item.audioUrl}" -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 "$outputPath" -y';
 
+    // Timer giả lập tiến trình mượt tăng liên tục phòng khi timeInMs hoặc duration không trả về
+    Timer? smoothTimer;
+    smoothTimer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      if (item.progress.value < 0.92 && item.status.value == DownloadTaskStatus.running) {
+        if (item.totalDurationMs <= 0) {
+          item.progress.value += 0.03; // Tăng mượt 3% mỗi 200ms
+        }
+      } else {
+        timer.cancel();
+      }
+    });
+
     await FFmpegKit.executeAsync(
         ffmpegCommand,
         (session) async {
+          smoothTimer?.cancel();
           // Callback khi hoàn thành
           final returnCode = await session.getReturnCode();
           if (ReturnCode.isSuccess(returnCode)) {
             item.progress.value = 1.0;
             item.status.value = DownloadTaskStatus.complete;
+            try {
+              final file = File(outputPath);
+              if (await file.exists()) {
+                final len = await file.length();
+                if (len > 0) {
+                  item.size = MediaStoreHelper.convertFileSizeToString(len);
+                }
+              }
+            } catch (_) {}
             bool saved = await _saveToGallery(item);
             if (saved) {
               onCompleted?.call(item);
@@ -265,23 +288,27 @@ class VideoDownloadHelper {
             _removeTask(item);
           }
         },
-        (log) => print(log.getMessage()), // LogCallback
+        (log) {
+          final message = log.getMessage();
+          if (item.totalDurationMs <= 0 && message.contains("Duration:")) {
+            RegExp regExp = RegExp(r"Duration: (\d{2}):(\d{2}):(\d{2})\.(\d{2})");
+            Match? match = regExp.firstMatch(message);
+            if (match != null) {
+              int hours = int.parse(match.group(1)!);
+              int minutes = int.parse(match.group(2)!);
+              int seconds = int.parse(match.group(3)!);
+              item.totalDurationMs = (hours * 3600 + minutes * 60 + seconds) * 1000.0;
+            }
+          }
+        },
         (statistics) {
-          // StatisticsCallback: Nơi tính progress
-          if (item.totalDurationMs > 0) {
-            double timeInMs = statistics.getTime().toDouble();
+          // StatisticsCallback: Nơi tính progress real-time
+          double timeInMs = statistics.getTime().toDouble();
+          if (item.totalDurationMs > 0 && timeInMs > 0) {
             double progress = timeInMs / item.totalDurationMs;
-
-            if (progress <= 0.95) {
+            if (progress > item.progress.value && progress <= 0.95) {
               item.progress.value = progress;
-
-              // Trigger UI update thông qua throttle
-              final now = DateTime.now();
-              if (_lastUiUpdateTime == null ||
-                  now.difference(_lastUiUpdateTime!).inMilliseconds >= 400) {
-                _lastUiUpdateTime = now;
-                onProgressChanged?.call(item);
-              }
+              onProgressChanged?.call(item);
             }
           }
         }
@@ -314,6 +341,7 @@ class VideoDownloadHelper {
         print("Phát hiện audioUrl, sử dụng FFmpeg gộp...");
         final taskId = "ffmpeg_merge_${DateTime.now().millisecondsSinceEpoch}";
         final item = DownloadItem(taskId, videoUrl, saveFileName, title, type, audioUrl: audioUrl, duration: duration, size: size, headers: headers);
+        item.progress.value = 0.05;
         activeDownloads.add(item);
         _taskMap[taskId] = item;
 
@@ -331,6 +359,7 @@ class VideoDownloadHelper {
         final taskId = "ffmpeg_${DateTime.now().millisecondsSinceEpoch}";
 
         final item = DownloadItem(taskId, videoUrl, saveFileName, title, type, duration: duration, size: size, headers: headers);
+        item.progress.value = 0.05;
         activeDownloads.add(item);
         _taskMap[taskId] = item;
 
@@ -354,6 +383,7 @@ class VideoDownloadHelper {
       if (taskId == null) return null;
 
       final item = DownloadItem(taskId, videoUrl, saveFileName, title, type, duration: duration, size: size, headers: headers);
+      item.progress.value = 0.05;
       activeDownloads.add(item);
       _taskMap[taskId] = item;
 
@@ -366,6 +396,34 @@ class VideoDownloadHelper {
       AppUtil.showNormalToast("Something went wrong while starting the download.".tr);
       return null;
     }
+  }
+
+  final Map<String, Timer> _pendingTimers = {};
+
+  DownloadItem addPendingItem({required String title, required DownloadType type}) {
+    final taskId = "pending_${DateTime.now().millisecondsSinceEpoch}_${_taskMap.length}";
+    final item = DownloadItem(taskId, "", null, title, type);
+    item.status.value = DownloadTaskStatus.running;
+    item.progress.value = 0.01;
+    activeDownloads.add(item);
+    _taskMap[taskId] = item;
+
+    _pendingTimers[taskId] = Timer.periodic(const Duration(milliseconds: 250), (timer) {
+      if (item.progress.value < 0.18 && item.status.value == DownloadTaskStatus.running) {
+        item.progress.value += 0.02;
+      } else {
+        timer.cancel();
+      }
+    });
+
+    return item;
+  }
+
+  void removePendingItem(DownloadItem item) {
+    _pendingTimers[item.taskId]?.cancel();
+    _pendingTimers.remove(item.taskId);
+    activeDownloads.remove(item);
+    _taskMap.remove(item.taskId);
   }
 
 
@@ -387,8 +445,8 @@ class VideoDownloadHelper {
 
       int sizeBytes = await file.length();
       print("Downloaded file size: $sizeBytes bytes");
-      if (sizeBytes < 20 * 1024) {
-        print("File size is less than 20KB: $sizeBytes bytes => download lỗi");
+      if (sizeBytes < 5 * 1024) {
+        print("File size is less than 5KB: $sizeBytes bytes => download lỗi");
         AppUtil.showNormalToast("Downloaded file is too small or corrupted.".tr);
         try {
           await file.delete();
@@ -396,37 +454,16 @@ class VideoDownloadHelper {
         return false;
       }
 
-      // Verify playable trước khi save:
-      final infoSession = await FFprobeKit.getMediaInformation(filePath);
-      final mediaInfo = infoSession.getMediaInformation();
-      if (mediaInfo == null) {
-        print("FFprobe failed: mediaInfo is null => reject file");
-        AppUtil.showNormalToast("Downloaded file is corrupted.".tr);
-        try {
-          await file.delete();
-        } catch (_) {}
-        return false;
-      }
-
-      String? durationStr = mediaInfo.getDuration();
-      final streams = mediaInfo.getStreams();
-      StreamInformation? videoStream;
+      // Thử lấy duration từ FFprobe (không xóa file nếu FFprobe không đọc được resolution)
+      String durationStr = "0";
       try {
-        videoStream = streams.firstWhere((s) => s.getType() == "video");
-      } catch (_) {}
-
-      final width = videoStream?.getWidth() ?? 0;
-      final height = videoStream?.getHeight() ?? 0;
-
-      print("FFprobe validation - duration: $durationStr, width: $width, height: $height");
-
-      if (durationStr == null || width == 0 || height == 0) {
-        print("Reject file: duration is null or resolution is 0x0");
-        AppUtil.showNormalToast("Downloaded file is not a valid video.".tr);
-        try {
-          await file.delete();
-        } catch (_) {}
-        return false;
+        final infoSession = await FFprobeKit.getMediaInformation(filePath);
+        final mediaInfo = infoSession.getMediaInformation();
+        if (mediaInfo != null) {
+          durationStr = mediaInfo.getDuration() ?? "0";
+        }
+      } catch (e) {
+        print("FFprobe check error: $e");
       }
 
       // Proceed to save video
@@ -482,9 +519,11 @@ class VideoDownloadHelper {
       if (Get.isRegistered<HistoryTabController>()) {
         var historyController = Get.isRegistered<HistoryTabController>() ? Get.find<HistoryTabController>() : Get.put(HistoryTabController());
         historyController.getData();
-        try {
-          historyController.tabController.animateTo(1, duration: const Duration(milliseconds: 300));
-        } catch (_) {}
+        if (activeDownloads.isEmpty) {
+          try {
+            historyController.tabController.animateTo(1, duration: const Duration(milliseconds: 300));
+          } catch (_) {}
+        }
       }
       if (Get.isRegistered<DownloadDetailController>()) {
         var controller = Get.isRegistered<DownloadDetailController>() ? Get.find<DownloadDetailController>() : Get.put(DownloadDetailController());

@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 import '../../core/utils/app_util.dart';
 import '../../core/utils/dialog_util.dart';
@@ -39,6 +40,7 @@ import '../popup_delete/popup_delete_controller.dart';
 import '../popup_delete/popup_delete_page.dart';
 import '../popup_rename/popup_rename_controller.dart';
 import '../popup_rename/popup_rename_page.dart';
+import '../tabbar/tabbar_controller.dart';
 import '../url_downloader/url_downloader_controller.dart';
 import '../url_downloader/url_downloader_page.dart';
 
@@ -284,6 +286,11 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
     Get.back();
     if (selectedFormats.isEmpty) return;
 
+    if (Get.isRegistered<TabbarController>()) {
+      var tabbarController = Get.isRegistered<TabbarController>() ? Get.find<TabbarController>() : Get.put(TabbarController());
+      tabbarController.onChangeTabbarIndex(1);
+    }
+
     if (Get.isRegistered<HistoryTabController>()) {
       var controller = Get.isRegistered<HistoryTabController>() ? Get.find<HistoryTabController>() : Get.put(HistoryTabController());
       Map<String, String> headers = {
@@ -344,6 +351,7 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
         },
         adDissmissed: onDone,
         onFailed: onDone,
+        timeout: const Duration(seconds: 15),
       );
     } else {
       onDone();
@@ -418,6 +426,7 @@ class DownloadDetailController extends BaseController with GetTickerProviderStat
   }
 
   Future<void> openMyFile(String path) async {
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     final uri = Uri.parse(path);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       throw "Could not open $path";

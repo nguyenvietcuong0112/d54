@@ -10,6 +10,7 @@ class EasyInterstitialAd extends StatefulWidget {
   final void Function()? onFailed;
   final void Function()? adDismissed;
   final void Function()? onAdImpression;
+  final Duration? timeout;
 
   const EasyInterstitialAd({
     super.key,
@@ -19,6 +20,7 @@ class EasyInterstitialAd extends StatefulWidget {
     this.adDismissed,
     this.onFailed,
     this.onAdImpression,
+    this.timeout,
   });
 
   @override
@@ -34,10 +36,25 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
   );
 
   StreamSubscription? _streamSubscription;
+  Timer? _timeoutTimer;
+  bool _isFinished = false;
+
+  void _finishAndPop(void Function()? callback) {
+    if (_isFinished) return;
+    _isFinished = true;
+    _timeoutTimer?.cancel();
+    EasyAds.instance.setFullscreenAdShowing(false);
+    _streamSubscription?.cancel();
+    if (mounted && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+    callback?.call();
+  }
 
   Future<void> _showAd() => Future.delayed(
         const Duration(seconds: 1),
         () {
+          if (_isFinished) return;
           if (_appLifecycleState == AppLifecycleState.resumed) {
             if (mounted) {
               _interstitialAd?.show();
@@ -52,12 +69,19 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     EasyAds.instance.setFullscreenAdShowing(true);
+
+    if (widget.timeout != null) {
+      _timeoutTimer = Timer(widget.timeout!, () {
+        _finishAndPop(widget.onFailed);
+      });
+    }
     
     _streamSubscription = EasyAds.instance.onEvent.listen((event) {
       if (event.adUnitType == AdUnitType.interstitial &&
           event.adUnitId == widget.adId) {
         switch (event.type) {
           case AdEventType.adLoaded:
+            _timeoutTimer?.cancel();
             if (_appLifecycleState == AppLifecycleState.resumed) {
               _showAd();
             } else {
@@ -65,37 +89,23 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
             }
             break;
           case AdEventType.adShowed:
+            _timeoutTimer?.cancel();
             widget.onShowed?.call();
             break;
           case AdEventType.onAdImpression:
             widget.onAdImpression?.call();
             break;
           case AdEventType.adFailedToLoad:
-            EasyAds.instance.setFullscreenAdShowing(false);
-            _streamSubscription?.cancel();
-            if (mounted && Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
-            widget.onFailed?.call();
+            _finishAndPop(widget.onFailed);
             break;
           case AdEventType.adDismissed:
-            EasyAds.instance.setFullscreenAdShowing(false);
-            _streamSubscription?.cancel();
-            if (mounted && Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            }
-            widget.adDismissed?.call();
+            _finishAndPop(widget.adDismissed);
             break;
           case AdEventType.adFailedToShow:
             if (_appLifecycleState != AppLifecycleState.resumed) {
               _adFailedToShow = true;
             } else {
-              EasyAds.instance.setFullscreenAdShowing(false);
-              _streamSubscription?.cancel();
-              if (mounted && Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              }
-              widget.onFailed?.call();
+              _finishAndPop(widget.onFailed);
             }
             break;
           default:
@@ -105,6 +115,7 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
     });
 
     if (_interstitialAd?.isAdLoaded == true) {
+      _timeoutTimer?.cancel();
       if (_appLifecycleState == AppLifecycleState.resumed) {
         _showAd();
       } else {
@@ -123,7 +134,7 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _appLifecycleState = state;
-    if (state == AppLifecycleState.resumed && _adFailedToShow) {
+    if (state == AppLifecycleState.resumed && _adFailedToShow && !_isFinished) {
       _showAd();
     }
     super.didChangeAppLifecycleState(state);
@@ -131,6 +142,8 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
 
   @override
   void dispose() {
+    _timeoutTimer?.cancel();
+    _streamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _interstitialAd?.dispose();
     super.dispose();

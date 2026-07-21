@@ -573,6 +573,7 @@ class EasyAds {
     Function()? onShowed,
     Function()? adDissmissed,
     Function()? onFailed,
+    Duration? timeout,
   }) {
     if (_isFullscreenAdShowing) {
       return;
@@ -588,6 +589,7 @@ class EasyAds {
           onShowed: onShowed,
           onFailed: onFailed,
           adDismissed: adDissmissed,
+          timeout: timeout,
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
