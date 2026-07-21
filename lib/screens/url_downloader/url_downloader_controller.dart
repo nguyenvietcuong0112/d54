@@ -144,8 +144,25 @@ class URLDownloaderController extends BaseController {
     }
   }
 
+  String _cleanMediaUrl(String rawUrl) {
+    try {
+      final uri = Uri.parse(rawUrl);
+      if (uri.queryParameters.containsKey("bytestart") ||
+          uri.queryParameters.containsKey("byteend") ||
+          uri.queryParameters.containsKey("range")) {
+        final newQueryParameters = Map<String, String>.from(uri.queryParameters);
+        newQueryParameters.remove("bytestart");
+        newQueryParameters.remove("byteend");
+        newQueryParameters.remove("range");
+        return uri.replace(queryParameters: newQueryParameters).toString();
+      }
+    } catch (_) {}
+    return rawUrl;
+  }
+
   void addVideoIfValid(LoadedResource resource) async {
-    String url = resource.url.toString();
+    String rawUrl = resource.url.toString();
+    String url = _cleanMediaUrl(rawUrl);
     // Tránh trùng
     if (videoList.any((v) => v['url'] == url)) return;
     if (Utils.isYoutubeUrl(url)) return;
@@ -194,19 +211,7 @@ class URLDownloaderController extends BaseController {
       } catch (_) {}
 
       // 2. Thử xóa bytestart/byteend và gửi HTTP HEAD
-      String cleanUrlStr = url;
-      try {
-        final uriParsed = Uri.parse(url);
-        if (uriParsed.queryParameters.containsKey("bytestart") ||
-            uriParsed.queryParameters.containsKey("byteend") ||
-            uriParsed.queryParameters.containsKey("range")) {
-          final newQueryParameters = Map<String, String>.from(uriParsed.queryParameters);
-          newQueryParameters.remove("bytestart");
-          newQueryParameters.remove("byteend");
-          newQueryParameters.remove("range");
-          cleanUrlStr = uriParsed.replace(queryParameters: newQueryParameters).toString();
-        }
-      } catch (_) {}
+      String cleanUrlStr = _cleanMediaUrl(url);
 
       final headers = {
         "User-Agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36",
@@ -548,6 +553,19 @@ class URLDownloaderController extends BaseController {
     Get.back();
   }
 
+  String _currentLoadedPage = "";
+
+  void clearVideoListIfPageChanged(String newUrl) {
+    if (_currentLoadedPage != newUrl) {
+      _currentLoadedPage = newUrl;
+      videoList.clear();
+    }
+  }
+
+  void clearVideoList() {
+    videoList.clear();
+  }
+
   onStartSearch() {
     isSearching.value = true;
   }
@@ -555,6 +573,9 @@ class URLDownloaderController extends BaseController {
   onTextSearchChange(String text) {
     url.value = text;
     hasSearchText.value = text.isNotEmpty;
+    if (text.trim().isEmpty) {
+      videoList.clear();
+    }
     update();
   }
 
@@ -562,6 +583,7 @@ class URLDownloaderController extends BaseController {
     searchTextFieldController.clear();
     url.value = "";
     hasSearchText.value = false;
+    videoList.clear();
     clearLastSearchedUrl();
     focusNode.requestFocus();
     update();
@@ -589,6 +611,8 @@ class URLDownloaderController extends BaseController {
       AppUtil.showNormalToast("Something went wrong while starting the download.".tr);
       return;
     }
+
+    videoList.clear();
 
     String finalUrl = trimmedText;
     
@@ -639,10 +663,6 @@ class URLDownloaderController extends BaseController {
                     padding: EdgeInsets.only(bottom: 100),
                     itemBuilder: (context, index) {
                       final video = videoList[index];
-                      print("aaaaaaaaaasizeeeeee:${video['size']}");
-                      print("aaaaaaaaaasizeeeeeeaaaaa:${video["url"]}");
-                      debugPrint("aaaaaaa123123123ádasdas123:${video['url']}");
-
                       return GestureDetector(
                         onTap: () {
                           if (selectedIndices.contains(index)) {

@@ -69,6 +69,7 @@ final Map<String, String> koKR = {
   "Progress": "진행 상황",
   "Downloaded": "다운로드 완료",
   "No data available": "데이터가 없습니다",
+  "No video in downloading": "다운로드 중인 비디오가 없습니다",
   "Open with": "다음으로 열기",
   "Share": "공유",
   "Rename": "이름 변경",

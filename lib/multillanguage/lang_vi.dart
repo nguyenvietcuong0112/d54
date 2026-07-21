@@ -69,6 +69,7 @@ final Map<String, String> viVN = {
   'Progress': 'Tiến độ',
   'Downloaded': 'Đã tải xuống',
   "No data available": "Không có dữ liệu",
+  "No video in downloading": "Không có video đang tải",
   "Open with": "Mở bằng",
   "Share": "Chia sẻ",
   "Rename": "Đổi tên",

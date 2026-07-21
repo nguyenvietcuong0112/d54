@@ -69,6 +69,7 @@ final Map<String, String> thTH = {
   'Progress': 'ความคืบหน้า',
   'Downloaded': 'ดาวน์โหลดแล้ว',
   "No data available": "ไม่มีข้อมูล",
+  "No video in downloading": "ไม่มีวิดีโอที่กำลังดาวน์โหลด",
   "Open with": "เปิดด้วย",
   "Share": "แชร์",
   "Rename": "เปลี่ยนชื่อ",

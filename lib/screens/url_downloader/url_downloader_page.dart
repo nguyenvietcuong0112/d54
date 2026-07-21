@@ -79,6 +79,7 @@ class URLDownloaderPage extends GetView<URLDownloaderController> {
                 if (url != null) {
                   final urlStr = url.toString();
                   if (!urlStr.contains("about:blank")) {
+                    controller.clearVideoListIfPageChanged(urlStr);
                     controller.url.value = urlStr;
                     controller.searchTextFieldController.text = urlStr;
                     controller.saveLastSearchedUrl(urlStr);

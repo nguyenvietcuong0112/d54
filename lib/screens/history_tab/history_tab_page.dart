@@ -119,7 +119,7 @@ class HistoryTabPage extends GetView<HistoryTabController> {
             height: 20,
           ),
           Text(
-            "No data available".tr,
+            "No video in downloading".tr,
             style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,

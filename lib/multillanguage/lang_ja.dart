@@ -69,6 +69,7 @@ final Map<String, String> jaJP = {
   "Progress": "進行状況",
   "Downloaded": "ダウンロード済み",
   "No data available": "データがありません",
+  "No video in downloading": "ダウンロード中の動画はありません",
   "Open with": "次で開く",
   "Share": "共有",
   "Rename": "名前を変更",

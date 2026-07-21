@@ -69,6 +69,7 @@ final Map<String, String> deDE = {
   "Progress": "Fortschritt",
   "Downloaded": "Heruntergeladen",
   "No data available": "Keine Daten verfügbar",
+  "No video in downloading": "Kein Video wird heruntergeladen",
   "Open with": "Öffnen mit",
   "Share": "Teilen",
   "Rename": "Umbenennen",

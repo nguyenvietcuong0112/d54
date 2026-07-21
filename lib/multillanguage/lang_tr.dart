@@ -69,6 +69,7 @@ final Map<String, String> trTR = {
   'Progress': 'İlerleme',
   'Downloaded': 'İndirildi',
   "No data available": "Veri yok",
+  "No video in downloading": "İndirilen video yok",
   "Open with": "Birlikte aç",
   "Share": "Paylaş",
   "Rename": "Yeniden Adlandır",

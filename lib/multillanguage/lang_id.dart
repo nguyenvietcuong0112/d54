@@ -69,6 +69,7 @@ final Map<String, String> idID = {
   'Progress': 'Progres',
   'Downloaded': 'Berhasil Diunduh',
   "No data available": "Tidak ada data tersedia",
+  "No video in downloading": "Tidak ada video yang sedang diunduh",
   "Open with": "Buka dengan",
   "Share": "Bagikan",
   "Rename": "Ubah Nama",

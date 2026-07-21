@@ -69,6 +69,7 @@ final Map<String, String> frFR = {
   "Progress": "Progression",
   "Downloaded": "Téléchargé",
   "No data available": "Aucune donnée disponible",
+  "No video in downloading": "Aucune vidéo en cours de téléchargement",
   "Open with": "Ouvrir avec",
   "Share": "Partager",
   "Rename": "Renommer",

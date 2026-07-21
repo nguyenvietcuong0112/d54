@@ -69,6 +69,7 @@ final Map<String, String> itIT = {
   "Progress": "Avanzamento",
   "Downloaded": "Scaricato",
   "No data available": "Nessun dato disponibile",
+  "No video in downloading": "Nessun video in download",
   "Open with": "Apri con",
   "Share": "Condividi",
   "Rename": "Rinomina",

@@ -69,6 +69,7 @@ final Map<String, String> bnBN = {
   "Progress": "অগ্রগতি",
   "Downloaded": "ডাউনলোড হয়েছে",
   "No data available": "কোনো ডেটা উপলব্ধ নেই",
+  "No video in downloading": "ডাউনলোড করার কোনো ভিডিও নেই",
   "Open with": "এর মাধ্যমে খুলুন",
   "Share": "শেয়ার",
   "Rename": "নাম পরিবর্তন",

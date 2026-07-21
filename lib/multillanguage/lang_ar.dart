@@ -69,6 +69,7 @@ final Map<String, String> arAR = {
   "Progress": "قيد التقدم",
   "Downloaded": "تم التنزيل",
   "No data available": "لا توجد بيانات متاحة",
+  "No video in downloading": "لا يوجد فيديو قيد التحميل",
   "Open with": "فتح باستخدام",
   "Share": "مشاركة",
   "Rename": "إعادة تسمية",

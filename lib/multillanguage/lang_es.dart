@@ -69,6 +69,7 @@ final Map<String, String> esES = {
   "Progress": "Progreso",
   "Downloaded": "Descargado",
   "No data available": "No hay datos disponibles",
+  "No video in downloading": "No hay vídeos descargándose",
   "Open with": "Abrir con",
   "Share": "Compartir",
   "Rename": "Renombrar",

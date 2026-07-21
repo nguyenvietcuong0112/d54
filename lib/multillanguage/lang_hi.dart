@@ -69,6 +69,7 @@ final Map<String, String> hiHI = {
   "Progress": "प्रगति",
   "Downloaded": "डाउनलोड किया गया",
   "No data available": "कोई डेटा उपलब्ध नहीं है",
+  "No video in downloading": "डाउनलोड में कोई वीडियो नहीं है",
   "Open with": "इसके साथ खोलें",
   "Share": "साझा करें",
   "Rename": "नाम बदलें",

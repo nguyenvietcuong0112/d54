@@ -69,6 +69,7 @@ final Map<String, String> enUS = {
   'Progress': 'Progress',
   'Downloaded': 'Downloaded',
   "No data available": "No data available",
+  "No video in downloading": "No video in downloading",
   "Open with": "Open with",
   "Share": "Share",
   "Rename": "Rename",

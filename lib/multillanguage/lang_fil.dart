@@ -69,6 +69,7 @@ final Map<String, String> filFIL = {
   "Progress": "Progreso",
   "Downloaded": "Na-download",
   "No data available": "Walang available na data",
+  "No video in downloading": "Walang video na kino-download",
   "Open with": "Buksan gamit ang",
   "Share": "Ibahagi",
   "Rename": "Palitan ang pangalan",

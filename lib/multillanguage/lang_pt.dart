@@ -69,6 +69,7 @@ final Map<String, String> ptBR = {
   "Progress": "Progresso",
   "Downloaded": "Baixado",
   "No data available": "Nenhum dado disponível",
+  "No video in downloading": "Nenhum vídeo baixando",
   "Open with": "Abrir com",
   "Share": "Compartilhar",
   "Rename": "Renomear",
