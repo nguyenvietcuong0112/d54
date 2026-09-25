@@ -93,3 +93,6 @@
 -keepattributes *Annotation*
 -keepattributes Signature
 -keepattributes InnerClasses
+
+# Native Ad custom views
+-keep class com.video.downloader.fastsave.ShimmerButton { *; }
