@@ -47,9 +47,9 @@ android {
     defaultConfig {
         applicationId "com.video.downloader.fastsave"
         minSdkVersion 24
-        targetSdkVersion 35
-        versionCode 10
-        versionName "0.1.0"
+        targetSdkVersion 36
+        versionCode 11
+        versionName "0.1.1"
 
         archivesBaseName = "D54_Video_Downloader_v${versionName}_c${versionCode}_${new Date().format('ddMMyyyy')}"
         multiDexEnabled true
