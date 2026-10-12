@@ -77,7 +77,7 @@ class HomeTabPage extends GetView<HomeTabController> {
           ),
           const SizedBox(height: 12),
           Text(
-            "HD Video Downloader & Player".tr,
+            "All Video Downloader: HD Saver".tr,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,

@@ -87,7 +87,7 @@ final Map<String, String> ptBR = {
   "Something went wrong while starting the download.": "Algo deu errado ao iniciar o download.",
   "Video saved to gallery successfully.": "O vídeo foi salvo com sucesso na galeria.",
   "Failed to save video to gallery.": "Falha ao salvar o vídeo na galeria.",
-  "HD Video Downloader & Player": "Baixador e reprodutor de vídeo HD",
+  "All Video Downloader: HD Saver": "Baixador e reprodutor de vídeo HD",
   "Lost Connection": "Conexão perdida",
   "We can't download videos without internet. Please reconnect and try again.": "Não podemos baixar vídeos sem internet. Conecte-se novamente e tente de novo.",
   "Go to setting": "Ir para configuração",
@@ -113,4 +113,8 @@ final Map<String, String> ptBR = {
   "Fast & Free": "Rápido & Grátis",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Aproveite downloads ilimitados com alta velocidade — totalmente gratuito, sempre que precisar.",
   "Get started": "Começar",
+  "Do you like All Video Downloader: HD Saver?": "Você gosta do All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Precisamos do seu feedback e incentivo para proporcionar uma experiência melhor.",
+  "No, thanks": "Não, obrigado",
+  "Thank you!": "Obrigado!",
 };

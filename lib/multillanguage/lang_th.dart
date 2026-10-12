@@ -87,7 +87,7 @@ final Map<String, String> thTH = {
   "Something went wrong while starting the download.": "เกิดข้อผิดพลาดขณะเริ่มการดาวน์โหลด",
   "Video saved to gallery successfully.": "บันทึกวิดีโอลงในแกลเลอรีสำเร็จแล้ว",
   "Failed to save video to gallery.": "ไม่สามารถบันทึกวิดีโอลงในแกลเลอรีได้",
-  "HD Video Downloader & Player": "เครื่องดาวน์โหลดและเล่นวิดีโอ HD",
+  "All Video Downloader: HD Saver": "เครื่องดาวน์โหลดและเล่นวิดีโอ HD",
   "Lost Connection": "การเชื่อมต่อขาดหาย",
   "We can't download videos without internet. Please reconnect and try again.": "เราไม่สามารถดาวน์โหลดวิดีโอโดยไม่มีอินเทอร์เน็ตได้ โปรดเชื่อมต่ออีกครั้งและลองใหม่",
   "Go to setting": "ไปที่การตั้งค่า",
@@ -113,4 +113,8 @@ final Map<String, String> thTH = {
   "Fast & Free": "รวดเร็วและฟรี",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "เพลิดเพลินกับการดาวน์โหลดไม่จำกัดด้วยความเร็วสูง — ฟรีทั้งหมด ทุกเวลาที่คุณต้องการ",
   "Get started": "เริ่มต้นใช้งาน",
+  "Do you like All Video Downloader: HD Saver?": "คุณชอบ All Video Downloader: HD Saver หรือไม่?",
+  "We need your feedback and motivation to provide you with a better experience.": "เราต้องการคำติชมและกำลังใจจากคุณเพื่อมอบประสบการณ์ที่ดีขึ้น",
+  "No, thanks": "ไม่ ขอบคุณ",
+  "Thank you!": "ขอบคุณ!",
 };

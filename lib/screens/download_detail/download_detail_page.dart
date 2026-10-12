@@ -679,7 +679,7 @@ class DownloadDetailPage extends GetView<DownloadDetailController> {
                 ),
               ),
               Text(
-                "HD Video Downloader & Player".tr,
+                "All Video Downloader: HD Saver".tr,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,

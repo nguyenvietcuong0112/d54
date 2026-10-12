@@ -13,10 +13,9 @@ import '../../core/utils/app_util.dart';
 import '../../core/values/constants.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
+import '../../helper/rating_helper.dart';
 import '../language/language_controller.dart';
 import '../language/language_page.dart';
-import '../popup_rating/popup_rating_controller.dart';
-import '../popup_rating/popup_rating_page.dart';
 
 class SettingTabController extends BaseController {
 
@@ -72,17 +71,7 @@ class SettingTabController extends BaseController {
   }
 
   onSelectRateApp() async {
-    var result = await Get.dialog(GetBuilder<PopupRatingController>(
-      init: PopupRatingController(), // Optional: Initialize controller here if needed
-      builder: (controller) {
-        return PopupRatingPage();
-      },
-    ),arguments: {},
-      useSafeArea: false,
-    );
-    if (result != null) {
-      AppUtil.showNormalToast("Thank you for your review".tr);
-    }
+    RatingHelper.showRatingDialog();
   }
 
   onSelectPrivacy() async{

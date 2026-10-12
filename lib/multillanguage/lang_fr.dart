@@ -87,7 +87,7 @@ final Map<String, String> frFR = {
   "Something went wrong while starting the download.": "Une erreur s’est produite lors du démarrage du téléchargement.",
   "Video saved to gallery successfully.": "La vidéo a été enregistrée avec succès dans la galerie.",
   "Failed to save video to gallery.": "Échec de l’enregistrement de la vidéo dans la galerie.",
-  "HD Video Downloader & Player": "Téléchargeur & Lecteur Vidéo HD",
+  "All Video Downloader: HD Saver": "Téléchargeur & Lecteur Vidéo HD",
   "Lost Connection": "Connexion perdue",
   "We can't download videos without internet. Please reconnect and try again.": "Impossible de télécharger des vidéos sans Internet. Veuillez vous reconnecter et réessayer.",
   "Go to setting": "Aller aux paramètres",
@@ -113,4 +113,8 @@ final Map<String, String> frFR = {
   "Fast & Free": "Rapide & Gratuit",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Profitez de téléchargements illimités à grande vitesse — entièrement gratuit, à tout moment.",
   "Get started": "Commencer",
+  "Do you like All Video Downloader: HD Saver?": "Aimez-vous All Video Downloader: HD Saver ?",
+  "We need your feedback and motivation to provide you with a better experience.": "Nous avons besoin de vos retours et de votre soutien pour vous offrir une meilleure expérience.",
+  "No, thanks": "Non, merci",
+  "Thank you!": "Merci !",
 };

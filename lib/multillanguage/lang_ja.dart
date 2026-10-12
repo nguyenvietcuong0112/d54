@@ -87,7 +87,7 @@ final Map<String, String> jaJP = {
   "Something went wrong while starting the download.": "ダウンロードの開始中に問題が発生しました。",
   "Video saved to gallery successfully.": "動画はギャラリーに正常に保存されました。",
   "Failed to save video to gallery.": "動画をギャラリーに保存できませんでした。",
-  "HD Video Downloader & Player": "HD動画ダウンローダー＆プレイヤー",
+  "All Video Downloader: HD Saver": "HD動画ダウンローダー＆プレイヤー",
   "Lost Connection": "接続が切れました",
   "We can't download videos without internet. Please reconnect and try again.": "インターネット接続なしでは動画をダウンロードできません。再接続してもう一度お試しください。",
   "Go to setting": "設定に移動",
@@ -113,4 +113,8 @@ final Map<String, String> jaJP = {
   "Fast & Free": "高速＆無料",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "高速で無制限のダウンロードをお楽しみください。いつでも完全無料です。",
   "Get started": "始める",
+  "Do you like All Video Downloader: HD Saver?": "All Video Downloader: HD Saverはお気に入りですか？",
+  "We need your feedback and motivation to provide you with a better experience.": "より良い体験を提供するために、皆様のご意見とご支援が必要です。",
+  "No, thanks": "いいえ、結構です",
+  "Thank you!": "ありがとうございます！",
 };

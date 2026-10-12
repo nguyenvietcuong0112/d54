@@ -1,183 +1,241 @@
-import 'package:cscmobi_app/screens/popup_rating/popup_rating_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import '../../core/values/app_colors.dart';
+import 'popup_rating_controller.dart';
 
 class PopupRatingPage extends GetView<PopupRatingController> {
+  const PopupRatingPage({Key? key}) : super(key: key);
+
   @override
-  PopupRatingController get controller => Get.isRegistered<PopupRatingController>() ? Get.find<PopupRatingController>() : Get.put(PopupRatingController());
+  PopupRatingController get controller =>
+      Get.isRegistered<PopupRatingController>()
+          ? Get.find<PopupRatingController>()
+          : Get.put(PopupRatingController());
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
+    return Material(
+      color: Colors.transparent,
       child: Center(
         child: Container(
-          margin: EdgeInsets.only(left: 20, right: 20),
-          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 28),
           decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20))
+            color: const Color(0xFF1E1E1E),
+            borderRadius: BorderRadius.circular(20),
           ),
-          child: Wrap(
-            children: [
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(top: 20, left: 10, right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Obx(() => Image.asset(
-                      'assets/png/rate' +  controller.currentStar.value.toInt().toString() + '.png',
-                      width: 120,
-                      height: 120,
-                    ),),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'We like you too!'.tr,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.black,
-                          fontSize: 20
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Your opinion matters to us'.tr,
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.black
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    RatingBar(
-                      initialRating: controller.currentStar.value,
-                      direction: Axis.horizontal,
-                      allowHalfRating: false,
-                      itemCount: 5,
-                      minRating: 1,
-                      maxRating: 5,
-                      ratingWidget: RatingWidget(
-                        full: Image.asset('assets/png/rated.png'),
-                        half: Image.asset('assets/png/rated.png'),
-                        empty: Image.asset('assets/png/unrate.png'),
-                      ),
-                      itemPadding: EdgeInsets.symmetric(horizontal: 5.0),
-                      onRatingUpdate: (rating) {
-                        controller.updateRating(rating);
-                      },
-                      updateOnDrag: true,
-                    ),
-                    Container(
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'The best we can get'.tr,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                                color: AppColors.main
-                            ),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Image.asset(
-                            'assets/png/arrow_rate.png',
-                            width: 26,
-                            height: 21,
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: InkWell(
-                              onTap: () {
-                                controller.onSelectBack();
-                              },
-                              child: Container(
-                                height: 42,
-                                decoration: BoxDecoration(
-                                    color: AppColors.black,
-                                    borderRadius: BorderRadius.circular(20)
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Not now'.tr,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: InkWell(
-                              onTap: () {
-                                controller.onSelectSubmit();
-                              },
-                              child: Container(
-                                height: 42,
-                                decoration: BoxDecoration(
-                                    color: AppColors.main,
-                                    borderRadius: BorderRadius.circular(20)
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Submit'.tr,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    )
-                  ],
-                ),
-              ),
-            ],
+          child: Obx(
+            () => AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: controller.isRatedThankYou.value
+                  ? _buildThankYouContent()
+                  : _buildRatingContent(),
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  /// Giao diện popup mời Rating ban đầu (Image 1)
+  Widget _buildRatingContent() {
+    return Column(
+      key: const ValueKey('rating_content'),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Nút Close "X" ở góc trên bên trái
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 14, top: 14),
+            child: GestureDetector(
+              onTap: () => controller.onSelectClose(),
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // Icon Thumbs-up hình tròn nền trắng
+        Container(
+          width: 68,
+          height: 68,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+          child: const Center(
+            child: Icon(
+              Icons.thumb_up_alt_rounded,
+              color: Color(0xFF3B82F6),
+              size: 34,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 18),
+
+        // Tiêu đề: "Bạn có thích [App Name]?"
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            "Do you like All Video Downloader: HD Saver?".tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // Mô tả: "Chúng tôi cần phản hồi và động lực của bạn để mang đến cho bạn trải nghiệm tốt hơn."
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            "We need your feedback and motivation to provide you with a better experience.".tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFFB0B0B0),
+              fontSize: 13.5,
+              fontWeight: FontWeight.normal,
+              height: 1.4,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 22),
+
+        // 5 ngôi sao viền vàng (outline)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(5, (index) {
+            final star = index + 1;
+            return GestureDetector(
+              onTap: () => controller.onSelectStar(star),
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: const Icon(
+                  Icons.star_outline_rounded,
+                  color: Color(0xFFFFB800),
+                  size: 38,
+                ),
+              ),
+            );
+          }),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Nút "Không, cám ơn." ("No, thanks")
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: GestureDetector(
+            onTap: () => controller.onSelectClose(),
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              width: double.infinity,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFF3B82F6),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Center(
+                child: Text(
+                  "No, thanks".tr,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  /// Giao diện "Cảm ơn!" khi chọn <= 3 sao (Image 2)
+  Widget _buildThankYouContent() {
+    return Column(
+      key: const ValueKey('thank_you_content'),
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // Nút Close "X" ở góc trên bên trái
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 14, top: 14),
+            child: GestureDetector(
+              onTap: () => controller.onSelectClose(),
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // Icon Checkmark tròn nền sáng
+        Container(
+          width: 68,
+          height: 68,
+          decoration: const BoxDecoration(
+            color: Color(0xFFE8F1FD),
+            shape: BoxShape.circle,
+          ),
+          child: const Center(
+            child: Icon(
+              Icons.check_rounded,
+              color: Color(0xFF3B82F6),
+              size: 38,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 20),
+
+        // Text: "Cảm ơn!"
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            "Thank you!".tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 36),
+      ],
     );
   }
 }

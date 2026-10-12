@@ -13,6 +13,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
+import '../../helper/rating_helper.dart';
 import '../download_detail/download_detail_page.dart';
 import '../../utils/app_setting.dart';
 
@@ -65,6 +66,7 @@ class HomeTabController extends BaseController {
       if (Get.isDialogOpen == true) {
         Get.back();
       }
+      RatingHelper.checkAndShowRatingOnHome();
     });
   }
 

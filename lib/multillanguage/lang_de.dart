@@ -87,7 +87,7 @@ final Map<String, String> deDE = {
   "Something went wrong while starting the download.": "Beim Start des Downloads ist ein Fehler aufgetreten.",
   "Video saved to gallery successfully.": "Video wurde erfolgreich in der Galerie gespeichert.",
   "Failed to save video to gallery.": "Video konnte nicht in der Galerie gespeichert werden.",
-  "HD Video Downloader & Player": "HD Video Downloader & Player",
+  "All Video Downloader: HD Saver": "All Video Downloader: HD Saver",
   "Lost Connection": "Verbindung verloren",
   "We can't download videos without internet. Please reconnect and try again.": "Ohne Internet können keine Videos heruntergeladen werden. Bitte verbinden Sie sich erneut und versuchen Sie es noch einmal.",
   "Go to setting": "Zu den Einstellungen gehen",
@@ -113,4 +113,8 @@ final Map<String, String> deDE = {
   "Fast & Free": "Schnell & Kostenlos",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Genießen Sie unbegrenzte Downloads mit hoher Geschwindigkeit – völlig kostenlos, wann immer Sie sie brauchen.",
   "Get started": "Loslegen",
+  "Do you like All Video Downloader: HD Saver?": "Gefällt dir All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Wir brauchen dein Feedback und deine Motivation, um dir ein besseres Erlebnis zu bieten.",
+  "No, thanks": "Nein, danke",
+  "Thank you!": "Danke!",
 };

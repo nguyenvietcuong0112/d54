@@ -87,7 +87,7 @@ final Map<String, String> koKR = {
   "Something went wrong while starting the download.": "다운로드를 시작하는 동안 문제가 발생했습니다.",
   "Video saved to gallery successfully.": "비디오가 갤러리에 성공적으로 저장되었습니다.",
   "Failed to save video to gallery.": "비디오를 갤러리에 저장하지 못했습니다.",
-  "HD Video Downloader & Player": "HD 비디오 다운로더 & 플레이어",
+  "All Video Downloader: HD Saver": "HD 비디오 다운로더 & 플레이어",
   "Lost Connection": "연결 끊김",
   "We can't download videos without internet. Please reconnect and try again.": "인터넷 연결 없이는 비디오를 다운로드할 수 없습니다. 다시 연결하고 시도해 주세요.",
   "Go to setting": "설정으로 이동",
@@ -113,4 +113,8 @@ final Map<String, String> koKR = {
   "Fast & Free": "빠름 & 무료",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "초고속 무제한 다운로드를 즐겨보세요 — 언제든지 완전 무료입니다.",
   "Get started": "시작하기",
+  "Do you like All Video Downloader: HD Saver?": "All Video Downloader: HD Saver이(가) 마음에 드시나요?",
+  "We need your feedback and motivation to provide you with a better experience.": "더 나은 경험을 제공하기 위해 여러분의 피드백과 격려가 필요합니다.",
+  "No, thanks": "아니요, 괜찮습니다",
+  "Thank you!": "감사합니다!",
 };

@@ -25,7 +25,7 @@ import 'ads/const/ad_id_extension.dart';
 
 final navigatorKey = Get.key;
 
-const bool isProduction = true;
+const bool isProduction = true ;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

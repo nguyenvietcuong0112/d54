@@ -87,7 +87,7 @@ final Map<String, String> hiHI = {
   "Something went wrong while starting the download.": "डाउनलोड शुरू करते समय कुछ गलत हो गया।",
   "Video saved to gallery successfully.": "वीडियो सफलतापूर्वक गैलरी में सहेजा गया।",
   "Failed to save video to gallery.": "वीडियो को गैलरी में सहेजने में विफल रहा।",
-  "HD Video Downloader & Player": "एचडी वीडियो डाउनलोडर और प्लेयर",
+  "All Video Downloader: HD Saver": "एचडी वीडियो डाउनलोडर और प्लेयर",
   "Lost Connection": "कनेक्शन टूट गया",
   "We can't download videos without internet. Please reconnect and try again.": "हम इंटरनेट के बिना वीडियो डाउनलोड नहीं कर सकते। कृपया फिर से कनेक्ट करें और पुनः प्रयास करें.",
   "Go to setting": "सेटिंग में जाएं",
@@ -113,4 +113,8 @@ final Map<String, String> hiHI = {
   "Fast & Free": "तेज़ और मुफ़्त",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "उच्च गति के साथ असीमित डाउनलोड का आनंद लें — पूरी तरह से मुफ़्त, जब भी आपको आवश्यकता हो।",
   "Get started": "शुरू करें",
+  "Do you like All Video Downloader: HD Saver?": "क्या आपको All Video Downloader: HD Saver पसंद है?",
+  "We need your feedback and motivation to provide you with a better experience.": "आपको बेहतर अनुभव प्रदान करने के लिए हमें आपकी प्रतिक्रिया और प्रोत्साहन की आवश्यकता है।",
+  "No, thanks": "नहीं, धन्यवाद",
+  "Thank you!": "धन्यवाद!",
 };

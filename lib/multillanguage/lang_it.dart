@@ -87,7 +87,7 @@ final Map<String, String> itIT = {
   "Something went wrong while starting the download.": "Si è verificato un errore durante l’avvio del download.",
   "Video saved to gallery successfully.": "Il video è stato salvato correttamente nella galleria.",
   "Failed to save video to gallery.": "Impossibile salvare il video nella galleria.",
-  "HD Video Downloader & Player": "HD Video Downloader & Player",
+  "All Video Downloader: HD Saver": "All Video Downloader: HD Saver",
   "Lost Connection": "Connessione persa",
   "We can't download videos without internet. Please reconnect and try again.": "Impossibile scaricare video senza Internet. Riconnettiti e riprova.",
   "Go to setting": "Vai alle impostazioni",
@@ -113,4 +113,8 @@ final Map<String, String> itIT = {
   "Fast & Free": "Veloce & Gratuito",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Goditi download illimitati ad alta velocità, completamente gratuiti, ogni volta che ne hai bisogno.",
   "Get started": "Inizia",
+  "Do you like All Video Downloader: HD Saver?": "Ti piace All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Abbiamo bisogno del tuo feedback e della tua motivazione per offrirti un'esperienza migliore.",
+  "No, thanks": "No, grazie",
+  "Thank you!": "Grazie!",
 };

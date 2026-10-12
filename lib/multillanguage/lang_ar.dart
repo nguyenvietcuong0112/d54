@@ -87,7 +87,7 @@ final Map<String, String> arAR = {
   "Something went wrong while starting the download.": "حدث خطأ ما أثناء بدء التنزيل.",
   "Video saved to gallery successfully.": "تم حفظ الفيديو في المعرض بنجاح.",
   "Failed to save video to gallery.": "فشل حفظ الفيديو في المعرض.",
-  "HD Video Downloader & Player": "برنامج تنزيل وتشغيل الفيديو عالي الدقة",
+  "All Video Downloader: HD Saver": "برنامج تنزيل وتشغيل الفيديو عالي الدقة",
   "Lost Connection": "الاتصال مفقود",
   "We can't download videos without internet. Please reconnect and try again.": "لا يمكننا تنزيل مقاطع الفيديو بدون إنترنت. يرجى إعادة الاتصال والمحاولة مرة أخرى.",
   "Go to setting": "اذهب إلى الإعدادات",
@@ -113,4 +113,8 @@ final Map<String, String> arAR = {
   "Fast & Free": "سريع ومجاني",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "استمتع بتنزيلات غير محدودة وبسرعة عالية — مجانية تمامًا، في أي وقت تحتاجه.",
   "Get started": "ابدأ الآن",
+  "Do you like All Video Downloader: HD Saver?": "هل يعجبك All Video Downloader: HD Saver؟",
+  "We need your feedback and motivation to provide you with a better experience.": "نحن بحاجة إلى ملاحظاتك ودعمك لنقدم لك تجربة أفضل.",
+  "No, thanks": "لا، شكراً",
+  "Thank you!": "شكراً لك!",
 };

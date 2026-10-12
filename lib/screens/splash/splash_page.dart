@@ -50,7 +50,7 @@ class SplashPage extends GetView<SplashController> {
                           Container(
                             transform: Matrix4.translationValues(0.0, 0, 0.0),
                             child: Text(
-                              "HD Video Downloader & Player",
+                              "All Video Downloader: HD Saver",
                               style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w600,

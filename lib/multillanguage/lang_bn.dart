@@ -87,7 +87,7 @@ final Map<String, String> bnBN = {
   "Something went wrong while starting the download.": "ডাউনলোড শুরু করার সময় কিছু ভুল হয়েছে।",
   "Video saved to gallery successfully.": "ভিডিওটি সফলভাবে গ্যালারিতে সংরক্ষণ করা হয়েছে।",
   "Failed to save video to gallery.": "গ্যালারিতে ভিডিও সংরক্ষণ করতে ব্যর্থ হয়েছে।",
-  "HD Video Downloader & Player": "এইচডি ভিডিও ডাউনলোডার এবং প্লেয়ার",
+  "All Video Downloader: HD Saver": "এইচডি ভিডিও ডাউনলোডার এবং প্লেয়ার",
   "Lost Connection": "সংযোগ বিচ্ছিন্ন",
   "We can't download videos without internet. Please reconnect and try again.": "ইন্টারনেট ছাড়া আমরা ভিডিও ডাউনলোড করতে পারি না। দয়া করে পুনরায় সংযোগ করুন এবং আবার চেষ্টা করুন।",
   "Go to setting": "সেটিংসে যান",
@@ -113,4 +113,8 @@ final Map<String, String> bnBN = {
   "Fast & Free": "দ্রুত ও বিনামূল্যে",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "উচ্চ গতিতে সীমাহীন ডাউনলোড উপভোগ করুন — সম্পূর্ণ বিনামূল্যে, যখনই আপনার প্রয়োজন।",
   "Get started": "শুরু করুন",
+  "Do you like All Video Downloader: HD Saver?": "আপনি কি All Video Downloader: HD Saver পছন্দ করেন?",
+  "We need your feedback and motivation to provide you with a better experience.": "আপনাকে আরও ভাল অভিজ্ঞতা দেওয়ার জন্য আমাদের আপনার মতামত এবং অনুপ্রেরণা প্রয়োজন।",
+  "No, thanks": "না, ধন্যবাদ",
+  "Thank you!": "ধন্যবাদ!",
 };

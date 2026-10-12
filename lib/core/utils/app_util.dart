@@ -15,6 +15,7 @@ import '../anim/ease_in_widget.dart';
 import '../values/app_colors.dart';
 import '/core/values/constants.dart';
 import '/core/values/styles.dart';
+import '../../helper/rating_helper.dart';
 
 class AppUtil {
 
@@ -589,6 +590,7 @@ class AppUtil {
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }
+      RatingHelper.checkAndShowRatingAfterFirstDownload();
     });
   }
 }

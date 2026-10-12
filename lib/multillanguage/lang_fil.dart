@@ -87,7 +87,7 @@ final Map<String, String> filFIL = {
   "Something went wrong while starting the download.": "May nangyaring mali habang sinisimulan ang pag-download.",
   "Video saved to gallery successfully.": "Matagumpay na na-save ang video sa gallery.",
   "Failed to save video to gallery.": "Hindi na-save ang video sa gallery.",
-  "HD Video Downloader & Player": "HD Video Downloader at Player",
+  "All Video Downloader: HD Saver": "HD Video Downloader at Player",
   "Lost Connection": "Nawalan ng Koneksyon",
   "We can't download videos without internet. Please reconnect and try again.": "Hindi kami makakapag-download ng mga video nang walang internet. Pakikonekta muli at subukang muli.",
   "Go to setting": "Pumunta sa setting",
@@ -113,4 +113,8 @@ final Map<String, String> filFIL = {
   "Fast & Free": "Mabilis at Libre",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "I-enjoy ang walang limitasyong pag-download nang mabilis — ganap na libre, anumang oras mo kailangan.",
   "Get started": "Magsimula",
+  "Do you like All Video Downloader: HD Saver?": "Gusto mo ba ang All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Kailangan namin ang iyong puna at suporta upang mabigyan ka ng mas magandang karanasan.",
+  "No, thanks": "Hindi, salamat",
+  "Thank you!": "Salamat!",
 };

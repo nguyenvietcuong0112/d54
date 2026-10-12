@@ -87,7 +87,7 @@ final Map<String, String> idID = {
   "Something went wrong while starting the download.": "Terjadi kesalahan saat memulai pengunduhan.",
   "Video saved to gallery successfully.": "Video berhasil disimpan ke galeri.",
   "Failed to save video to gallery.": "Gagal menyimpan video ke galeri.",
-  "HD Video Downloader & Player": "Pengunduh & Pemutar Video HD",
+  "All Video Downloader: HD Saver": "Pengunduh & Pemutar Video HD",
   "Lost Connection": "Koneksi Terputus",
   "We can't download videos without internet. Please reconnect and try again.": "Kami tidak dapat mengunduh video tanpa internet. Silakan sambungkan kembali dan coba lagi.",
   "Go to setting": "Buka pengaturan",
@@ -113,4 +113,8 @@ final Map<String, String> idID = {
   "Fast & Free": "Cepat & Gratis",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Nikmati unduhan tanpa batas dengan kecepatan tinggi — sepenuhnya gratis, kapan pun Anda butuhkan.",
   "Get started": "Mulai",
+  "Do you like All Video Downloader: HD Saver?": "Apakah Anda menyukai All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Kami membutuhkan masukan dan motivasi Anda untuk memberi pengalaman yang lebih baik.",
+  "No, thanks": "Tidak, terima kasih",
+  "Thank you!": "Terima kasih!",
 };

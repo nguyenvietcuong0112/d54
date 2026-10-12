@@ -87,7 +87,7 @@ final Map<String, String> esES = {
   "Something went wrong while starting the download.": "Algo salió mal al iniciar la descarga.",
   "Video saved to gallery successfully.": "El video se guardó correctamente en la galería.",
   "Failed to save video to gallery.": "No se pudo guardar el video en la galería.",
-  "HD Video Downloader & Player": "Descargador y reproductor de video HD",
+  "All Video Downloader: HD Saver": "Descargador y reproductor de video HD",
   "Lost Connection": "Conexión perdida",
   "We can't download videos without internet. Please reconnect and try again.": "No podemos descargar videos sin internet. Conéctate de nuevo e inténtalo otra vez.",
   "Go to setting": "Ir a configuración",
@@ -113,4 +113,8 @@ final Map<String, String> esES = {
   "Fast & Free": "Rápido & Gratis",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Disfruta de descargas ilimitadas a alta velocidad, completamente gratis, cuando lo necesites.",
   "Get started": "Comenzar",
+  "Do you like All Video Downloader: HD Saver?": "¿Te gusta All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Necesitamos tus comentarios y motivación para brindarte una mejor experiencia.",
+  "No, thanks": "No, gracias",
+  "Thank you!": "¡Gracias!",
 };

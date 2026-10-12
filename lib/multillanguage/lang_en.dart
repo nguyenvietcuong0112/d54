@@ -87,7 +87,7 @@ final Map<String, String> enUS = {
   "Something went wrong while starting the download.": "Something went wrong while starting the download.",
   "Video saved to gallery successfully.": "Video saved to gallery successfully.",
   "Failed to save video to gallery.": "Failed to save video to gallery.",
-  "HD Video Downloader & Player": "HD Video Downloader & Player",
+  "All Video Downloader: HD Saver": "All Video Downloader: HD Saver",
   "Lost Connection": "Lost Connection",
   "We can't download videos without internet. Please reconnect and try again.": "We can't download videos without internet. Please reconnect and try again.",
   "Go to setting": "Go to setting",
@@ -113,4 +113,8 @@ final Map<String, String> enUS = {
   "Fast & Free": "Fast & Free",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Enjoy unlimited downloads with high speed — completely free, anytime you need.",
   "Get started": "Get started",
+  "Do you like All Video Downloader: HD Saver?": "Do you like All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "We need your feedback and motivation to provide you with a better experience.",
+  "No, thanks": "No, thanks",
+  "Thank you!": "Thank you!",
 };

@@ -11,6 +11,7 @@ import '../../core/utils/app_util.dart';
 import '../../core/values/constants.dart';
 import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
+import '../../helper/rating_helper.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/manager/my_ad_id_manager.dart';
 import '../../ads/const/ad_id_name.dart';
@@ -35,6 +36,7 @@ class SplashController extends BaseController {
   @override
   void onInit() {
     super.onInit();
+    RatingHelper.incrementSessionCount();
     EasyAds.instance.appLifecycleReactor?.setOnSplashScreen(true);
     isNoFirstOpenApp.value = AppUtil.getBool("isNoFirstOpenApp");
     _checkInternetConnection();

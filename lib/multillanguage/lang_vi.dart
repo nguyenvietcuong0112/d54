@@ -87,7 +87,7 @@ final Map<String, String> viVN = {
   "Something went wrong while starting the download.": "Đã xảy ra lỗi khi bắt đầu tải xuống.",
   "Video saved to gallery successfully.": "Video đã được lưu vào bộ sưu tập thành công.",
   "Failed to save video to gallery.": "Lưu video vào bộ sưu tập thất bại.",
-  "HD Video Downloader & Player": "Trình tải & phát video HD",
+  "All Video Downloader: HD Saver": "Trình tải & phát video HD",
   "Lost Connection": "Mất kết nối",
   "We can't download videos without internet. Please reconnect and try again.": "Không thể tải xuống video khi không có internet. Vui lòng kết nối lại và thử lại.",
   "Go to setting": "Đi tới cài đặt",
@@ -113,4 +113,8 @@ final Map<String, String> viVN = {
   "Fast & Free": "Nhanh chóng & Miễn phí",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Tận hưởng số lượt tải xuống không giới hạn với tốc độ cao — hoàn toàn miễn phí, bất cứ khi nào bạn cần.",
   "Get started": "Bắt đầu",
+  "Do you like All Video Downloader: HD Saver?": "Bạn có thích All Video Downloader: HD Saver?",
+  "We need your feedback and motivation to provide you with a better experience.": "Chúng tôi cần phản hồi và động lực của bạn để mang đến cho bạn trải nghiệm tốt hơn.",
+  "No, thanks": "Không, cám ơn.",
+  "Thank you!": "Cảm ơn!",
 };

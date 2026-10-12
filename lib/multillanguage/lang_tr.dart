@@ -87,7 +87,7 @@ final Map<String, String> trTR = {
   "Something went wrong while starting the download.": "İndirme başlatılırken bir sorun oluştu.",
   "Video saved to gallery successfully.": "Video galeriye başarıyla kaydedildi.",
   "Failed to save video to gallery.": "Video galeriye kaydedilemedi.",
-  "HD Video Downloader & Player": "HD Video İndirici & Oynatıcı",
+  "All Video Downloader: HD Saver": "HD Video İndirici & Oynatıcı",
   "Lost Connection": "Bağlantı Kesildi",
   "We can't download videos without internet. Please reconnect and try again.": "İnternet olmadan videoları indiremeyiz. Lütfen yeniden bağlanın ve tekrar deneyin.",
   "Go to setting": "Ayarlara git",
@@ -113,4 +113,8 @@ final Map<String, String> trTR = {
   "Fast & Free": "Hızlı & Ücretsiz",
   "Enjoy unlimited downloads with high speed — completely free, anytime you need.": "Yüksek hızda sınırsız indirmenin tadını çıkarın — tamamen ücretsiz, ihtiyacınız olduğu her an.",
   "Get started": "Başla",
+  "Do you like All Video Downloader: HD Saver?": "All Video Downloader: HD Saver'ı beğendiniz mi?",
+  "We need your feedback and motivation to provide you with a better experience.": "Size daha iyi bir deneyim sunmak için geri bildiriminize ve desteğinize ihtiyacımız var.",
+  "No, thanks": "Hayır, teşekkürler",
+  "Thank you!": "Teşekkürler!",
 };
