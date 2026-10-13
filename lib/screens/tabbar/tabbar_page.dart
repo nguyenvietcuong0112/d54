@@ -4,14 +4,11 @@ import 'package:cscmobi_app/screens/home_tab/home_tab_page.dart';
 import 'package:cscmobi_app/screens/tabbar/tabbar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../utils/app_setting.dart';
 import '../../customwidget/wrap_keep_alive_tab.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../helper/firebase_remote_config_service.dart';
-import '../../customwidget/shimmer.dart';
 import '../../core/widget/route_observer_widget.dart';
 
 class TabbarPage extends GetView<TabbarController> {
@@ -22,8 +19,14 @@ class TabbarPage extends GetView<TabbarController> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: GetBuilder<TabbarController>(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          controller.showBackDialog(context);
+        }
+      },
+      child: GetBuilder<TabbarController>(
           builder: (_) {
             return Scaffold(
               backgroundColor: AppColors.redPrimary,
@@ -115,7 +118,7 @@ class TabbarPage extends GetView<TabbarController> {
             );
           },
         ),
-        onWillPop: () => controller.showBackDialog(context));
+    );
   }
 
   // Widget hỗ trợ xây dựng tab item chuẩn thiết kế mới (có viên thuốc nền active)

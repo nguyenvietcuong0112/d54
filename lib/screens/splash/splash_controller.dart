@@ -4,7 +4,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cscmobi_app/core/base/base_controller.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import '../../utils/app_setting.dart';
 import '../../core/utils/app_util.dart';
@@ -13,7 +12,6 @@ import '../../helper/firebase_helper.dart';
 import '../../helper/firebase_remote_config_service.dart';
 import '../../helper/rating_helper.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import '../../ads/manager/my_ad_id_manager.dart';
 import '../../ads/const/ad_id_name.dart';
 import '../../ads/const/ad_id_extension.dart';
 import '../../ads/dimens/ad_dimen.dart';
@@ -32,6 +30,7 @@ class SplashController extends BaseController {
   RxDouble percentLoading = 0.0.obs;
   Timer? _timer;
   int _value = 0;
+  bool _isNavigating = false;
 
   @override
   void onInit() {
@@ -65,7 +64,8 @@ class SplashController extends BaseController {
 
   fakeDuration() {
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(milliseconds: 20), (timer) {
+    _value = 0;
+    _timer = Timer.periodic(const Duration(milliseconds: 25), (timer) {
       _value++;
       percentLoading.value = _value.toDouble() / 100;
       if (_value >= 100) {
@@ -105,7 +105,9 @@ class SplashController extends BaseController {
           '_handleConnectivityResult _isConnected: TRUE');
       initMobileAdsSDK();
       initFirebase();
-      fakeDuration();
+      if (!_isNavigating && (_timer == null || !_timer!.isActive)) {
+        fakeDuration();
+      }
     } else {
       AppUtil.showLogFull(
           '_handleConnectivityResult _isConnected: FALSE');
@@ -181,7 +183,7 @@ class SplashController extends BaseController {
     EasyAds.instance.loadAd();
 
 
-    if(!isNoFirstOpenApp.value) {
+    if (!isNoFirstOpenApp.value) {
       final bool showLanguageAd = FirebaseRemoteConfigService.getBoolConfigByKey(
           FirebaseRemoteConfigService.native_language);
       final bool showLanguageClickAd = FirebaseRemoteConfigService.getBoolConfigByKey(
@@ -204,8 +206,7 @@ class SplashController extends BaseController {
         );
       }
     }
-    }
-
+  }
 
   logEvent() {}
 
@@ -214,6 +215,10 @@ class SplashController extends BaseController {
   }
 
   goToHome() {
+    if (_isNavigating) return;
+    _isNavigating = true;
+    _timer?.cancel();
+
     String _selectedLanguageCode = AppUtil().getUserChoosedLanguage();
     if (_selectedLanguageCode.isEmpty) {
       _selectedLanguageCode = 'en';
@@ -251,7 +256,9 @@ class SplashController extends BaseController {
 
   goNextScreen() {
     EasyAds.instance.appLifecycleReactor?.setOnSplashScreen(false);
-
+    final bool enableResumeAd =
+    FirebaseRemoteConfigService.getBoolConfigByKey(FirebaseRemoteConfigService.resume_open_app);
+    EasyAds.instance.appLifecycleReactor?.setAllowAppOpenAd(enableResumeAd);
     if (isNoFirstOpenApp.value) {
       Get.offAllWithController(
           controllerBuilder: () => TabbarController(),

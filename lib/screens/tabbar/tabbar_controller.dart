@@ -9,7 +9,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../utils/app_setting.dart';
 import '../../helper/firebase_helper.dart';
 import '../popup_confirm_quit/popup_confirm_quit_controller.dart';
 import '../popup_confirm_quit/popup_confirm_quit_page.dart';
@@ -68,8 +67,8 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
   }
 
   Future<void> requestPermission() async {
-    PermissionStatus status = await Permission.notification.request();
-    final notificationSettings = await FirebaseMessaging.instance.requestPermission(provisional: true);
+    await Permission.notification.request();
+    await FirebaseMessaging.instance.requestPermission(provisional: true);
     final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
     if (apnsToken != null) {
       // APNS token is available, make FCM plugin API requests...
@@ -78,7 +77,7 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
 
 
 
-  showBackDialog(BuildContext context) async {
+  Future<bool> showBackDialog(BuildContext context) async {
     try {
       var result = await Get.dialog(
           GetBuilder<PopupConfirmQuitController>(
@@ -88,7 +87,7 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
             },
           ),
           useSafeArea: true,
-          barrierDismissible: false,
+          barrierDismissible: true,
           arguments: {
             "title": "Exit app".tr,
             "desc": "Are you sure you want to exit the application?".tr,
@@ -98,7 +97,10 @@ class TabbarController extends BaseController with GetTickerProviderStateMixin {
       if (result != null && result["result"] != null && result["result"]) {
         exit(0);
       }
-    } catch (e) {}
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   onChangeTabbarIndex(index) {

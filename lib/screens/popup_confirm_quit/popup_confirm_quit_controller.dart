@@ -1,59 +1,64 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
-
 import '../../core/base/base_controller.dart';
 
 class PopupConfirmQuitController extends BaseController {
   RxString title = "".obs;
-  var desc = "".obs;
+  RxString desc = "".obs;
   RxString titleButton1 = "".obs;
   RxString titleButton2 = "".obs;
-  RxInt countDownValue = 3.obs;
+  RxInt countDownValue = 0.obs;
   Timer? _timer;
-  RxBool isEnableButton1 = false.obs;
+  RxBool isEnableButton1 = true.obs;
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
-    title.value = Get.arguments["title"];
-    desc.value = Get.arguments["desc"];
-    titleButton1.value = Get.arguments["titleButton1"];
-    titleButton2.value = Get.arguments["titleButton2"];
+    final args = Get.arguments;
+    if (args is Map) {
+      title.value = (args["title"] ?? "Exit app").toString();
+      desc.value = (args["desc"] ?? "Are you sure you want to exit the application?").toString();
+      titleButton1.value = (args["titleButton1"] ?? "Yes").toString();
+      titleButton2.value = (args["titleButton2"] ?? "No").toString();
+    } else {
+      title.value = "Exit app";
+      desc.value = "Are you sure you want to exit the application?";
+      titleButton1.value = "Yes";
+      titleButton2.value = "No";
+    }
   }
 
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (countDownValue.value > 0) {
-        countDownValue.value -= 1;
-        update();
-      } else {
-        if (_timer != null) {
-          _timer!.cancel();
+    if (countDownValue.value > 0) {
+      isEnableButton1.value = false;
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (countDownValue.value > 0) {
+          countDownValue.value -= 1;
+        } else {
+          _timer?.cancel();
+          isEnableButton1.value = true;
         }
-        isEnableButton1.value = true;
-        update();
-      }
-    });
+      });
+    } else {
+      isEnableButton1.value = true;
+    }
   }
 
   @override
   void onClose() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
+    _timer?.cancel();
+    super.onClose();
   }
 
-  onSelectCancel() {
+  void onSelectCancel() {
+    _timer?.cancel();
     Get.back();
-    _timer!.cancel();
   }
 
-  onSelectConfirm() {
+  void onSelectConfirm() {
+    _timer?.cancel();
     Get.back(result: {"result": true});
   }
 }

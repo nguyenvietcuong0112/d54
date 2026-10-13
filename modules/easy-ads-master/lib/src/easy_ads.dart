@@ -8,12 +8,9 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/services/easy_firebase_service.dart';
-import 'package:easy_ads_flutter/src/services/easy_shared_pref_service.dart';
 import 'package:easy_ads_flutter/src/utils/easy_app_open_ad_with_2_id.dart';
 import 'package:easy_ads_flutter/src/utils/easy_app_open_ad_with_id.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
-import 'package:easy_ads_flutter/src/utils/easy_interstitial_ad_splash.dart';
-import 'package:easy_ads_flutter/src/utils/easy_interstitial_ad_splash_with_2_id.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -23,6 +20,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'easy_admob/easy_admob_native_ad.dart';
 import 'services/easy_adjust_service.dart';
 import 'utils/easy_app_open_ad.dart';
+import 'utils/easy_interstitial_ad_splash.dart';
+import 'utils/easy_interstitial_ad_splash_with_2_id.dart';
 import 'utils/easy_interstitial_ad_splash_with_3_id.dart';
 import 'utils/easy_splash_ad_with_interstitial_and_app_open.dart';
 
@@ -87,6 +86,8 @@ class EasyAds {
   final EasyLogger _logger = EasyLogger();
   AdSize? adSize;
   bool _initialized = false;
+  GlobalKey<NavigatorState>? _navigatorKey;
+  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
   /// Initializes the Google Mobile Ads SDK.
   ///
@@ -115,6 +116,7 @@ class EasyAds {
     }
     // Initialize SharedPreferences if not already initialized
     _sharedPreferences ??= await SharedPreferences.getInstance();
+    _navigatorKey = navigatorKey;
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
     if (adMobAdRequest != null) {
@@ -293,6 +295,8 @@ class EasyAds {
     }
     _nativeAdCache.clear();
   }
+
+
 
   Future<void> initAdmob({
     String? appOpenAdUnitId,
@@ -614,15 +618,18 @@ class EasyAds {
     }
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => EasyInterstitialAdSplash(
+      PageRouteBuilder(
+        fullscreenDialog: true,
+        opaque: false,
+        barrierColor: Colors.transparent,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            EasyInterstitialAdSplash(
           adNetwork: adNetwork,
           adId: adId,
           onShowed: onShowed,
           onFailed: onFailed,
           adDismissed: adDissmissed,
         ),
-        fullscreenDialog: true,
       ),
     );
   }
@@ -642,8 +649,12 @@ class EasyAds {
     }
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => EasyInterstitialAdSplashWith3Id(
+      PageRouteBuilder(
+        fullscreenDialog: true,
+        opaque: false,
+        barrierColor: Colors.transparent,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            EasyInterstitialAdSplashWith3Id(
           adNetwork: adNetwork,
           adIdHigh: interSplashHigh,
           adIdMedium: interSplashMedium,
@@ -652,7 +663,6 @@ class EasyAds {
           onFailed: onFailed,
           adDismissed: adDissmissed,
         ),
-        fullscreenDialog: true,
       ),
     );
   }
@@ -671,8 +681,12 @@ class EasyAds {
     }
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => EasyInterstitialAdSplashWith2Id(
+      PageRouteBuilder(
+        fullscreenDialog: true,
+        opaque: false,
+        barrierColor: Colors.transparent,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            EasyInterstitialAdSplashWith2Id(
           adNetwork: adNetwork,
           adIdHigh: interSplashHigh,
           adIdAll: interSplashAll,
@@ -680,7 +694,6 @@ class EasyAds {
           onFailed: onFailed,
           adDismissed: adDissmissed,
         ),
-        fullscreenDialog: true,
       ),
     );
   }
@@ -696,17 +709,24 @@ class EasyAds {
     if (_isFullscreenAdShowing) {
       return;
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EasyRewardAd(
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        fullscreenDialog: true,
+        opaque: false,
+        barrierColor: Colors.black54,
+        pageBuilder: (context, animation, secondaryAnimation) => EasyRewardAd(
           adNetwork: adNetwork,
           adId: adId,
           onShowed: onShowed,
           onFailed: onFailed,
           adDismissed: adDissmissed,
         ),
-        fullscreenDialog: true,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
     );
   }

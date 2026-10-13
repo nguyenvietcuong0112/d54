@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -79,12 +80,31 @@ class AppUtil {
   }
 
   Future<String> getDeviceId() async {
-    var deviceId = await MobileDeviceIdentifier().getDeviceId() ?? "";
-    if (Platform.isIOS) { // import 'dart:io'
-      return deviceId; // unique ID on iOS
-    } else if(Platform.isAndroid) {
-      return deviceId; // unique ID on Android
-    } else {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? cachedId = prefs.getString("k_app_unique_device_id");
+      if (cachedId != null && cachedId.isNotEmpty) {
+        return cachedId;
+      }
+
+      String deviceId = "";
+      try {
+        deviceId = await MobileDeviceIdentifier()
+            .getDeviceId()
+            .timeout(const Duration(milliseconds: 1200)) ?? "";
+      } catch (_) {}
+
+      if (deviceId.isEmpty) {
+        final random = math.Random.secure();
+        final values = List<int>.generate(16, (i) => random.nextInt(256));
+        values[6] = (values[6] & 0x0f) | 0x40;
+        values[8] = (values[8] & 0x3f) | 0x80;
+        deviceId = values.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+      }
+
+      await prefs.setString("k_app_unique_device_id", deviceId);
+      return deviceId;
+    } catch (e) {
       return "";
     }
   }

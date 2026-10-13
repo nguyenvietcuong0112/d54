@@ -36,19 +36,27 @@ class _EasyInterstitialAdSplashState extends State<EasyInterstitialAdSplash>
   );
 
   StreamSubscription? _streamSubscription;
+  bool _isAdReadyToShow = false;
 
-  Future<void> _showAd() => Future.delayed(
-        const Duration(seconds: 1),
-        () {
-          if (_appLifecycleState == AppLifecycleState.resumed) {
-            if (mounted) {
-              _interstitialAd?.show();
-            }
-          } else {
-            _adFailedToShow = true;
+  Future<void> _showAd() {
+    if (mounted) {
+      setState(() {
+        _isAdReadyToShow = true;
+      });
+    }
+    return Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (_appLifecycleState == AppLifecycleState.resumed) {
+          if (mounted) {
+            _interstitialAd?.show();
           }
-        },
-      );
+        } else {
+          _adFailedToShow = true;
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -140,10 +148,24 @@ class _EasyInterstitialAdSplashState extends State<EasyInterstitialAdSplash>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: EasyLoadingSplash(
-        message: EasyAds.configuredLoadingMessage,
+    if (!_isAdReadyToShow) {
+      return const PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SizedBox.shrink(),
+        ),
+      );
+    }
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.black54,
+        body: EasyAds.configuredLoadingSplash ??
+            EasyLoadingSplash(
+              message: EasyAds.configuredLoadingMessage,
+            ),
       ),
     );
   }

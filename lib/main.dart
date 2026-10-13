@@ -29,6 +29,9 @@ const bool isProduction = true ;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   VideoDownloadHelper.instance.initialize();
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersiveSticky,
@@ -61,11 +64,13 @@ void main() async {
 
   await _initCrashlytics();
   await _initFirebaseAnalytics();
-  await initPlugin();
 
-  await _initializeAds();
-
+  // Run the app immediately so the first frame renders without delay, preventing nativePollOnce ANRs!
   runApp(const MyApp());
+
+  // Initialize plugins & ads in the background
+  initPlugin();
+  _initializeAds();
 }
 
 Future<void> _initCrashlytics() async {
@@ -115,15 +120,18 @@ Future<void> _initializeAds() async {
         } catch (e) {
           print('⚠️ Consent form error: $e');
         }
-        consentCompleter.complete();
+        if (!consentCompleter.isCompleted) consentCompleter.complete();
       },
           (error) {
         print('⚠️ Consent error: ${error.message}');
-        consentCompleter.complete();
+        if (!consentCompleter.isCompleted) consentCompleter.complete();
       },
     );
 
-    await consentCompleter.future;
+    // Timeout after 3 seconds so cold start never blocks on slow network
+    await consentCompleter.future.timeout(const Duration(seconds: 3), onTimeout: () {
+      print('⚠️ Consent request timed out');
+    });
 
     final IAdIdManager adIdManager = MyAdIdManager();
 
@@ -161,32 +169,39 @@ Future<void> _loadConsentForm() async {
         consentForm.show((formError) async {
           if (formError != null) {
             print('⚠️ Consent form show error: ${formError.message}');
-            completer.complete();
+            if (!completer.isCompleted) completer.complete();
             return;
           }
           await _loadConsentForm();
-          completer.complete();
+          if (!completer.isCompleted) completer.complete();
         });
       } else {
-        completer.complete();
+        if (!completer.isCompleted) completer.complete();
       }
     },
         (formError) {
       print('⚠️ Consent form load error: ${formError.message}');
-      completer.complete();
+      if (!completer.isCompleted) completer.complete();
     },
   );
 
-  await completer.future;
+  await completer.future.timeout(const Duration(seconds: 3), onTimeout: () {
+    print('⚠️ Consent form loading timed out');
+  });
 }
 
 
 Future<void> initPlugin() async {
-  final TrackingStatus status =
-  await AppTrackingTransparency.trackingAuthorizationStatus;
-  if (status == TrackingStatus.notDetermined) {
-    await Future.delayed(const Duration(milliseconds: 200));
-    await AppTrackingTransparency.requestTrackingAuthorization();
+  if (!Platform.isIOS) return;
+  try {
+    final TrackingStatus status =
+        await AppTrackingTransparency.trackingAuthorizationStatus;
+    if (status == TrackingStatus.notDetermined) {
+      await Future.delayed(const Duration(milliseconds: 200));
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    }
+  } catch (e) {
+    print('⚠️ ATT error: $e');
   }
 }
 

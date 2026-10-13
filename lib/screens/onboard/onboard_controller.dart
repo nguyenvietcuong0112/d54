@@ -50,6 +50,7 @@ class OnboardController extends BaseController {
   StreamSubscription? _adEventSubscription;
   RxBool isFullAdNextButtonVisible = false.obs;
   Timer? _fullAdTimer;
+  bool _isNavigating = false;
 
   @override
   void onInit() {
@@ -261,19 +262,40 @@ class OnboardController extends BaseController {
     update();
   }
 
-  onSelectNext(List<OnboardStep> steps) {
-    if (currentIndex.value < steps.length - 1) {
-      currentIndex.value++;
-      pageController.animateToPage(
-        currentIndex.value,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      Get.offWithController(
-        controllerBuilder: () => QuestionController(),
-        page: () => QuestionPage(),
-      );
+  onSelectNext(List<OnboardStep> steps) async {
+    if (_isNavigating) return;
+    _isNavigating = true;
+
+    try {
+      if (currentIndex.value < steps.length - 1) {
+        final targetPage = currentIndex.value + 1;
+        if (pageController.hasClients) {
+          try {
+            if (pageController.positions.length == 1) {
+              await pageController.animateToPage(
+                targetPage,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              // In case multiple scroll positions are attached, jump safely
+              pageController.jumpToPage(targetPage);
+            }
+          } catch (e) {
+            debugPrint("Error animating page: $e");
+          }
+        }
+        currentIndex.value = targetPage;
+      } else {
+        Get.offWithController(
+          controllerBuilder: () => QuestionController(),
+          page: () => QuestionPage(),
+        );
+      }
+    } finally {
+      Future.delayed(const Duration(milliseconds: 350), () {
+        _isNavigating = false;
+      });
     }
     update();
   }

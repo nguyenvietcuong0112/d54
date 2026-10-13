@@ -285,6 +285,7 @@ class OnboardPage extends GetView<OnboardController> {
   Widget _buildFullAdPage(OnboardController controller, OnboardStep step) {
     final steps = controller.getSteps();
     return Container(
+      key: ValueKey('full_ad_${step.fullAd?.hashCode}'),
       width: double.infinity,
       height: double.infinity,
       decoration: const BoxDecoration(
@@ -359,9 +360,19 @@ class OnlyForwardScrollPhysics extends ScrollPhysics {
       return super.applyBoundaryConditions(position, value);
     }
     final double minPixels = getCurrentPage() * viewport;
-    if (value < minPixels) {
-      return value - minPixels;
+
+    // Boundary conditions only apply when moving backward (value < position.pixels)
+    if (value < position.pixels) {
+      if (position.pixels <= minPixels) {
+        // Already at or below minPixels boundary, disallow all backward movement
+        return value - position.pixels;
+      }
+      if (value < minPixels) {
+        // Hit the minPixels boundary from above, only disallow the part below minPixels
+        return value - minPixels;
+      }
     }
+
     return super.applyBoundaryConditions(position, value);
   }
 }

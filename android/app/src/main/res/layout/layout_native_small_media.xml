@@ -112,14 +112,14 @@
                 android:text="" />
 
             <!-- Action Button / CTA -->
-            <com.videohd.download.video.allvideodownloader.ShimmerButton
+            <com.video.downloader.fastsave.ShimmerButton
                 android:id="@+id/ad_call_to_action"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:background="@drawable/bg_button_ads"
                 android:gravity="center"
                 android:text="Open"
-                android:textColor="@color/gnt_white"
+                android:textColor="#1a1a1a"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"

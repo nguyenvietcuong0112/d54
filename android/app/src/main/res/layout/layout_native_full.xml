@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#FAFAFA"
+        android:background="#1a1a1a"
         android:scrollbars="none">
 
         <!-- Ad Badge/Attribution -->
@@ -69,7 +69,7 @@
             android:ellipsize="end"
             android:gravity="start|center_vertical"
             android:singleLine="true"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/gnt_white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_goneMarginStart="16dp"
@@ -88,7 +88,7 @@
             android:ellipsize="end"
             android:gravity="start|center_vertical"
             android:singleLine="true"
-            android:textColor="#555555"
+            android:textColor="@color/gnt_white"
             android:textSize="13sp"
             app:layout_goneMarginStart="16dp"
             app:layout_constraintBottom_toTopOf="@+id/ad_call_to_action"
@@ -96,7 +96,7 @@
             app:layout_constraintStart_toEndOf="@id/ad_app_icon" />
 
         <!-- Call to Action Button -->
-        <com.videohd.download.video.allvideodownloader.ShimmerButton
+        <com.video.downloader.fastsave.ShimmerButton
             android:id="@+id/ad_call_to_action"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -104,7 +104,7 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/bg_button_ads"
             android:gravity="center"
-            android:textColor="#FFFFFF"
+            android:textColor="#1a1a1a"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

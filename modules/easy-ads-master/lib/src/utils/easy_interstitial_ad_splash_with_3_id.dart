@@ -42,6 +42,7 @@ class _EasyInterstitialAdSplashWith3IdState
   final List<String> _adIds = [];
   bool _currentLoadFailed = false;
   bool _currentLoadSucceeded = false;
+  bool _isAdReadyToShow = false;
 
   @override
   void initState() {
@@ -78,8 +79,11 @@ class _EasyInterstitialAdSplashWith3IdState
             break;
           case AdEventType.adDismissed:
             EasyAds.instance.setFullscreenAdShowing(false);
-            widget.adDismissed?.call();
             _streamSubscription?.cancel();
+            if (mounted && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+            widget.adDismissed?.call();
             break;
           case AdEventType.adFailedToShow:
             _onAdFailedToShow();
@@ -165,28 +169,42 @@ class _EasyInterstitialAdSplashWith3IdState
   void _onAdFailedToShow() {
     print(
         '[EasyInterstitialAdSplashWith3Id] Ad ${_currentAdIndex + 1} failed to show');
-    // Continue to next ad in sequence
+    if (mounted) {
+      setState(() {
+        _isAdReadyToShow = false;
+      });
+    }
   }
 
   void _onAllAdsFailed() {
     _isLoading = false;
-    widget.onFailed?.call();
     EasyAds.instance.setFullscreenAdShowing(false);
     _streamSubscription?.cancel();
+    if (mounted && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+    widget.onFailed?.call();
   }
 
-  Future<void> _showAd() => Future.delayed(
-        const Duration(seconds: 1),
-        () {
-          if (_appLifecycleState == AppLifecycleState.resumed) {
-            if (mounted && _currentAd?.isAdLoaded == true) {
-              _currentAd?.show();
-            }
-          } else {
-            _adFailedToShow = true;
+  Future<void> _showAd() {
+    if (mounted) {
+      setState(() {
+        _isAdReadyToShow = true;
+      });
+    }
+    return Future.delayed(
+      const Duration(seconds: 1),
+      () {
+        if (_appLifecycleState == AppLifecycleState.resumed) {
+          if (mounted && _currentAd?.isAdLoaded == true) {
+            _currentAd?.show();
           }
-        },
-      );
+        } else {
+          _adFailedToShow = true;
+        }
+      },
+    );
+  }
 
   AppLifecycleState _appLifecycleState = AppLifecycleState.resumed;
   bool _adFailedToShow = false;
@@ -210,10 +228,24 @@ class _EasyInterstitialAdSplashWith3IdState
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: EasyLoadingSplash(
-        message: EasyAds.configuredLoadingMessage,
+    if (!_isAdReadyToShow) {
+      return const PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SizedBox.shrink(),
+        ),
+      );
+    }
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.black54,
+        body: EasyAds.configuredLoadingSplash ??
+            EasyLoadingSplash(
+              message: EasyAds.configuredLoadingMessage,
+            ),
       ),
     );
   }

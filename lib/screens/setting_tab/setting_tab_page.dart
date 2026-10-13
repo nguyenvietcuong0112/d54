@@ -21,27 +21,26 @@ class SettingTabPage extends GetView<SettingTabController> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return WillPopScope(
-        child: Scaffold(
-          backgroundColor: AppColors.backgroundColor,
-          body: SafeArea(
-            bottom: false,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                children: [
-                  buildNavigation(),
-                  Expanded(
-                    child: buildContent(),
-                  ),
-                ],
-              ),
+    return PopScope(
+      canPop: true,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: SafeArea(
+          bottom: false,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                buildNavigation(),
+                Expanded(
+                  child: buildContent(),
+                ),
+              ],
             ),
           ),
         ),
-        onWillPop: () => controller.onSelectBack()
+      ),
     );
   }
 

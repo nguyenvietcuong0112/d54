@@ -41,6 +41,7 @@ class _EasyInterstitialAdSplashWith2IdState
   bool _currentLoadFailed = false;
   bool _currentLoadSucceeded = false;
   bool _showInitiated = false;
+  bool _isAdReadyToShow = false;
 
   @override
   void initState() {
@@ -77,8 +78,11 @@ class _EasyInterstitialAdSplashWith2IdState
             break;
           case AdEventType.adDismissed:
             EasyAds.instance.setFullscreenAdShowing(false);
-            widget.adDismissed?.call();
             _streamSubscription?.cancel();
+            if (mounted && Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+            widget.adDismissed?.call();
             break;
           case AdEventType.adFailedToShow:
             _onAdFailedToShow();
@@ -166,13 +170,21 @@ class _EasyInterstitialAdSplashWith2IdState
     // Mark as failed so the loader can proceed to next ad
     _currentLoadFailed = true;
     _showInitiated = false;
+    if (mounted) {
+      setState(() {
+        _isAdReadyToShow = false;
+      });
+    }
   }
 
   void _onAllAdsFailed() {
     _isLoading = false;
-    widget.onFailed?.call();
     EasyAds.instance.setFullscreenAdShowing(false);
     _streamSubscription?.cancel();
+    if (mounted && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+    widget.onFailed?.call();
   }
 
   Future<void> _showAd() => Future.delayed(
@@ -191,6 +203,11 @@ class _EasyInterstitialAdSplashWith2IdState
   void _tryShowOnce() {
     if (_showInitiated || _adShown) return;
     _showInitiated = true;
+    if (mounted) {
+      setState(() {
+        _isAdReadyToShow = true;
+      });
+    }
     _showAd();
   }
 
@@ -233,10 +250,24 @@ class _EasyInterstitialAdSplashWith2IdState
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: EasyLoadingSplash(
-        message: EasyAds.configuredLoadingMessage,
+    if (!_isAdReadyToShow) {
+      return const PopScope(
+        canPop: false,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SizedBox.shrink(),
+        ),
+      );
+    }
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.black54,
+        body: EasyAds.configuredLoadingSplash ??
+            EasyLoadingSplash(
+              message: EasyAds.configuredLoadingMessage,
+            ),
       ),
     );
   }

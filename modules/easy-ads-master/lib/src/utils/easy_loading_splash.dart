@@ -14,35 +14,55 @@ class EasyLoadingSplash extends StatelessWidget {
         Theme.of(context).textTheme.bodyLarge?.color ?? const Color(0xFF515151);
 
     if (customSplash != null) {
-      return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(body: customSplash!),
-      );
+      return customSplash!;
     }
 
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: SpinKitThreeBounce(
-                  color: textColor,
-                  size: 30.0,
-                ),
+          child: Container(
+            width: 140,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF232334),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Colors.white10,
+                width: 1,
               ),
-              const SizedBox(height: 8),
-              if (message != null)
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black38,
+                  blurRadius: 16,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: SpinKitThreeBounce(
+                    color: textColor,
+                    size: 24.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 Text(
-                  message!,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  message ?? "Loading ad...",
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

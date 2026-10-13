@@ -25,6 +25,7 @@ class EasyAdmobNativeAd extends EasyAdBase {
   bool _isAdLoaded = false;
   bool _isAdLoading = false;
   bool _isAdLoadedFailed = false;
+  Widget? _adWidget;
 
   @override
   AdUnitType get adUnitType => AdUnitType.native;
@@ -36,6 +37,7 @@ class EasyAdmobNativeAd extends EasyAdBase {
   void dispose() {
     _isAdLoaded = false;
     _isAdLoadedFailed = false;
+    _adWidget = null;
     _nativeAd?.dispose();
     _nativeAd = null;
   }
@@ -119,9 +121,12 @@ class EasyAdmobNativeAd extends EasyAdBase {
       return const SizedBox();
     }
 
-    return SizedBox(
+    return _adWidget ??= SizedBox(
       height: _height,
-      child: AdWidget(ad: ad),
+      child: AdWidget(
+        key: ValueKey('ad_widget_${ad.hashCode}'),
+        ad: ad,
+      ),
     );
   }
 

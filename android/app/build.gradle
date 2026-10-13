@@ -27,7 +27,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.videohd.download.video.allvideodownloader"
+    namespace "com.video.downloader.fastsave"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -45,11 +45,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.videohd.download.video.allvideodownloader"
+        applicationId "com.video.downloader.fastsave"
         minSdkVersion 24
         targetSdkVersion 36
-        versionCode 11
-        versionName "0.1.1"
+        versionCode 12
+        versionName "0.1.2"
 
         archivesBaseName = "D54_Video_Downloader_v${versionName}_c${versionCode}_${new Date().format('ddMMyyyy')}"
         multiDexEnabled true

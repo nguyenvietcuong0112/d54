@@ -49,21 +49,19 @@ class LanguagePage extends GetView<LanguageController> {
 
                     if (isShowAlt) {
                       return showAlt
-                          ? EasyNativeAdCached(
+                          ? EasyNativeAd(
                               key: const ValueKey('language_alt'),
                               factoryId: 'nativeMedia',
                               adId: MyAdIdName.nativeLanguageClick.getId,
-                              cacheKey: MyAdIdName.nativeLanguageClick,
                               height: AdDimen.mediumNativeHeight,
                             )
                           : const SizedBox();
                     } else {
                       return showStd
-                          ? EasyNativeAdCached(
+                          ? EasyNativeAd(
                               key: const ValueKey('language_std'),
                               factoryId: 'nativeMedia',
                               adId: MyAdIdName.nativeLanguage.getId,
-                              cacheKey: MyAdIdName.nativeLanguage,
                               height: AdDimen.mediumNativeHeight,
                             )
                           : const SizedBox();

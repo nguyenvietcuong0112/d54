@@ -151,13 +151,57 @@ class _EasyInterstitialAdState extends State<EasyInterstitialAd>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: const Scaffold(
+    if (EasyAds.configuredLoadingSplash != null) {
+      return EasyAds.configuredLoadingSplash!;
+    }
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          child: Container(
+            width: 140,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            decoration: BoxDecoration(
+              color: const Color(0xFF232334),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Colors.white10,
+                width: 1,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black38,
+                  blurRadius: 16,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: const Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFE3FC57)),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  "Loading ad...",
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           ),
         ),
       ),

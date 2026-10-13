@@ -295,6 +295,10 @@ class URLDownloaderController extends BaseController {
   }
 
   Future<Uint8List?> generateThumbnail(String videoUrl) async {
+    // MediaMetadataRetriever hangs and crashes when streaming remote URLs on Android
+    if (videoUrl.startsWith('http://') || videoUrl.startsWith('https://')) {
+      return null;
+    }
     try {
       final uint8list = await VideoThumbnail.thumbnailData(
         video: videoUrl,
